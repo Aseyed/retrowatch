@@ -121,21 +121,17 @@ import android.widget.TextView;
 		@Override
 		public void onClick(View v) 
 		{
-			switch(v.getId())
-			{
-				case R.id.btn_disable_package:
-					mDialogContext.dismiss();
-					if(mDialogListener != null)
-						mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_DISABLE_PACKAGE, 0, 0, 
-								null, null, mMode == DIALOG_MODE_MESSAGE ? mContentObject : mFilterObject);
-					break;
-					
-				case R.id.btn_edit:
-					mDialogContext.dismiss();
-					if(mDialogListener != null)
-						mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_CLOSE, 0, 0, 
-								null, null, mMode == DIALOG_MODE_MESSAGE ? mContentObject : mFilterObject);
-					break;
+			int id = v.getId();
+			if (id == R.id.btn_disable_package) {
+				mDialogContext.dismiss();
+				if(mDialogListener != null)
+					mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_DISABLE_PACKAGE, 0, 0, 
+							null, null, mMode == DIALOG_MODE_MESSAGE ? mContentObject : mFilterObject);
+			} else if (id == R.id.btn_edit) {
+				mDialogContext.dismiss();
+				if(mDialogListener != null)
+					mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_CLOSE, 0, 0, 
+							null, null, mMode == DIALOG_MODE_MESSAGE ? mContentObject : mFilterObject);
 			}
 		}
 	}	// End of class OnClickListener

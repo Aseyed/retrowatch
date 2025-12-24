@@ -249,33 +249,34 @@ public class RetroWatchActivity extends FragmentActivity implements ActionBar.Ta
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_scan:
+		int id = item.getItemId();
+		if (id == R.id.action_scan) {
 			// Launch the DeviceListActivity to see devices and do scan
 			doScan();
 			return true;
-		case R.id.action_noti_settings:
+		} else if (id == R.id.action_noti_settings) {
 			// Launch notification settings screen
 			setNotificationAccess();
 			return true;
-		case R.id.action_refresh:
+		} else if (id == R.id.action_refresh) {
 			// Refresh every contents
 			refreshContentObjects();
 			return true;
-		case R.id.action_send_all:
+		} else if (id == R.id.action_send_all) {
 			// Send all available contents to watch
 			mService.reserveRemoteUpdate(100);
 			return true;
+		}
 		/* Disabled:
-		case R.id.action_discoverable:
+		if (id == R.id.action_discoverable) {
 			// Disabled: Ensure this device is discoverable by others
 			ensureDiscoverable();
 			return true;
-		case R.id.action_settings:
-			// Disabled: 
-			break;
-		*/
 		}
+		if (id == R.id.action_settings) {
+			// Disabled: 
+		}
+		*/
 		return false;
 	}
 

@@ -223,19 +223,17 @@ public class MessageListAdapter extends ArrayAdapter<ContentObject> implements I
 	};	// End of new OnTouchListener
 	
 	private void processOnClickEvent(View v) {
-		switch(v.getId())
-		{
-			case R.id.msg_item_container:
-				if(v.getTag() == null)
-					break;
-				ContentObject co = ((ViewHolder)v.getTag()).mContentObject;
-				if(co != null) {
-					MessageListDialog dialog = new MessageListDialog(mContext);
-					dialog.setDialogParams(this, null, co);
-					dialog.show();
-				}
-				break;
-		}	// End of switch()
+		int id = v.getId();
+		if (id == R.id.msg_item_container) {
+			if(v.getTag() == null)
+				return;
+			ContentObject co = ((ViewHolder)v.getTag()).mContentObject;
+			if(co != null) {
+				MessageListDialog dialog = new MessageListDialog(mContext);
+				dialog.setDialogParams(this, null, co);
+				dialog.show();
+			}
+		}
 	}
 	
 	public class ViewHolder {

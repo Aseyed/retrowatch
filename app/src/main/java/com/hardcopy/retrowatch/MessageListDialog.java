@@ -118,25 +118,19 @@ import android.widget.TextView;
 		@Override
 		public void onClick(View v) 
 		{
-			switch(v.getId())
-			{
-				case R.id.btn_enable_message:
-					mDialogContext.dismiss();
-					if(mDialogListener != null)
-						mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_ENABLE_MESSAGE, 0, 0, null, null, mContentObject);
-					break;
-					
-				case R.id.btn_enable_package:
-					mDialogContext.dismiss();
-					if(mDialogListener != null)
-						mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_ENABLE_PACKAGE, 0, 0, null, null, mContentObject);
-					break;
-					
-				case R.id.btn_close:
-					mDialogContext.dismiss();
-					if(mDialogListener != null)
-						mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_CLOSE, 0, 0, null, null, mContentObject);
-					break;
+			int id = v.getId();
+			if (id == R.id.btn_enable_message) {
+				mDialogContext.dismiss();
+				if(mDialogListener != null)
+					mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_ENABLE_MESSAGE, 0, 0, null, null, mContentObject);
+			} else if (id == R.id.btn_enable_package) {
+				mDialogContext.dismiss();
+				if(mDialogListener != null)
+					mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_ENABLE_PACKAGE, 0, 0, null, null, mContentObject);
+			} else if (id == R.id.btn_close) {
+				mDialogContext.dismiss();
+				if(mDialogListener != null)
+					mDialogListener.OnDialogCallback(IDialogListener.CALLBACK_CLOSE, 0, 0, null, null, mContentObject);
 			}
 		}
 	}	// End of class OnClickListener

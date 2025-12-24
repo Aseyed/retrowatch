@@ -198,18 +198,16 @@ public class FiltersAdapter extends ArrayAdapter<FilterObject> implements IDialo
 	 * @param v		Clicked view
 	 */
 	private void processOnClickEvent(View v) {
-		switch(v.getId())
-		{
-			case R.id.filter_item_container:
-				FilterObject filter = (FilterObject) v.getTag();
-				if(filter != null) {
-					mAdapterListener.OnAdapterCallback(IAdapterListener.CALLBACK_FILTER_SELECTED, 0, 0, null, null, filter);
-					MenuDialog dialog = new MenuDialog(mContext);
-					dialog.setDialogParams(this, null, null, filter);
-					dialog.show();
-				}
-				break;
-		}	// End of switch()
+		int id = v.getId();
+		if (id == R.id.filter_item_container) {
+			FilterObject filter = (FilterObject) v.getTag();
+			if(filter != null) {
+				mAdapterListener.OnAdapterCallback(IAdapterListener.CALLBACK_FILTER_SELECTED, 0, 0, null, null, filter);
+				MenuDialog dialog = new MenuDialog(mContext);
+				dialog.setDialogParams(this, null, null, filter);
+				dialog.show();
+			}
+		}
 	}
 	
 	/**

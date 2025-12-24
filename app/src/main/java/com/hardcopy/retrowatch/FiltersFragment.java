@@ -118,8 +118,8 @@ public class FiltersFragment extends Fragment implements OnClickListener, IAdapt
 	
 	@Override 
 	public void onClick(View v) {
-		switch(v.getId()) {
-		case R.id.btn_add:
+		int id = v.getId();
+		if (id == R.id.btn_add) {
 			if(mCurrentFilterObject != null) {
 				// Edit filter
 				mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_EDIT_FILTER, 0, 0, null, null, 
@@ -128,8 +128,7 @@ public class FiltersFragment extends Fragment implements OnClickListener, IAdapt
 				InputMethodManager imm2 = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm2.hideSoftInputFromWindow(mEditOrigin.getWindowToken(), 0);
 			}
-			break;
-		}	// End of switch()
+		}
 	}	// End of onClick()
 	
 	@Override
