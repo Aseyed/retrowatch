@@ -46,6 +46,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import androidx.core.app.ActivityCompat;
+import com.google.android.material.tabs.TabLayout;
 import androidx.core.content.ContextCompat;
 
 import androidx.fragment.app.FragmentActivity;
@@ -78,6 +79,7 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 	private FragmentManager mFragmentManager;
 	private RetroWatchFragmentAdapter mSectionsPagerAdapter;
 	private ViewPager mViewPager;
+	private TabLayout mTabLayout;
 	
 	private ImageView mImageBT = null;
 	private TextView mTextStatus = null;
@@ -105,7 +107,7 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		// Load static utilities
 		mUtils = new Utils(mContext);
 		
-		// Set up the action bar - tabs deprecated, using ViewPager only
+		// Set up the action bar
 		final ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayShowTitleEnabled(true);
@@ -118,6 +120,33 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
+
+		// Set up the Material TabLayout
+		mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		
+		// Add tabs
+		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+			mTabLayout.addTab(mTabLayout.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)));
+		}
+		
+		// Connect TabLayout with ViewPager
+		mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+			@Override
+			public void onTabSelected(TabLayout.Tab tab) {
+				mViewPager.setCurrentItem(tab.getPosition());
+			}
+			
+			@Override
+			public void onTabUnselected(TabLayout.Tab tab) {
+			}
+			
+			@Override
+			public void onTabReselected(TabLayout.Tab tab) {
+			}
+		});
+		
+		// Update TabLayout when ViewPager is swiped
+		mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
 
 		// Setup views
 		mImageBT = (ImageView) findViewById(R.id.status_title);
