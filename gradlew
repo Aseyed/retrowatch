@@ -135,9 +135,9 @@ if [ ! -f "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" ]; then
     if [ ! -f "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" ]; then
         echo "Downloading gradle-wrapper.jar..."
         if [ -x "$(command -v curl)" ]; then
-            curl -L -o "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" "https://raw.githubusercontent.com/gradle/gradle/v8.2.2/gradle/wrapper/gradle-wrapper.jar"
+            curl -L -o "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" "https://raw.githubusercontent.com/android/architecture-samples/main/gradle/wrapper/gradle-wrapper.jar"
         elif [ -x "$(command -v wget)" ]; then
-            wget -O "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" "https://raw.githubusercontent.com/gradle/gradle/v8.2.2/gradle/wrapper/gradle-wrapper.jar"
+            wget -O "$APP_HOME/gradle/wrapper/gradle-wrapper.jar" "https://raw.githubusercontent.com/android/architecture-samples/main/gradle/wrapper/gradle-wrapper.jar"
         else
             echo "Error: curl or wget not found. Cannot download gradle-wrapper.jar."
             exit 1
