@@ -31,7 +31,6 @@ import com.hardcopy.retrowatch.utils.Utils;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;

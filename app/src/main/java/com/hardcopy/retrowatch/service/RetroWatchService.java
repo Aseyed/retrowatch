@@ -37,6 +37,7 @@ import com.hardcopy.retrowatch.utils.Logs;
 import com.hardcopy.retrowatch.utils.Settings;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
@@ -237,11 +238,30 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	 */
 	private void makeNotification(String title, String text, String ticker) {
 		NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		Notification.Builder ncomp = new Notification.Builder(this);
+		
+		// Create notification channel for API 26+
+		String channelId = "retrowatch_channel";
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			NotificationChannel channel = new NotificationChannel(
+				channelId,
+				"Retro Watch Notifications",
+				NotificationManager.IMPORTANCE_DEFAULT
+			);
+			channel.setDescription("Notifications from Retro Watch");
+			nManager.createNotificationChannel(channel);
+		}
+		
+		Notification.Builder ncomp;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			ncomp = new Notification.Builder(this, channelId);
+		} else {
+			ncomp = new Notification.Builder(this);
+		}
+		
 		ncomp.setContentTitle(title);
 		if(text != null)
 			ncomp.setContentText(text);
-		if(ticker != null)
+		if(ticker != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
 			ncomp.setTicker(ticker);
 		ncomp.setSmallIcon(R.drawable.ic_launcher);
 		ncomp.setAutoCancel(true);

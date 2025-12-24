@@ -31,6 +31,7 @@ import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import androidx.core.content.ContextCompat;
 
 public class MessageListAdapter extends ArrayAdapter<ContentObject> implements IDialogListener {
 
@@ -135,9 +136,9 @@ public class MessageListAdapter extends ArrayAdapter<ContentObject> implements I
 		
 		if (co != null && holder != null) {
 			if(co.mIsEnabled)
-				holder.mItemContainer.setBackgroundColor(mContext.getResources().getColor(R.color.lightblue1));
+				holder.mItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.lightblue1));
 			else
-				holder.mItemContainer.setBackgroundColor(mContext.getResources().getColor(R.color.graye));
+				holder.mItemContainer.setBackgroundColor(ContextCompat.getColor(mContext, R.color.graye));
 			
 			holder.mTextInfo.setText(Utils.getMessageTypeString(co.mContentType) + " : " + co.mPackageName);
 			if(co.mOriginalString != null) {

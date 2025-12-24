@@ -47,3 +47,6 @@ The code has been updated to automatically detect the `__AVR_ATmega32U4__` archi
 *   **Voltage Levels**: Ensure your OLED and Bluetooth modules match the logic voltage of your Pro Micro (3.3V vs 5V). Mixing 5V logic with 3.3V modules can damage them.
 *   **Upload Reset**: If you have trouble uploading, quickly double-tap the reset button (if available) or short the RST pin to GND twice quickly to enter bootloader mode manually.
 
+
+
+

@@ -27,6 +27,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.SystemClock;
 
 public class ServiceMonitoring {
@@ -67,7 +68,8 @@ public class ServiceMonitoring {
 	public static void startMonitoring(Context context) {
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(context, ServiceMonitoringBR.class);
-		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+		int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ? PendingIntent.FLAG_IMMUTABLE : 0;
+		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, flags);
 		am.setRepeating(AlarmManager.ELAPSED_REALTIME, SystemClock.elapsedRealtime(), SERVICE_RESTART_INTERVAL, pi);
 	}
 
@@ -78,7 +80,8 @@ public class ServiceMonitoring {
 	public static void stopMonitoring(Context context) {
 		AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 		Intent intent = new Intent(context, ServiceMonitoringBR.class);
-		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, 0);
+		int flags = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ? PendingIntent.FLAG_IMMUTABLE : 0;
+		PendingIntent pi = PendingIntent.getBroadcast(context, 0, intent, flags);
 		am.cancel(pi);
 	}
 	

@@ -23,16 +23,21 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import com.hardcopy.retrowatch.utils.Logs;
 import com.hardcopy.retrowatch.utils.Utils;
 
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 
-public class HttpFileAsyncTask extends AsyncTask<Void, Integer, String> implements HttpInterface {
+public class HttpFileAsyncTask implements HttpInterface {
 	// Global variables
 	public static final String tag = "HttpFileAsyncTask";
+	private static final Executor executor = Executors.newSingleThreadExecutor();
+	private static final Handler handler = new Handler(Looper.getMainLooper());
 	
 	private int mType;
 	private String mID = null;
@@ -57,12 +62,19 @@ public class HttpFileAsyncTask extends AsyncTask<Void, Integer, String> implemen
 		mFileName = filename;
 	}
 
+	/**
+	 * Execute the HTTP file download asynchronously
+	 */
+	public void execute() {
+		executor.execute(this::doInBackground);
+	}
 	
-	protected String doInBackground(Void... unused) 
+	private void doInBackground() 
 	{
 		if(mListener==null || mID==null || mURL==null || mDir==null || mFileName==null) { 
 			//Logs.d(tag, "###### Error!!! : Parameter is null. Check parameter");
-			return ""; 
+			onPostExecute("");
+			return; 
 		}
 					
 		URL url = null;
@@ -74,11 +86,14 @@ public class HttpFileAsyncTask extends AsyncTask<Void, Integer, String> implemen
 			mResultStatus = MSG_HTTP_RESULT_CODE_ERROR_REQUEST_EXCEPTION;
 			Logs.d(tag, "# URL = "+url);
 			//Logs.d(tag, "###### Error!!! : MalformedURLException ");
-			return null;
+			onPostExecute(null);
+			return;
 		}
 		
-		if(Utils.checkFileExists(mDir, mFileName))
-			return null;
+		if(Utils.checkFileExists(mDir, mFileName)) {
+			onPostExecute(null);
+			return;
+		}
 		String filePathAndName = new String(mDir+"/"+mFileName);
 
 		try {
@@ -110,20 +125,22 @@ public class HttpFileAsyncTask extends AsyncTask<Void, Integer, String> implemen
 			mResultStatus = MSG_HTTP_RESULT_CODE_ERROR_UNKNOWN;
 			//Logs.d(tag, "###### Error!!! : Cannot download file... ");
 			e.printStackTrace();
-			return null; 
+			onPostExecute(null);
+			return; 
 		}
 
-		return filePathAndName;
+		onPostExecute(filePathAndName);
 	}
 
-	protected void onProgressUpdate(Integer... progress) {
-		// TODO: set progress percentage
-		// This code runs on UI thread
-	}
-
-	protected void onPostExecute(String filename) {
-		// This code runs on UI thread
-		mListener.OnReceiveFileResponse(mType, mID, filename, mURL, mResultStatus);
+	private void onPostExecute(String filename) {
+		// Post to UI thread using handler
+		final String finalFilename = filename;
+		final int finalStatus = mResultStatus;
+		handler.post(() -> {
+			if(mListener != null) {
+				mListener.OnReceiveFileResponse(mType, mID, finalFilename, mURL, finalStatus);
+			}
+		});
 	}
 	
 }

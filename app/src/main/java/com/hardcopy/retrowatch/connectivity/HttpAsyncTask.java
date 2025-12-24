@@ -19,16 +19,21 @@ package com.hardcopy.retrowatch.connectivity;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import com.hardcopy.retrowatch.utils.Logs;
 
-import android.os.AsyncTask;
+import android.os.Handler;
+import android.os.Looper;
 
 
-public class HttpAsyncTask extends AsyncTask<Void, Integer, String> implements HttpInterface
+public class HttpAsyncTask implements HttpInterface
 {
 	// Global variables
 	public static final String tag = "HttpAsyncTask";
+	private static final Executor executor = Executors.newSingleThreadExecutor();
+	private static final Handler handler = new Handler(Looper.getMainLooper());
 	
 //	private Map<String, String> mMap;	// Disabled
 	private int mType;
@@ -47,8 +52,14 @@ public class HttpAsyncTask extends AsyncTask<Void, Integer, String> implements H
 		mRequestType = requestType;
 	}
 	
+	/**
+	 * Execute the HTTP request asynchronously
+	 */
+	public void execute() {
+		executor.execute(this::doInBackground);
+	}
 
-	protected String doInBackground(Void... unused) 
+	private void doInBackground() 
 	{
 		Logs.d(tag, "###### HttpAsyncTask :: Starting HTTP request task ");
 		String resultString = null;
@@ -56,7 +67,8 @@ public class HttpAsyncTask extends AsyncTask<Void, Integer, String> implements H
 		
 		if(mListener==null || mURL==null) { 
 			Logs.d(tag, "###### Error!!! : mListener==null or mURL==null ");
-			return null; 
+			onPostExecute(null);
+			return; 
 		} else {
 			Logs.d(tag, "###### Request URL = "+mURL);
 		}
@@ -69,7 +81,8 @@ public class HttpAsyncTask extends AsyncTask<Void, Integer, String> implements H
 			e1.printStackTrace();
 			mResultStatus = MSG_HTTP_RESULT_CODE_ERROR_REQUEST_EXCEPTION;
 			Logs.d(tag, "###### Error!!! : MalformedURLException ");
-			return "";
+			onPostExecute("");
+			return;
 		}
 		
 		// Determine request type
@@ -99,30 +112,31 @@ public class HttpAsyncTask extends AsyncTask<Void, Integer, String> implements H
 			e.printStackTrace();
 			mResultStatus = MSG_HTTP_RESULT_CODE_ERROR_REQUEST_EXCEPTION;
 			Logs.d(tag, "###### Error!!! : HttpRequester makes IOException ");
-			return "";
+			onPostExecute("");
+			return;
 		}
 
 		// Check result string
 		if(resultString == null || resultString.length() < 1) {
 			mResultStatus = MSG_HTTP_RESULT_CODE_ERROR_UNKNOWN;
 			Logs.d(tag, "###### Error!!! : resultString - invalid result ");
-			return "";
+			onPostExecute("");
+			return;
 		}
 		
 		mResultStatus = MSG_HTTP_RESULT_CODE_OK;
-		return resultString;
+		onPostExecute(resultString);
 	}
 
-	protected void onProgressUpdate(Integer... progress) {
-		// TODO: set progress percentage
-		// This code runs on UI thread
-	}
-
-	protected void onPostExecute(String result) {
-		// This code runs on UI thread
-		if(mListener != null) {
-			mListener.OnReceiveHttpResponse(mType, result, mResultStatus);
-		}
+	private void onPostExecute(String result) {
+		// Post to UI thread using handler
+		final String finalResult = result;
+		final int finalStatus = mResultStatus;
+		handler.post(() -> {
+			if(mListener != null) {
+				mListener.OnReceiveHttpResponse(mType, finalResult, finalStatus);
+			}
+		});
 	}
 
 	
