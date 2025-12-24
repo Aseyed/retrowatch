@@ -115,66 +115,82 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 	}
 	
 	private void initializeUI() {
-		setContentView(R.layout.activity_retro_watch);
+		try {
+			Log.d(TAG, "Step 1: Setting content view");
+			setContentView(R.layout.activity_retro_watch);
 
-		// Load static utilities
-		mUtils = new Utils(mContext);
-		
-		// Set up the action bar
-		final ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayShowTitleEnabled(true);
-		}
-
-		// Create the adapter that will return a fragment for each of the primary sections of the app.
-		mFragmentManager = getSupportFragmentManager();
-		mSectionsPagerAdapter = new RetroWatchFragmentAdapter(mFragmentManager, mContext, this);
-
-		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
-
-		// Set up the Material TabLayout
-		mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
-		
-		// Add tabs
-		if (mSectionsPagerAdapter != null) {
-			for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-				mTabLayout.addTab(mTabLayout.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)));
+			Log.d(TAG, "Step 2: Loading utilities");
+			// Load static utilities
+			mUtils = new Utils(mContext);
+			
+			Log.d(TAG, "Step 3: Setting up action bar");
+			// Set up the action bar
+			final ActionBar actionBar = getActionBar();
+			if (actionBar != null) {
+				actionBar.setDisplayShowTitleEnabled(true);
 			}
-		}
-		
-		// Connect TabLayout with ViewPager
-		mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-			@Override
-			public void onTabSelected(TabLayout.Tab tab) {
-				if (mViewPager != null) {
-					mViewPager.setCurrentItem(tab.getPosition());
+
+			Log.d(TAG, "Step 4: Creating fragment adapter");
+			// Create the adapter that will return a fragment for each of the primary sections of the app.
+			mFragmentManager = getSupportFragmentManager();
+			mSectionsPagerAdapter = new RetroWatchFragmentAdapter(mFragmentManager, mContext, this);
+
+			Log.d(TAG, "Step 5: Setting up ViewPager");
+			// Set up the ViewPager with the sections adapter.
+			mViewPager = (ViewPager) findViewById(R.id.pager);
+			mViewPager.setAdapter(mSectionsPagerAdapter);
+
+			Log.d(TAG, "Step 6: Setting up TabLayout");
+			// Set up the Material TabLayout
+			mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
+			
+			Log.d(TAG, "Step 7: Adding tabs");
+			// Add tabs
+			if (mSectionsPagerAdapter != null) {
+				for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+					mTabLayout.addTab(mTabLayout.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)));
 				}
 			}
 			
-			@Override
-			public void onTabUnselected(TabLayout.Tab tab) {
+			Log.d(TAG, "Step 8: Connecting TabLayout with ViewPager");
+			// Connect TabLayout with ViewPager
+			mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+				@Override
+				public void onTabSelected(TabLayout.Tab tab) {
+					if (mViewPager != null) {
+						mViewPager.setCurrentItem(tab.getPosition());
+					}
+				}
+				
+				@Override
+				public void onTabUnselected(TabLayout.Tab tab) {
+				}
+				
+				@Override
+				public void onTabReselected(TabLayout.Tab tab) {
+				}
+			});
+			
+			// Update TabLayout when ViewPager is swiped
+			if (mViewPager != null && mTabLayout != null) {
+				mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+			}
+
+			Log.d(TAG, "Step 9: Setting up status views");
+			// Setup views
+			mImageBT = (ImageView) findViewById(R.id.status_title);
+			if (mImageBT != null) {
+				mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
+			}
+			mTextStatus = (TextView) findViewById(R.id.status_text);
+			if (mTextStatus != null) {
+				mTextStatus.setText(getResources().getString(R.string.bt_state_init));
 			}
 			
-			@Override
-			public void onTabReselected(TabLayout.Tab tab) {
-			}
-		});
-		
-		// Update TabLayout when ViewPager is swiped
-		if (mViewPager != null && mTabLayout != null) {
-			mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-		}
-
-		// Setup views
-		mImageBT = (ImageView) findViewById(R.id.status_title);
-		if (mImageBT != null) {
-			mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
-		}
-		mTextStatus = (TextView) findViewById(R.id.status_text);
-		if (mTextStatus != null) {
-			mTextStatus.setText(getResources().getString(R.string.bt_state_init));
+			Log.d(TAG, "initializeUI completed successfully");
+		} catch (Exception e) {
+			Log.e(TAG, "ERROR in initializeUI: " + e.getMessage(), e);
+			throw e; // Re-throw to be caught by caller
 		}
 	}
 	
@@ -236,8 +252,16 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 			
 			if (bluetoothGranted) {
 				// Permissions granted, initialize UI and start service
-				initializeUI();
-				doStartService();
+				try {
+					Log.d(TAG, "Initializing UI after permissions granted");
+					initializeUI();
+					Log.d(TAG, "UI initialized successfully, starting service");
+					doStartService();
+					Log.d(TAG, "Service start requested");
+				} catch (Exception e) {
+					Log.e(TAG, "ERROR during initialization: " + e.getMessage(), e);
+					Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+				}
 			} else {
 				// Permissions denied, show explanation
 				Toast.makeText(this, "Bluetooth permissions are required. Please grant permissions in Settings.", Toast.LENGTH_LONG).show();
@@ -469,24 +493,41 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 	private ServiceConnection mServiceConn = new ServiceConnection() {
 		
 		public void onServiceConnected(ComponentName className, IBinder binder) {
-			Logs.d(TAG, "Activity - Service connected");
-			
-			mService = ((RetroWatchService.RetroWatchServiceBinder) binder).getService();
-			
-			// Activity couldn't work with mService until connections are made
-			// So initialize parameters and settings here, not while running onCreate()
-			initialize();
+			try {
+				Logs.d(TAG, "Activity - Service connected");
+				Log.d(TAG, "onServiceConnected: Getting service instance");
+				
+				mService = ((RetroWatchService.RetroWatchServiceBinder) binder).getService();
+				
+				// Activity couldn't work with mService until connections are made
+				// So initialize parameters and settings here, not while running onCreate()
+				Log.d(TAG, "onServiceConnected: Calling initialize()");
+				initialize();
+				Log.d(TAG, "onServiceConnected: Initialization complete");
+			} catch (Exception e) {
+				Log.e(TAG, "ERROR in onServiceConnected: " + e.getMessage(), e);
+				Toast.makeText(RetroWatchActivity.this, "Error connecting to service: " + e.getMessage(), Toast.LENGTH_LONG).show();
+			}
 		}
 
 		public void onServiceDisconnected(ComponentName className) {
+			Log.d(TAG, "onServiceDisconnected");
 			mService = null;
 		}
 	};
 	
 	private void doStartService() {
-		Logs.d(TAG, "# Activity - doStartService()");
-		startService(new Intent(this, RetroWatchService.class));
-		bindService(new Intent(this, RetroWatchService.class), mServiceConn, Context.BIND_AUTO_CREATE);
+		try {
+			Logs.d(TAG, "# Activity - doStartService()");
+			Log.d(TAG, "Starting RetroWatchService...");
+			startService(new Intent(this, RetroWatchService.class));
+			Log.d(TAG, "Binding to RetroWatchService...");
+			bindService(new Intent(this, RetroWatchService.class), mServiceConn, Context.BIND_AUTO_CREATE);
+			Log.d(TAG, "Service started and bind requested");
+		} catch (Exception e) {
+			Log.e(TAG, "ERROR in doStartService: " + e.getMessage(), e);
+			Toast.makeText(this, "Error starting service: " + e.getMessage(), Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	private void doStopService() {
@@ -499,27 +540,44 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 	 * Initialization / Finalization
 	 */
 	private void initialize() {
-		Logs.d(TAG, "# Activity - initialize()");
-		mService.setupService(mActivityHandler);
-		
-		// If BT is not on, request that it be enabled.
-		// RetroWatchService.setupBT() will then be called during onActivityResult
-		if(!mService.isBluetoothEnabled()) {
-			Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-			startActivityForResult(enableIntent, Constants.REQUEST_ENABLE_BT);
+		try {
+			Logs.d(TAG, "# Activity - initialize()");
+			Log.d(TAG, "initialize: Setting up service");
+			mService.setupService(mActivityHandler);
+			
+			Log.d(TAG, "initialize: Checking Bluetooth status");
+			// If BT is not on, request that it be enabled.
+			// RetroWatchService.setupBT() will then be called during onActivityResult
+			if(!mService.isBluetoothEnabled()) {
+				Log.d(TAG, "initialize: Bluetooth not enabled, requesting");
+				Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+				startActivityForResult(enableIntent, Constants.REQUEST_ENABLE_BT);
+			}
+			
+			Log.d(TAG, "initialize: Refreshing content objects");
+			// Get messages(notifications)
+			refreshContentObjects();
+			
+			Log.d(TAG, "initialize: Getting filters");
+			// Get filters
+			getFiltersAll();
+			
+			Log.d(TAG, "initialize: Reserving content update");
+			// Reserve refresh timer
+			reserveContentUpdate(5000);
+			
+			Log.d(TAG, "initialize: Getting BLE status");
+			// Get current connection status (Result will be delivered on Handler)
+			mService.getBleStatus();
+			
+			Log.d(TAG, "initialize: Completed successfully");
+		} catch (SecurityException e) {
+			Log.e(TAG, "SecurityException in initialize: " + e.getMessage(), e);
+			Toast.makeText(this, "Bluetooth permission error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
+			Log.e(TAG, "ERROR in initialize: " + e.getMessage(), e);
+			Toast.makeText(this, "Initialization error: " + e.getMessage(), Toast.LENGTH_LONG).show();
 		}
-		
-		// Get messages(notifications)
-		refreshContentObjects();
-		
-		// Get filters
-		getFiltersAll();
-		
-		// Reserve refresh timer
-		reserveContentUpdate(5000);
-		
-		// Get current connection status (Result will be delivered on Handler)
-		mService.getBleStatus();
 	}
 	
 	private void finalizeActivity() {
