@@ -196,11 +196,19 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			registerReceiver(mBatteryInfoReceiver, iFilter);
 		}
 		
-		// Set telephony listener
-		TelephonyStateListener telephonyListener = new TelephonyStateListener();
-		TelephonyManager telephony = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
-		telephony.listen(telephonyListener, PhoneStateListener.LISTEN_SERVICE_STATE);
-		telephony.listen(telephonyListener, PhoneStateListener.LISTEN_CALL_STATE);
+		// Set telephony listener - only for older Android versions
+		// PhoneStateListener is deprecated in API 31 and can cause crashes
+		if (android.os.Build.VERSION.SDK_INT < 31) {
+			try {
+				TelephonyStateListener telephonyListener = new TelephonyStateListener();
+				TelephonyManager telephony = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+				telephony.listen(telephonyListener, PhoneStateListener.LISTEN_SERVICE_STATE);
+				telephony.listen(telephonyListener, PhoneStateListener.LISTEN_CALL_STATE);
+			} catch (Exception e) {
+				Logs.d(TAG, "Could not register telephony listener: " + e.getMessage());
+			}
+		}
+		// TODO: For API 31+, should use TelephonyCallback instead of PhoneStateListener
 		
 		// Get local Bluetooth adapter
 		mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
