@@ -102,6 +102,19 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		mContext = this;//.getApplicationContext();
 		mActivityHandler = new ActivityHandler();
 		
+		// IMPORTANT: Request permissions FIRST before initializing full UI
+		if (!checkPermissions()) {
+			// Show simple permission request screen
+			setContentView(R.layout.activity_permission_request);
+			mTextStatus = (TextView) findViewById(R.id.status_text);
+			requestAppPermissions();
+		} else {
+			// Permissions already granted, initialize normally
+			initializeUI();
+		}
+	}
+	
+	private void initializeUI() {
 		setContentView(R.layout.activity_retro_watch);
 
 		// Load static utilities
@@ -125,15 +138,19 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		mTabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		
 		// Add tabs
-		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-			mTabLayout.addTab(mTabLayout.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)));
+		if (mSectionsPagerAdapter != null) {
+			for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+				mTabLayout.addTab(mTabLayout.newTab().setText(mSectionsPagerAdapter.getPageTitle(i)));
+			}
 		}
 		
 		// Connect TabLayout with ViewPager
 		mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 			@Override
 			public void onTabSelected(TabLayout.Tab tab) {
-				mViewPager.setCurrentItem(tab.getPosition());
+				if (mViewPager != null) {
+					mViewPager.setCurrentItem(tab.getPosition());
+				}
 			}
 			
 			@Override
@@ -146,18 +163,18 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		});
 		
 		// Update TabLayout when ViewPager is swiped
-		mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+		if (mViewPager != null && mTabLayout != null) {
+			mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+		}
 
 		// Setup views
 		mImageBT = (ImageView) findViewById(R.id.status_title);
-		mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
+		if (mImageBT != null) {
+			mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
+		}
 		mTextStatus = (TextView) findViewById(R.id.status_text);
-		mTextStatus.setText(getResources().getString(R.string.bt_state_init));
-		
-		// IMPORTANT: Request permissions before starting service
-		// The service will be started in onRequestPermissionsResult or onResume if already granted
-		if (!checkPermissions()) {
-			requestAppPermissions();
+		if (mTextStatus != null) {
+			mTextStatus.setText(getResources().getString(R.string.bt_state_init));
 		}
 	}
 	
@@ -218,12 +235,12 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 			}
 			
 			if (bluetoothGranted) {
-				// Permissions granted, start the service
+				// Permissions granted, initialize UI and start service
+				initializeUI();
 				doStartService();
 			} else {
 				// Permissions denied, show explanation
 				Toast.makeText(this, "Bluetooth permissions are required. Please grant permissions in Settings.", Toast.LENGTH_LONG).show();
-				mTextStatus.setText("Permissions required - Grant in Settings");
 			}
 		}
 	}
@@ -242,7 +259,8 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		super.onResume();
 		
 		// Start service when activity resumes and permissions are granted
-		if (mService == null && checkPermissions()) {
+		// Only if UI is already initialized (mService might be null on first run)
+		if (mViewPager != null && mService == null && checkPermissions()) {
 			doStartService();
 		}
 	}
