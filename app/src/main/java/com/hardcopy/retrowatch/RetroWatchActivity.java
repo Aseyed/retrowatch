@@ -150,11 +150,7 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 
 		// Setup views
 		mImageBT = (ImageView) findViewById(R.id.status_title);
-		if (Build.VERSION.SDK_INT >= 21) {
-			mImageBT.setImageDrawable(getDrawable(android.R.drawable.presence_invisible));
-		} else {
-			mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_invisible));
-		}
+		mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
 		mTextStatus = (TextView) findViewById(R.id.status_text);
 		mTextStatus.setText(getResources().getString(R.string.bt_state_init));
 		
