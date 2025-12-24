@@ -45,6 +45,7 @@ import android.os.Message;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.content.ContextCompat;
