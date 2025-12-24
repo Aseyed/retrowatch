@@ -27,10 +27,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     
-    buildFeatures {
-        viewBinding true
-    }
-    
     lint {
         abortOnError false
         checkReleaseBuilds false

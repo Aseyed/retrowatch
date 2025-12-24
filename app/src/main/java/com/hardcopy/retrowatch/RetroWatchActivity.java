@@ -57,7 +57,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RetroWatchActivity extends FragmentActivity implements ActionBar.TabListener, IFragmentListener {
+public class RetroWatchActivity extends FragmentActivity implements IFragmentListener {
 
     // Debugging
     private static final String TAG = "RetroWatchActivity";
@@ -105,9 +105,11 @@ public class RetroWatchActivity extends FragmentActivity implements ActionBar.Ta
 		// Load static utilities
 		mUtils = new Utils(mContext);
 		
-		// Set up the action bar.
+		// Set up the action bar - tabs deprecated, using ViewPager only
 		final ActionBar actionBar = getActionBar();
-		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+		if (actionBar != null) {
+			actionBar.setDisplayShowTitleEnabled(true);
+		}
 
 		// Create the adapter that will return a fragment for each of the primary sections of the app.
 		mFragmentManager = getSupportFragmentManager();
@@ -117,25 +119,13 @@ public class RetroWatchActivity extends FragmentActivity implements ActionBar.Ta
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
-		// When swiping between different sections, select the corresponding tab.
-		mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-			@Override
-			public void onPageSelected(int position) {
-				actionBar.setSelectedNavigationItem(position);
-			}
-		});
-
-		// For each of the sections in the app, add a tab to the action bar.
-		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
-			// Create a tab with text corresponding to the page title defined by the adapter.
-			actionBar.addTab(actionBar.newTab()
-					.setText(mSectionsPagerAdapter.getPageTitle(i))
-					.setTabListener(this));
-		}
-		
 		// Setup views
 		mImageBT = (ImageView) findViewById(R.id.status_title);
-		mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_invisible));
+		if (Build.VERSION.SDK_INT >= 21) {
+			mImageBT.setImageDrawable(getDrawable(android.R.drawable.presence_invisible));
+		} else {
+			mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_invisible));
+		}
 		mTextStatus = (TextView) findViewById(R.id.status_text);
 		mTextStatus.setText(getResources().getString(R.string.bt_state_init));
 		
@@ -289,24 +279,6 @@ public class RetroWatchActivity extends FragmentActivity implements ActionBar.Ta
 	public void onConfigurationChanged(Configuration newConfig){
 		// This prevents reload after configuration changes
 		super.onConfigurationChanged(newConfig);
-	}
-	
-	
-	/**
-	 * Implements TabListener
-	 */
-	@Override
-	public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-		// When the given tab is selected, switch to the corresponding page in the ViewPager.
-		mViewPager.setCurrentItem(tab.getPosition());
-	}
-
-	@Override
-	public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-	}
-
-	@Override
-	public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
 	}
 	
 	@Override
@@ -630,17 +602,17 @@ public class RetroWatchActivity extends FragmentActivity implements ActionBar.Ta
 			case Constants.MESSAGE_BT_STATE_INITIALIZED:
 				mTextStatus.setText(getResources().getString(R.string.bt_title) + ": " + 
 						getResources().getString(R.string.bt_state_init));
-				mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_invisible));
+				mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
 				break;
 			case Constants.MESSAGE_BT_STATE_LISTENING:
 				mTextStatus.setText(getResources().getString(R.string.bt_title) + ": " + 
 						getResources().getString(R.string.bt_state_wait));
-				mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_invisible));
+				mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_invisible));
 				break;
 			case Constants.MESSAGE_BT_STATE_CONNECTING:
 				mTextStatus.setText(getResources().getString(R.string.bt_title) + ": " + 
 						getResources().getString(R.string.bt_state_connect));
-				mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_away));
+				mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_away));
 				break;
 			case Constants.MESSAGE_BT_STATE_CONNECTED:
 				if(mService != null) {
@@ -648,19 +620,19 @@ public class RetroWatchActivity extends FragmentActivity implements ActionBar.Ta
 					if(deviceName != null) {
 						mTextStatus.setText(getResources().getString(R.string.bt_title) + ": " + 
 								getResources().getString(R.string.bt_state_connected) + " " + deviceName);
-						mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_online));
+						mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_online));
 					}
 				}
 				break;
 			case Constants.MESSAGE_BT_STATE_ERROR:
 				mTextStatus.setText(getResources().getString(R.string.bt_state_error));
-				mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+				mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_busy));
 				break;
 			
 			// BT Command status
 			case Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED:
 				mTextStatus.setText(getResources().getString(R.string.bt_cmd_sending_error));
-				mImageBT.setImageDrawable(getResources().getDrawable(android.R.drawable.presence_busy));
+				mImageBT.setImageDrawable(ContextCompat.getDrawable(mContext, android.R.drawable.presence_busy));
 				break;
 				
 			////////////////////////////////////////////
