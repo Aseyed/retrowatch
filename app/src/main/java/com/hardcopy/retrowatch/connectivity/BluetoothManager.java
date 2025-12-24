@@ -26,15 +26,19 @@ import java.util.UUID;
 import com.hardcopy.retrowatch.utils.Constants;
 import com.hardcopy.retrowatch.utils.Logs;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import androidx.core.app.ActivityCompat;
 
 /**
  * This class does all the work for setting up and managing Bluetooth
@@ -69,6 +73,7 @@ public class BluetoothManager {
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
+    private final Context mContext;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -88,9 +93,20 @@ public class BluetoothManager {
      * @param handler  A Handler to send messages back to the UI Activity
      */
     public BluetoothManager(Context context, Handler handler) {
+        mContext = context;
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
         mHandler = handler;
+    }
+    
+    /**
+     * Check if we have Bluetooth permissions (required for Android 12+)
+     */
+    private boolean hasBluetoothPermission() {
+        if (Build.VERSION.SDK_INT >= 31) {
+            return ActivityCompat.checkSelfPermission(mContext, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true; // No runtime permission needed for older versions
     }
 
     /**
@@ -123,6 +139,17 @@ public class BluetoothManager {
      * session in listening (server) mode. Called by the Activity onResume() */
     public synchronized void start() {
         Logs.d(TAG, "Starting BluetoothManager...");
+        
+        // Check for Bluetooth permission
+        if (!hasBluetoothPermission()) {
+            Logs.e(TAG, "Cannot start BluetoothManager: Missing BLUETOOTH_CONNECT permission");
+            Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_TOAST, "Bluetooth permission required");
+            msg.setData(bundle);
+            mHandler.sendMessage(msg);
+            return;
+        }
 
         // Cancel any thread attempting to make a connection
         if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
@@ -132,8 +159,18 @@ public class BluetoothManager {
 
         // Start the thread to listen on a BluetoothServerSocket
         if (mAcceptThread == null) {
-            mAcceptThread = new AcceptThread();
-            mAcceptThread.start();
+            try {
+                mAcceptThread = new AcceptThread();
+                mAcceptThread.start();
+            } catch (SecurityException e) {
+                Logs.e(TAG, "SecurityException when starting AcceptThread: " + e.getMessage());
+                Message msg = mHandler.obtainMessage(MESSAGE_TOAST);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_TOAST, "Bluetooth permission denied");
+                msg.setData(bundle);
+                mHandler.sendMessage(msg);
+                return;
+            }
         }
         setState(STATE_LISTEN);
         mIsServiceStopped = false;
@@ -145,6 +182,13 @@ public class BluetoothManager {
      */
     public synchronized void connect(BluetoothDevice device) {
         Logs.d(TAG, "Connecting to: " + device);
+        
+        // Check for Bluetooth permission
+        if (!hasBluetoothPermission()) {
+            Logs.e(TAG, "Cannot connect: Missing BLUETOOTH_CONNECT permission");
+            connectionFailed();
+            return;
+        }
         
         if (mState == STATE_CONNECTED)
         	return;
@@ -158,9 +202,14 @@ public class BluetoothManager {
         if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
 
         // Start the thread to connect with the given device
-        mConnectThread = new ConnectThread(device);
-        mConnectThread.start();
-        setState(STATE_CONNECTING);
+        try {
+            mConnectThread = new ConnectThread(device);
+            mConnectThread.start();
+            setState(STATE_CONNECTING);
+        } catch (SecurityException e) {
+            Logs.e(TAG, "SecurityException when connecting: " + e.getMessage());
+            connectionFailed();
+        }
     }
 
     /**
@@ -188,7 +237,18 @@ public class BluetoothManager {
         Message msg = mHandler.obtainMessage(MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_ADDRESS, device.getAddress());
-        bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_NAME, device.getName());
+        
+        // Get device name with permission check
+        try {
+            if (hasBluetoothPermission()) {
+                bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_NAME, device.getName());
+            } else {
+                bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_NAME, "Unknown Device");
+            }
+        } catch (SecurityException e) {
+            Logs.e(TAG, "SecurityException getting device name: " + e.getMessage());
+            bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_NAME, "Unknown Device");
+        }
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -308,9 +368,15 @@ public class BluetoothManager {
 
             // Create a new listening server socket
             try {
-                tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
+                if (hasBluetoothPermission()) {
+                    tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
+                } else {
+                    Logs.e(TAG, "Cannot create server socket: Missing BLUETOOTH_CONNECT permission");
+                }
             } catch (IOException e) {
                 Logs.e(TAG, "listen() failed" + e.toString());
+            } catch (SecurityException e) {
+                Logs.e(TAG, "SecurityException in AcceptThread: " + e.getMessage());
             }
             mmServerSocket = tmp;
         }
@@ -385,9 +451,15 @@ public class BluetoothManager {
             // Get a BluetoothSocket for a connection with the
             // given BluetoothDevice
             try {
-                tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                if (hasBluetoothPermission()) {
+                    tmp = device.createRfcommSocketToServiceRecord(MY_UUID);
+                } else {
+                    Log.e(TAG, "Cannot create socket: Missing BLUETOOTH_CONNECT permission");
+                }
             } catch (IOException e) {
                 Log.e(TAG, "create() failed", e);
+            } catch (SecurityException e) {
+                Log.e(TAG, "SecurityException creating socket: " + e.getMessage());
             }
             mmSocket = tmp;
         }
@@ -395,9 +467,21 @@ public class BluetoothManager {
         public void run() {
             Log.i(TAG, "BEGIN mConnectThread");
             setName("ConnectThread");
+            
+            if (mmSocket == null) {
+                Log.e(TAG, "Socket is null, cannot connect");
+                connectionFailed();
+                return;
+            }
 
             // Always cancel discovery because it will slow down a connection
-            mAdapter.cancelDiscovery();
+            try {
+                if (hasBluetoothPermission()) {
+                    mAdapter.cancelDiscovery();
+                }
+            } catch (SecurityException e) {
+                Log.e(TAG, "SecurityException canceling discovery: " + e.getMessage());
+            }
 
             // Make a connection to the BluetoothSocket
             try {

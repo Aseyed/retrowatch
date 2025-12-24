@@ -212,8 +212,20 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == REQUEST_CODE_PERMISSIONS) {
-			// Proceed regardless of result for now, but in production we should handle denial
-			doStartService();
+			// Check if at least Bluetooth permissions were granted
+			boolean hasRequiredPermissions = true;
+			if (Build.VERSION.SDK_INT >= 31) {
+				hasRequiredPermissions = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
+			}
+			
+			if (hasRequiredPermissions) {
+				doStartService();
+			} else {
+				// Show a message that permissions are required
+				Toast.makeText(this, "Bluetooth permissions are required for this app to work", Toast.LENGTH_LONG).show();
+				// Still try to start service, but it will have limited functionality
+				doStartService();
+			}
 		}
 	}
 
