@@ -154,10 +154,9 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		mTextStatus = (TextView) findViewById(R.id.status_text);
 		mTextStatus.setText(getResources().getString(R.string.bt_state_init));
 		
-		// Do data initialization after service started and binded
-		if (checkPermissions()) {
-			doStartService();
-		} else {
+		// IMPORTANT: Request permissions before starting service
+		// The service will be started in onRequestPermissionsResult or onResume if already granted
+		if (!checkPermissions()) {
 			requestAppPermissions();
 		}
 	}
@@ -212,19 +211,19 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 		if (requestCode == REQUEST_CODE_PERMISSIONS) {
-			// Check if at least Bluetooth permissions were granted
-			boolean hasRequiredPermissions = true;
+			// Check if Bluetooth permissions were granted
+			boolean bluetoothGranted = true;
 			if (Build.VERSION.SDK_INT >= 31) {
-				hasRequiredPermissions = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
+				bluetoothGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED;
 			}
 			
-			if (hasRequiredPermissions) {
+			if (bluetoothGranted) {
+				// Permissions granted, start the service
 				doStartService();
 			} else {
-				// Show a message that permissions are required
-				Toast.makeText(this, "Bluetooth permissions are required for this app to work", Toast.LENGTH_LONG).show();
-				// Still try to start service, but it will have limited functionality
-				doStartService();
+				// Permissions denied, show explanation
+				Toast.makeText(this, "Bluetooth permissions are required. Please grant permissions in Settings.", Toast.LENGTH_LONG).show();
+				mTextStatus.setText("Permissions required - Grant in Settings");
 			}
 		}
 	}
@@ -235,6 +234,16 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		
 		if(mRefreshTimer != null) {
 			mRefreshTimer.cancel();
+		}
+	}
+	
+	@Override
+	public synchronized void onResume() {
+		super.onResume();
+		
+		// Start service when activity resumes and permissions are granted
+		if (mService == null && checkPermissions()) {
+			doStartService();
 		}
 	}
 	
