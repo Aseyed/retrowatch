@@ -221,13 +221,20 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			return;
 		}
 		
-		if (!mBluetoothAdapter.isEnabled()) {
-			// BT is not on, need to turn on manually.
-			// Activity will do this.
-		} else {
-			if(mBtManager == null) {
-				setupBT();
+		// Check Bluetooth state - requires BLUETOOTH_CONNECT permission on Android 12+
+		try {
+			if (!mBluetoothAdapter.isEnabled()) {
+				// BT is not on, need to turn on manually.
+				// Activity will do this.
+				Logs.d(TAG, "Bluetooth is not enabled");
+			} else {
+				if(mBtManager == null) {
+					setupBT();
+				}
 			}
+		} catch (SecurityException e) {
+			// Permission not granted yet - service will initialize BT later when permissions are granted
+			Logs.d(TAG, "Bluetooth permission not granted yet: " + e.getMessage());
 		}
 		
 		// Start service monitoring
@@ -508,7 +515,12 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			Logs.e(TAG, "# Service - cannot find bluetooth adapter. Restart app.");
 			return false;
 		}
-		return mBluetoothAdapter.isEnabled();
+		try {
+			return mBluetoothAdapter.isEnabled();
+		} catch (SecurityException e) {
+			Logs.e(TAG, "# Service - Bluetooth permission not granted: " + e.getMessage());
+			return false;
+		}
 	}
 	
 	/**
@@ -516,8 +528,13 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	 */
 	public int getBluetoothScanMode() {
 		int scanMode = -1;
-		if(mBluetoothAdapter != null)
-			scanMode = mBluetoothAdapter.getScanMode();
+		if(mBluetoothAdapter != null) {
+			try {
+				scanMode = mBluetoothAdapter.getScanMode();
+			} catch (SecurityException e) {
+				Logs.e(TAG, "# Service - Bluetooth permission not granted: " + e.getMessage());
+			}
+		}
 		
 		return scanMode;
 	}
