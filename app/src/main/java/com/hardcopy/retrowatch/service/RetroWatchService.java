@@ -60,9 +60,12 @@ import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
+import android.content.pm.ServiceInfo;
+
 public class RetroWatchService extends Service implements IContentManagerListener {
 
 	private static final String TAG = "RetroWatchService";
+	private static final int FOREGROUND_NOTIFICATION_ID = 12345;
 	
 	private static final long SENDING_CONTENTS_INTERVAL = 10*60*1000;
 	private static final long DEFAULT_UPDATE_DELAY = 10*1000;
@@ -110,9 +113,30 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Logs.d(TAG, "# Service - onStartCommand() starts here");
 		
+		// Promote to Foreground Service to prevent killing on Android 8+
+		startForegroundService();
+		
 		// If service returns START_STICKY, android restarts service automatically after forced close.
 		// At this time, onStartCommand() method in service must handle null intent.
 		return Service.START_STICKY;
+	}
+	
+	private void startForegroundService() {
+		Notification notification = makeNotification("Retro Watch", "Service is running", "Retro Watch Service");
+		if (notification != null) {
+			try {
+				if (Build.VERSION.SDK_INT >= 34) { // Android 14
+					startForeground(FOREGROUND_NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE);
+				} else if (Build.VERSION.SDK_INT >= 29) { // Android 10
+					startForeground(FOREGROUND_NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_CONNECTED_DEVICE); 
+					// Note: manifest type is enough for < 14 but passing it explicit is fine if available
+				} else {
+					startForeground(FOREGROUND_NOTIFICATION_ID, notification);
+				}
+			} catch (Exception e) {
+				Logs.e(TAG, "Failed to start foreground service: " + e.getMessage());
+			}
+		}
 	}
 	
 	@Override
@@ -242,9 +266,9 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	}
 	
 	/**
-	 * Disabled: Make a notification and register it.
+	 * Create a notification for foreground service
 	 */
-	private void makeNotification(String title, String text, String ticker) {
+	private Notification makeNotification(String title, String text, String ticker) {
 		NotificationManager nManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 		
 		// Create notification channel for API 26+
@@ -252,11 +276,13 @@ public class RetroWatchService extends Service implements IContentManagerListene
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			NotificationChannel channel = new NotificationChannel(
 				channelId,
-				"Retro Watch Notifications",
-				NotificationManager.IMPORTANCE_DEFAULT
+				"Retro Watch Service",
+				NotificationManager.IMPORTANCE_LOW
 			);
-			channel.setDescription("Notifications from Retro Watch");
-			nManager.createNotificationChannel(channel);
+			channel.setDescription("Persistent notification for Retro Watch service");
+			if (nManager != null) {
+				nManager.createNotificationChannel(channel);
+			}
 		}
 		
 		Notification.Builder ncomp;
@@ -272,8 +298,10 @@ public class RetroWatchService extends Service implements IContentManagerListene
 		if(ticker != null && Build.VERSION.SDK_INT < Build.VERSION_CODES.O)
 			ncomp.setTicker(ticker);
 		ncomp.setSmallIcon(R.drawable.ic_launcher);
-		ncomp.setAutoCancel(true);
-		nManager.notify((int)System.currentTimeMillis(),ncomp.build());
+		ncomp.setAutoCancel(false);
+		ncomp.setOngoing(true);
+		
+		return ncomp.build();
 	}
 	
 	private void sendTimeToDevice() {

@@ -29,6 +29,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.SystemClock;
+import androidx.core.content.ContextCompat;
 
 public class ServiceMonitoring {
 	
@@ -102,7 +103,13 @@ public class ServiceMonitoring {
 			}
 			// If service is not running, start service.
 			if(isRunningService(context, RetroWatchService.class) == false) {
-				context.startService(new Intent(context, RetroWatchService.class));
+				try {
+					Intent serviceIntent = new Intent(context, RetroWatchService.class);
+					ContextCompat.startForegroundService(context, serviceIntent);
+				} catch (Exception e) {
+					// Log error but don't crash
+					e.printStackTrace();
+				}
 			}
 		}
 	}
