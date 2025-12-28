@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.hardcopy.retrowatch.app-mergeDebugResources-32:/values-v11/values-v11.xml",
+            "outputFile": "com.hardcopy.retrowatch.app-mergeDebugResources-29:/values-v11/values-v11.xml",
             "map": [
                 {
                     "source": "D:\\projects\\retrowatch\\app\\src\\main\\res\\values-v11\\styles.xml",

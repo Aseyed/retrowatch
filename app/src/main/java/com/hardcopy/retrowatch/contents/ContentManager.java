@@ -660,14 +660,21 @@ public class ContentManager {
 	}
 	
 	public synchronized void queryGmailLabels() {
-		// Get the account list, and pick the user specified address
-		AccountManager.get(mContext).getAccountsByTypeAndFeatures(ACCOUNT_TYPE_GOOGLE, FEATURES_MAIL,
-				new AccountManagerCallback<Account[]>() {
+		// Get the account list, and pick the user specified address.
+		// NOTE: This can throw SecurityException (GET_ACCOUNTS) on modern Android if not granted.
+		try {
+			AccountManager.get(mContext).getAccountsByTypeAndFeatures(ACCOUNT_TYPE_GOOGLE, FEATURES_MAIL,
+					new AccountManagerCallback<Account[]>() {
 			@Override
 			public void run(AccountManagerFuture<Account[]> future) {
 				Account[] accounts = null;
 				try {
 					accounts = future.getResult();
+				} catch (SecurityException se) {
+					Logs.e(TAG, "Gmail query blocked by permission: " + se.toString());
+					// Degrade gracefully (avoid crashing the app/service).
+					addGmailToContentList(0);
+					return;
 				} catch (OperationCanceledException oce) {
 					Logs.e(TAG, "Got OperationCanceledException: "+oce.toString());
 				} catch (IOException ioe) {
@@ -680,6 +687,10 @@ public class ContentManager {
 				Logs.d(TAG, "# Gmail unread count = "+ mGmailUnreadCount);
 			}
 		}, null /* handler */);
+		} catch (SecurityException se) {
+			Logs.e(TAG, "Gmail query blocked by permission: " + se.toString());
+			addGmailToContentList(0);
+		}
 	}
 	
 	public synchronized void addGmailToContentList(int unreadCount) {

@@ -96,10 +96,13 @@ public class NotificationReceiverService extends NotificationListenerService {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getStringExtra("command").equals("clearall")){
+            if (intent == null) return;
+            String command = intent.getStringExtra("command");
+            if (command == null) return;
+            if(command.equals("clearall")){
             	NotificationReceiverService.this.cancelAllNotifications();
             }
-            else if(intent.getStringExtra("command").equals("list")){
+            else if(command.equals("list")){
                 for (StatusBarNotification sbn : NotificationReceiverService.this.getActiveNotifications()) {
                     Intent i2 = new  Intent(Constants.NOTIFICATION_LISTENER);
                     i2.putExtra(NOTIFICATION_KEY_CMD, NOTIFICATION_CMD_LIST);

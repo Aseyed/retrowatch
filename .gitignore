@@ -1,0 +1,23 @@
+# Android / Gradle
+.gradle/
+build/
+**/build/
+
+# Local SDK config (must not be committed)
+local.properties
+**/local.properties
+
+# Android Studio / IntelliJ
+.idea/
+**/.idea/
+*.iml
+
+# Keystores / signing
+*.jks
+*.keystore
+
+# OS
+.DS_Store
+Thumbs.db
+
+

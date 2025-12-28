@@ -72,6 +72,7 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 	private RetroWatchService mService;
 	private Utils mUtils;
 	private ActivityHandler mActivityHandler;
+	private boolean mIsServiceBound = false;
 	
 	// Global
 	private boolean mStopService = false;
@@ -533,6 +534,7 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 				Log.d(TAG, "onServiceConnected: Getting service instance");
 				
 				mService = ((RetroWatchService.RetroWatchServiceBinder) binder).getService();
+				mIsServiceBound = true;
 				
 				// Activity couldn't work with mService until connections are made
 				// So initialize parameters and settings here, not while running onCreate()
@@ -548,6 +550,7 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 		public void onServiceDisconnected(ComponentName className) {
 			Log.d(TAG, "onServiceDisconnected");
 			mService = null;
+			mIsServiceBound = false;
 		}
 	};
 	
@@ -555,10 +558,20 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 		try {
 			Logs.d(TAG, "# Activity - doStartService()");
 			Log.d(TAG, "Starting RetroWatchService...");
-			startService(new Intent(this, RetroWatchService.class));
+			Intent serviceIntent = new Intent(this, RetroWatchService.class);
+			// On Android 8+ prefer foreground-service start to avoid background-start restrictions.
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				ContextCompat.startForegroundService(this, serviceIntent);
+			} else {
+				startService(serviceIntent);
+			}
 			Log.d(TAG, "Binding to RetroWatchService...");
-			bindService(new Intent(this, RetroWatchService.class), mServiceConn, Context.BIND_AUTO_CREATE);
+			bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
 			Log.d(TAG, "Service started and bind requested");
+		} catch (IllegalStateException e) {
+			// Can happen on modern Android if a foreground service start is disallowed in current app state.
+			Log.e(TAG, "IllegalStateException in doStartService: " + e.getMessage(), e);
+			Toast.makeText(this, "Unable to start service: " + e.getMessage(), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			Log.e(TAG, "ERROR in doStartService: " + e.getMessage(), e);
 			Toast.makeText(this, "Error starting service: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -621,7 +634,16 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 		if(mStopService)
 			doStopService();
 		
-		unbindService(mServiceConn);
+		if (mIsServiceBound) {
+			try {
+				unbindService(mServiceConn);
+			} catch (IllegalArgumentException e) {
+				// Defensive: avoid crashing if system already unbound us or bind never completed.
+				Log.w(TAG, "Service not bound when unbinding: " + e.getMessage());
+			} finally {
+				mIsServiceBound = false;
+			}
+		}
 
 		RecycleUtils.recursiveRecycle(getWindow().getDecorView());
 		System.gc();
@@ -863,8 +885,14 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 			case Constants.MESSAGE_FEED_UPDATED:
 			{
 				ArrayList<ContentObject> feedList = null;
-				if(msg.obj != null) {
-					feedList = (ArrayList<ContentObject>)msg.obj;
+				if (msg.obj instanceof ArrayList<?>) {
+					// Avoid unchecked casts: copy only the expected element type.
+					feedList = new ArrayList<>();
+					for (Object o : (ArrayList<?>) msg.obj) {
+						if (o instanceof ContentObject) {
+							feedList.add((ContentObject) o);
+						}
+					}
 				}
 				MessageListFragment frg = (MessageListFragment) mSectionsPagerAdapter.getItem(RetroWatchFragmentAdapter.FRAGMENT_POS_MESSAGE_LIST);
 				if(frg != null) {

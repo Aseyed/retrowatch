@@ -5,6 +5,8 @@ plugins {
 android {
     namespace 'com.hardcopy.retrowatch'
     compileSdk 35 // Android 15 (latest stable)
+    // Use installed build-tools explicitly to avoid AGP trying to resolve older revisions via SDK remote metadata.
+    buildToolsVersion "35.0.0"
 
     defaultConfig {
         applicationId "com.hardcopy.retrowatch"
@@ -38,17 +40,10 @@ android {
 
 dependencies {
     // AndroidX libraries - latest stable versions for maximum compatibility
-    implementation 'androidx.appcompat:appcompat:1.7.0'
+    // Note: 1.7.0 is not published in common repos; 1.6.1 is the stable release line.
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.core:core:1.13.1'
-    
-    // Lifecycle components for better activity/fragment lifecycle handling
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.8.7'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7'
-    
-    // Activity result API for modern activity result handling
-    implementation 'androidx.activity:activity:1.9.3'
-    implementation 'androidx.fragment:fragment:1.8.5'
 }
 

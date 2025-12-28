@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.hardcopy.retrowatch.app-mergeDebugResources-32:/values-sw720dp-land-v13/values-sw720dp-land-v13.xml",
+            "outputFile": "com.hardcopy.retrowatch.app-mergeDebugResources-29:/values-sw720dp-land-v13/values-sw720dp-land-v13.xml",
             "map": [
                 {
                     "source": "D:\\projects\\retrowatch\\app\\src\\main\\res\\values-sw720dp-land\\dimens.xml",

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.hardcopy.retrowatch.app-mergeDebugResources-32:/values-xlarge-v4/values-xlarge-v4.xml",
+            "outputFile": "com.hardcopy.retrowatch.app-mergeDebugResources-29:/values-xlarge-v4/values-xlarge-v4.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\Ravin\\.gradle\\caches\\8.13\\transforms\\b53fdde436f23ce080f349958593ad2a\\transformed\\appcompat-1.7.0\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
+                    "source": "C:\\Users\\Ravin\\.gradle\\caches\\transforms-4\\59f40d4cb3a5f4a586fe99f4b0afd247\\transformed\\appcompat-1.6.1\\res\\values-xlarge-v4\\values-xlarge-v4.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7",
                         "startColumns": "4,4,4,4,4,4",

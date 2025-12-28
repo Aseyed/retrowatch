@@ -90,22 +90,22 @@
 51-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:40:22-65
 52
 53    <permission
-53-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\2a73b9be6d4f291b9bd93ba4a78e16cf\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
+53-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\transforms-4\1d5792de3cb177969ca648673c6dd0d7\transformed\core-1.13.1\AndroidManifest.xml:22:5-24:47
 54        android:name="com.hardcopy.retrowatch.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-54-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\2a73b9be6d4f291b9bd93ba4a78e16cf\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
+54-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\transforms-4\1d5792de3cb177969ca648673c6dd0d7\transformed\core-1.13.1\AndroidManifest.xml:23:9-81
 55        android:protectionLevel="signature" />
-55-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\2a73b9be6d4f291b9bd93ba4a78e16cf\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
+55-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\transforms-4\1d5792de3cb177969ca648673c6dd0d7\transformed\core-1.13.1\AndroidManifest.xml:24:9-44
 56
 57    <uses-permission android:name="com.hardcopy.retrowatch.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-57-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\2a73b9be6d4f291b9bd93ba4a78e16cf\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
-57-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\2a73b9be6d4f291b9bd93ba4a78e16cf\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
+57-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\transforms-4\1d5792de3cb177969ca648673c6dd0d7\transformed\core-1.13.1\AndroidManifest.xml:26:5-97
+57-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\transforms-4\1d5792de3cb177969ca648673c6dd0d7\transformed\core-1.13.1\AndroidManifest.xml:26:22-94
 58
 59    <application
 59-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:42:5-99:19
 60        android:allowBackup="true"
 60-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:43:9-35
 61        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-61-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\2a73b9be6d4f291b9bd93ba4a78e16cf\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
+61-->[androidx.core:core:1.13.1] C:\Users\Ravin\.gradle\caches\transforms-4\1d5792de3cb177969ca648673c6dd0d7\transformed\core-1.13.1\AndroidManifest.xml:28:18-86
 62        android:dataExtractionRules="@xml/data_extraction_rules"
 62-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:44:9-65
 63        android:debuggable="true"
@@ -118,160 +118,159 @@
 67-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:46:9-45
 68        android:label="@string/app_name"
 68-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:47:9-41
-69        android:testOnly="true"
-70        android:theme="@style/AppTheme" >
-70-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:48:9-40
-71
-72        <!-- Activity -->
-73        <activity
-73-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:53:9-63:20
-74            android:name="com.hardcopy.retrowatch.RetroWatchActivity"
-74-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:54:13-47
-75            android:configChanges="keyboardHidden|orientation|screenSize"
-75-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:57:13-74
-76            android:exported="true"
-76-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:58:13-36
-77            android:label="@string/app_name"
-77-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:55:13-45
-78            android:launchMode="singleTask" >
-78-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:56:13-44
-79            <intent-filter>
-79-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:59:13-62:29
-80                <action android:name="android.intent.action.MAIN" />
-80-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:60:17-69
-80-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:60:25-66
-81
-82                <category android:name="android.intent.category.LAUNCHER" />
-82-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:61:17-77
-82-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:61:27-74
-83            </intent-filter>
-84        </activity>
-85        <activity
-85-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:65:9-70:20
-86            android:name="com.hardcopy.retrowatch.DeviceListActivity"
-86-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:65:19-53
-87            android:configChanges="keyboardHidden|orientation|screenSize"
-87-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:68:19-80
-88            android:exported="false"
-88-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:69:19-43
-89            android:label="@string/select_device"
-89-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:66:19-56
-90            android:theme="@android:style/Theme.Dialog" >
-90-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:67:19-62
-91        </activity>
-92        <activity
-92-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:72:9-78:20
-93            android:name="com.hardcopy.retrowatch.RetroWebViewActivity"
-93-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:73:13-49
-94            android:configChanges="keyboardHidden|orientation|screenSize"
-94-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:76:13-74
-95            android:exported="false"
-95-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:77:13-37
-96            android:label="@string/web_view_name"
-96-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:74:13-50
-97            android:launchMode="singleTask" >
-97-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:75:13-44
-98        </activity>
-99
-100        <!-- Service -->
-101        <service
-101-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:81:9-88:19
-102            android:name="com.hardcopy.retrowatch.service.RetroWatchService"
-102-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:82:13-55
-103            android:configChanges="keyboardHidden|orientation|screenSize"
-103-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:85:13-74
-104            android:exported="false"
-104-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:86:13-37
-105            android:foregroundServiceType="connectedDevice"
-105-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:87:13-60
-106            android:icon="@drawable/ic_launcher"
-106-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:83:13-49
-107            android:label="@string/service_name" >
-107-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:84:13-50
-108        </service>
-109        <service
-109-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:90:9-97:19
-110            android:name="com.hardcopy.retrowatch.service.NotificationReceiverService"
-110-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:90:18-69
-111            android:exported="true"
-111-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:93:13-36
-112            android:label="@string/noti_receiver_name"
-112-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:91:13-55
-113            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
-113-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:92:13-87
-114            <intent-filter>
-114-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:94:13-96:29
-115                <action android:name="android.service.notification.NotificationListenerService" />
-115-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:95:17-99
-115-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:95:25-96
-116            </intent-filter>
-117        </service>
-118
-119        <provider
-119-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-120            android:name="androidx.startup.InitializationProvider"
-120-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:25:13-67
-121            android:authorities="com.hardcopy.retrowatch.androidx-startup"
-121-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:26:13-68
-122            android:exported="false" >
-122-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:27:13-37
-123            <meta-data
-123-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-124                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-124-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:30:17-75
-125                android:value="androidx.startup" />
-125-->[androidx.emoji2:emoji2:1.3.0] C:\Users\Ravin\.gradle\caches\8.13\transforms\0cbe343614403bb23b063726add83b65\transformed\jetified-emoji2-1.3.0\AndroidManifest.xml:31:17-49
-126            <meta-data
-126-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Ravin\.gradle\caches\8.13\transforms\c8e053dc610571d590fe2318893af835\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:29:13-31:52
-127                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-127-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Ravin\.gradle\caches\8.13\transforms\c8e053dc610571d590fe2318893af835\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:30:17-78
-128                android:value="androidx.startup" />
-128-->[androidx.lifecycle:lifecycle-process:2.8.7] C:\Users\Ravin\.gradle\caches\8.13\transforms\c8e053dc610571d590fe2318893af835\transformed\jetified-lifecycle-process-2.8.7\AndroidManifest.xml:31:17-49
-129            <meta-data
-129-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:29:13-31:52
-130                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-130-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:30:17-85
-131                android:value="androidx.startup" />
-131-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:31:17-49
-132        </provider>
-133
-134        <receiver
-134-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:34:9-52:20
-135            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-135-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:35:13-76
-136            android:directBootAware="false"
-136-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:36:13-44
-137            android:enabled="true"
-137-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:37:13-35
-138            android:exported="true"
-138-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:38:13-36
-139            android:permission="android.permission.DUMP" >
-139-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:39:13-57
-140            <intent-filter>
-140-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:40:13-42:29
-141                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:17-91
-141-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:41:25-88
-142            </intent-filter>
-143            <intent-filter>
-143-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:43:13-45:29
-144                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-144-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:17-85
-144-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:44:25-82
-145            </intent-filter>
-146            <intent-filter>
-146-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:46:13-48:29
-147                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-147-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:17-88
-147-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:47:25-85
-148            </intent-filter>
-149            <intent-filter>
-149-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:49:13-51:29
-150                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-150-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:17-95
-150-->[androidx.profileinstaller:profileinstaller:1.3.1] C:\Users\Ravin\.gradle\caches\8.13\transforms\4406a9fbde36da215b72289a02691bd5\transformed\jetified-profileinstaller-1.3.1\AndroidManifest.xml:50:25-92
-151            </intent-filter>
-152        </receiver>
-153    </application>
-154
-155</manifest>
+69        android:theme="@style/AppTheme" >
+69-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:48:9-40
+70
+71        <!-- Activity -->
+72        <activity
+72-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:53:9-63:20
+73            android:name="com.hardcopy.retrowatch.RetroWatchActivity"
+73-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:54:13-47
+74            android:configChanges="keyboardHidden|orientation|screenSize"
+74-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:57:13-74
+75            android:exported="true"
+75-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:58:13-36
+76            android:label="@string/app_name"
+76-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:55:13-45
+77            android:launchMode="singleTask" >
+77-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:56:13-44
+78            <intent-filter>
+78-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:59:13-62:29
+79                <action android:name="android.intent.action.MAIN" />
+79-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:60:17-69
+79-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:60:25-66
+80
+81                <category android:name="android.intent.category.LAUNCHER" />
+81-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:61:17-77
+81-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:61:27-74
+82            </intent-filter>
+83        </activity>
+84        <activity
+84-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:65:9-70:20
+85            android:name="com.hardcopy.retrowatch.DeviceListActivity"
+85-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:65:19-53
+86            android:configChanges="keyboardHidden|orientation|screenSize"
+86-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:68:19-80
+87            android:exported="false"
+87-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:69:19-43
+88            android:label="@string/select_device"
+88-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:66:19-56
+89            android:theme="@android:style/Theme.Dialog" >
+89-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:67:19-62
+90        </activity>
+91        <activity
+91-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:72:9-78:20
+92            android:name="com.hardcopy.retrowatch.RetroWebViewActivity"
+92-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:73:13-49
+93            android:configChanges="keyboardHidden|orientation|screenSize"
+93-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:76:13-74
+94            android:exported="false"
+94-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:77:13-37
+95            android:label="@string/web_view_name"
+95-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:74:13-50
+96            android:launchMode="singleTask" >
+96-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:75:13-44
+97        </activity>
+98
+99        <!-- Service -->
+100        <service
+100-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:81:9-88:19
+101            android:name="com.hardcopy.retrowatch.service.RetroWatchService"
+101-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:82:13-55
+102            android:configChanges="keyboardHidden|orientation|screenSize"
+102-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:85:13-74
+103            android:exported="false"
+103-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:86:13-37
+104            android:foregroundServiceType="connectedDevice"
+104-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:87:13-60
+105            android:icon="@drawable/ic_launcher"
+105-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:83:13-49
+106            android:label="@string/service_name" >
+106-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:84:13-50
+107        </service>
+108        <service
+108-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:90:9-97:19
+109            android:name="com.hardcopy.retrowatch.service.NotificationReceiverService"
+109-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:90:18-69
+110            android:exported="true"
+110-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:93:13-36
+111            android:label="@string/noti_receiver_name"
+111-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:91:13-55
+112            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+112-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:92:13-87
+113            <intent-filter>
+113-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:94:13-96:29
+114                <action android:name="android.service.notification.NotificationListenerService" />
+114-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:95:17-99
+114-->D:\projects\retrowatch\app\src\main\AndroidManifest.xml:95:25-96
+115            </intent-filter>
+116        </service>
+117
+118        <provider
+118-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+119            android:name="androidx.startup.InitializationProvider"
+119-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:25:13-67
+120            android:authorities="com.hardcopy.retrowatch.androidx-startup"
+120-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:26:13-68
+121            android:exported="false" >
+121-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:27:13-37
+122            <meta-data
+122-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+123                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+123-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:30:17-75
+124                android:value="androidx.startup" />
+124-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Ravin\.gradle\caches\transforms-4\629e1e9d12b47c113d89cde03bfdd29e\transformed\jetified-emoji2-1.2.0\AndroidManifest.xml:31:17-49
+125            <meta-data
+125-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\Ravin\.gradle\caches\transforms-4\f4a41a8d9449fd22caea64007c81a051\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
+126                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+126-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\Ravin\.gradle\caches\transforms-4\f4a41a8d9449fd22caea64007c81a051\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
+127                android:value="androidx.startup" />
+127-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\Ravin\.gradle\caches\transforms-4\f4a41a8d9449fd22caea64007c81a051\transformed\jetified-lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
+128            <meta-data
+128-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+129                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+129-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+130                android:value="androidx.startup" />
+130-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+131        </provider>
+132
+133        <receiver
+133-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+134            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+134-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+135            android:directBootAware="false"
+135-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+136            android:enabled="true"
+136-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+137            android:exported="true"
+137-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+138            android:permission="android.permission.DUMP" >
+138-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+139            <intent-filter>
+139-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+140                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+140-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+140-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+141            </intent-filter>
+142            <intent-filter>
+142-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+143                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+143-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+143-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+144            </intent-filter>
+145            <intent-filter>
+145-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+146                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+146-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+146-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+147            </intent-filter>
+148            <intent-filter>
+148-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+149                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+149-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+149-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Ravin\.gradle\caches\transforms-4\199118771072ce9b065496f55a7b37fd\transformed\jetified-profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+150            </intent-filter>
+151        </receiver>
+152    </application>
+153
+154</manifest>

@@ -1,546 +1,546 @@
 [
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/xml_data_extraction_rules.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/xml/data_extraction_rules.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_btn_cab_done_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/btn_cab_done_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_spinner_ab_disabled_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/spinner_ab_disabled_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_ic_launcher.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_ab_background_textured_example.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/ab_background_textured_example.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_spinner_ab_disabled_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/spinner_ab_disabled_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_progress_bg_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/progress_bg_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_spinner_background_ab_example.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/spinner_background_ab_example.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_progress_primary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/progress_primary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_menu_dropdown_panel_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/menu_dropdown_panel_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_btn_cab_done_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/btn_cab_done_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_cab_background_bottom_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/cab_background_bottom_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_spinner_ab_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/spinner_ab_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_list_rss.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/list_rss.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_btn_cab_done_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/btn_cab_done_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_activity_permission_request.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/activity_permission_request.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_menu_dropdown_panel_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/menu_dropdown_panel_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_menu_dropdown_panel_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/menu_dropdown_panel_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_list_message_list.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/list_message_list.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_tab_unselected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/tab_unselected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_progress_primary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/progress_primary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_spinner_ab_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/spinner_ab_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_ab_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/ab_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_spinner_ab_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/spinner_ab_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_progress_secondary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/progress_secondary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_btn_cab_done_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/btn_cab_done_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_ab_bottom_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/ab_bottom_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_cab_background_top_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/cab_background_top_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_spinner_ab_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/spinner_ab_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_tab_selected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/tab_selected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_ab_texture_tile_example.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/ab_texture_tile_example.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_ic_launcher.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_cab_background_bottom_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/cab_background_bottom_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_tab_unselected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/tab_unselected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_fragment_filters.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/fragment_filters.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_ab_texture_tile_example.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/ab_texture_tile_example.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_cab_background_bottom_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/cab_background_bottom_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_btn_cab_done_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/btn_cab_done_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_cab_background_bottom_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/cab_background_bottom_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_list_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/list_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_cab_background_top_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/cab_background_top_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_tab_indicator_ab_example.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/tab_indicator_ab_example.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_ic_launcher.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/ic_launcher.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_activity_web_view.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/activity_web_view.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_btn_cab_done_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/btn_cab_done_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_spinner_ab_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/spinner_ab_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/xml_backup_rules.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/xml/backup_rules.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_form_button_selector_gray.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/form_button_selector_gray.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_btn_cab_done_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/btn_cab_done_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_btn_cab_done_example.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/btn_cab_done_example.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_ab_bottom_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/ab_bottom_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_ab_texture_tile_example.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/ab_texture_tile_example.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_list_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/list_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_btn_cab_done_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/btn_cab_done_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_progress_primary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/progress_primary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_tab_selected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/tab_selected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_list_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/list_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_spinner_ab_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/spinner_ab_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/menu_retro_watch.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/menu/retro_watch.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_progress_primary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/progress_primary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_activity_device_list.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/activity_device_list.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_tab_selected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/tab_selected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_tab_selected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/tab_selected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_spinner_ab_disabled_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/spinner_ab_disabled_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_cab_background_top_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/cab_background_top_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_progress_bg_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/progress_bg_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_spinner_simple_item2.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/spinner_simple_item2.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_spinner_dropdown_simple_item.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/spinner_dropdown_simple_item.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_menu_dropdown_panel_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/menu_dropdown_panel_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/menu_retro_watch.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/menu/retro_watch.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_list_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/list_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_ab_texture_tile_example.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/ab_texture_tile_example.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_list_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/list_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_ab_transparent_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/ab_transparent_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_tab_unselected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/tab_unselected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_fragment_message_list.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/fragment_message_list.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_spinner_ab_disabled_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/spinner_ab_disabled_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_ab_bottom_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/ab_bottom_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_spinner_ab_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/spinner_ab_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_activity_retro_watch.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/activity_retro_watch.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_adapter_device_name.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/adapter_device_name.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_spinner_ab_disabled_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/spinner_ab_disabled_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_menu_dropdown_panel_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/menu_dropdown_panel_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_tab_unselected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/tab_unselected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_ab_transparent_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/ab_transparent_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_list_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/list_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_tab_unselected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/tab_unselected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_ab_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/ab_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_tab_selected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/tab_selected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_ab_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/ab_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_tab_unselected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/tab_unselected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_progress_secondary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/progress_secondary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_menu_dropdown_panel_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/menu_dropdown_panel_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_tab_selected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/tab_selected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_tab_selected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/tab_selected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_fragment_watch_control.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/fragment_watch_control.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_spinner_ab_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/spinner_ab_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_ab_transparent_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/ab_transparent_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_activity_permission_request.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/activity_permission_request.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_cab_background_bottom_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/cab_background_bottom_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_list_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/list_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_list_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/list_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_ab_texture_tile_example.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/ab_texture_tile_example.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_list_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/list_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_progress_bg_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/progress_bg_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_cab_background_bottom_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/cab_background_bottom_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_btn_cab_done_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/btn_cab_done_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_progress_bg_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/progress_bg_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_tab_unselected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/tab_unselected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_ab_stacked_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/ab_stacked_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_ab_bottom_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/ab_bottom_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_btn_cab_done_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/btn_cab_done_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_fragment_rss.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/fragment_rss.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_cab_background_top_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/cab_background_top_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_spinner_ab_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/spinner_ab_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_spinner_ab_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/spinner_ab_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_spinner_ab_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/spinner_ab_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_tab_selected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/tab_selected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_tab_unselected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/tab_unselected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_list_filters.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/list_filters.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_tab_selected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/tab_selected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_selectable_background_example.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/selectable_background_example.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_activity_retro_watch.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/activity_retro_watch.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_ab_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/ab_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_btn_cab_done_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/btn_cab_done_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_spinner_ab_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/spinner_ab_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_progress_primary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/progress_primary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_progress_horizontal_example.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/progress_horizontal_example.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_btn_cab_done_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/btn_cab_done_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_tab_unselected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/tab_unselected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_tab_unselected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/tab_unselected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_btn_cab_done_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/btn_cab_done_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_spinner_ab_disabled_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/spinner_ab_disabled_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_progress_bg_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/progress_bg_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_tab_unselected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/tab_unselected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_ab_texture_tile_example.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/ab_texture_tile_example.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_tab_selected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/tab_selected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_ic_launcher.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/ic_launcher.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_spinner_ab_disabled_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/spinner_ab_disabled_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_spinner_ab_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/spinner_ab_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_spinner_dropdown_simple_item.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/spinner_dropdown_simple_item.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_cab_background_top_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/cab_background_top_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_progress_secondary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/progress_secondary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_cab_background_top_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/cab_background_top_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_selectable_background_example.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/selectable_background_example.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_ab_stacked_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/ab_stacked_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_tab_selected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/tab_selected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_spinner_simple_item2.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/spinner_simple_item2.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_ab_stacked_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/ab_stacked_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_list_message_list.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/list_message_list.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_ab_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/ab_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_form_button_selector.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/form_button_selector.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_dialog__message_list.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/dialog__message_list.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_adapter_device_name.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/adapter_device_name.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_progress_secondary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/progress_secondary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_activity_device_list.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/activity_device_list.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_form_button_selector_gray.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/form_button_selector_gray.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_btn_cab_done_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/btn_cab_done_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_ab_bottom_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/ab_bottom_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_ab_transparent_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/ab_transparent_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_tab_unselected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/tab_unselected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_tab_unselected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/tab_unselected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_progress_bg_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/progress_bg_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_spinner_ab_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/spinner_ab_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_ab_stacked_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/ab_stacked_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_cab_background_bottom_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/cab_background_bottom_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_tab_selected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/tab_selected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_tab_unselected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/tab_unselected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_fragment_message_list.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/fragment_message_list.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_tab_selected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/tab_selected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_btn_cab_done_example.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/btn_cab_done_example.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_tab_unselected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/tab_unselected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_tab_selected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/tab_selected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_ab_stacked_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/ab_stacked_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_ab_stacked_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/ab_stacked_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_ic_launcher.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/ic_launcher.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_spinner_ab_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/spinner_ab_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_list_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/list_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_btn_cab_done_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/btn_cab_done_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_fragment_filters.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/fragment_filters.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_tab_unselected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/tab_unselected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_tab_selected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/tab_selected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_activity_web_view.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/activity_web_view.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_ab_transparent_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/ab_transparent_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_tab_selected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/tab_selected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_list_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/list_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_ic_launcher.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/ic_launcher.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_progress_secondary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/progress_secondary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_tab_selected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/tab_selected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_ab_bottom_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/ab_bottom_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_btn_cab_done_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/btn_cab_done_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_tab_selected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/tab_selected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_spinner_ab_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/spinner_ab_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_tab_unselected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/tab_unselected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_list_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/list_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable_ab_background_textured_example.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable/ab_background_textured_example.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_list_rss.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/list_rss.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_btn_cab_done_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/btn_cab_done_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_ab_transparent_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/ab_transparent_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_progress_secondary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/progress_secondary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_spinner_background_ab_example.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/spinner_background_ab_example.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_fragment_rss.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/fragment_rss.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_list_filters.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/list_filters.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_tab_unselected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/tab_unselected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_cab_background_top_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/cab_background_top_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_tab_unselected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/tab_unselected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_btn_cab_done_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/btn_cab_done_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_ab_bottom_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/ab_bottom_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_ab_stacked_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/ab_stacked_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_ab_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/ab_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_ic_launcher.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/ic_launcher.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_tab_selected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/tab_selected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_dialog_filter_list.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/dialog_filter_list.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_spinner_ab_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/spinner_ab_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_tab_selected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/tab_selected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_menu_dropdown_panel_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/menu_dropdown_panel_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_tab_selected_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/tab_selected_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_tab_selected_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/tab_selected_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_progress_horizontal_example.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/progress_horizontal_example.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_progress_secondary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/progress_secondary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_tab_unselected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/tab_unselected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_progress_primary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/progress_primary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_list_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/list_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_menu_dropdown_panel_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/menu_dropdown_panel_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_ic_launcher.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/ic_launcher.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_btn_cab_done_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/btn_cab_done_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_spinner_ab_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/spinner_ab_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_ab_stacked_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/ab_stacked_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_btn_cab_done_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/btn_cab_done_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_ab_bottom_solid_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/ab_bottom_solid_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_tab_unselected_pressed_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/tab_unselected_pressed_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/xml_backup_rules.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/xml/backup_rules.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_tab_unselected_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/tab_unselected_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_list_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/list_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_spinner_ab_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/spinner_ab_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_dialog_filter_list.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/dialog_filter_list.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_fragment_watch_control.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/fragment_watch_control.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_spinner_ab_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/spinner_ab_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_ab_texture_tile_example.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/ab_texture_tile_example.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/xml_data_extraction_rules.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/xml/data_extraction_rules.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_ab_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/ab_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_spinner_ab_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/spinner_ab_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/layout_spinner_simple_item.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/layout/spinner_simple_item.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_tab_selected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/tab_selected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_btn_cab_done_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/btn_cab_done_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_progress_primary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/progress_primary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_ab_texture_tile_example.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/ab_texture_tile_example.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_progress_primary_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/progress_primary_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_cab_background_top_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/cab_background_top_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_spinner_simple_item.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/spinner_simple_item.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_progress_bg_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/progress_bg_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_list_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/list_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_progress_secondary_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/progress_secondary_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_btn_cab_done_default_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/btn_cab_done_default_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_form_button_selector.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/form_button_selector.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_spinner_ab_disabled_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/spinner_ab_disabled_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_ab_solid_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/ab_solid_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/layout_dialog__message_list.xml.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/layout/dialog__message_list.xml"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_spinner_ab_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/spinner_ab_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_tab_unselected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/tab_unselected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_ab_transparent_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/ab_transparent_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xhdpi_spinner_ab_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xhdpi/spinner_ab_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xxhdpi_spinner_ab_default_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xxhdpi/spinner_ab_default_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_tab_unselected_focused_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/tab_unselected_focused_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-mdpi_list_focused_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-mdpi/list_focused_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_btn_cab_done_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/btn_cab_done_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-hdpi_ab_transparent_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-hdpi/ab_transparent_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-hdpi_tab_selected_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-hdpi/tab_selected_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable_tab_indicator_ab_example.xml.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable/tab_indicator_ab_example.xml"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-mdpi_btn_cab_done_pressed_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-mdpi/btn_cab_done_pressed_example.9.png"
     },
     {
-        "merged": "com.hardcopy.retrowatch.app-debug-34:/drawable-xhdpi_cab_background_bottom_example.9.png.flat",
-        "source": "com.hardcopy.retrowatch.app-main-36:/drawable-xhdpi/cab_background_bottom_example.9.png"
+        "merged": "com.hardcopy.retrowatch.app-debug-31:/drawable-xxhdpi_progress_bg_example.9.png.flat",
+        "source": "com.hardcopy.retrowatch.app-main-33:/drawable-xxhdpi/progress_bg_example.9.png"
     }
 ]
