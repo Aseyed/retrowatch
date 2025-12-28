@@ -99,26 +99,53 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//----- System, Context
-		mContext = this;//.getApplicationContext();
-		mActivityHandler = new ActivityHandler();
-		
-		// IMPORTANT: Request permissions FIRST before initializing full UI
-		if (!checkPermissions()) {
-			try {
-				// Show simple permission request screen
-				setContentView(R.layout.activity_permission_request);
-				mTextStatus = (TextView) findViewById(R.id.status_text);
-				if (mTextStatus == null) {
-					Log.e(TAG, "mTextStatus is null in activity_permission_request");
-				}
-				requestAppPermissions();
-			} catch (Exception e) {
-				Log.e(TAG, "Error in permission request setup: " + e.getMessage(), e);
+		// Setup global exception handler to catch startup crashes
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			@Override
+			public void uncaughtException(Thread paramThread, Throwable paramThrowable) {
+				Log.e(TAG, "CRASH: " + paramThrowable.getMessage(), paramThrowable);
+				// Try to show a toast before dying (might not work if main thread is dead)
+				// System.exit(2); // Let the system handle it
 			}
-		} else {
-			// Permissions already granted, initialize normally
-			initializeUI();
+		});
+
+		try {
+			Log.d(TAG, "onCreate: Starting...");
+			
+			//----- System, Context
+			mContext = this;//.getApplicationContext();
+			mActivityHandler = new ActivityHandler();
+			
+			// IMPORTANT: Request permissions FIRST before initializing full UI
+			Log.d(TAG, "onCreate: Checking permissions...");
+			if (!checkPermissions()) {
+				Log.d(TAG, "onCreate: Permissions needed");
+				try {
+					// Show simple permission request screen
+					Log.d(TAG, "onCreate: Setting content view to activity_permission_request");
+					setContentView(R.layout.activity_permission_request);
+					
+					Log.d(TAG, "onCreate: Finding status_text");
+					mTextStatus = (TextView) findViewById(R.id.status_text);
+					if (mTextStatus == null) {
+						Log.e(TAG, "mTextStatus is null in activity_permission_request");
+					}
+					
+					Log.d(TAG, "onCreate: Requesting app permissions");
+					requestAppPermissions();
+				} catch (Exception e) {
+					Log.e(TAG, "Error in permission request setup: " + e.getMessage(), e);
+					Toast.makeText(this, "Setup Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+				}
+			} else {
+				// Permissions already granted, initialize normally
+				Log.d(TAG, "onCreate: Permissions granted, initializing UI");
+				initializeUI();
+			}
+			Log.d(TAG, "onCreate: Completed");
+		} catch (Exception e) {
+			Log.e(TAG, "CRASH in onCreate: " + e.getMessage(), e);
+			Toast.makeText(this, "Crash in onCreate: " + e.getMessage(), Toast.LENGTH_LONG).show();
 		}
 	}
 	
