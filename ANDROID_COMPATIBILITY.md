@@ -289,3 +289,4 @@ The app is now structured to easily support future Android versions:
 *App Version: 1.2.0*
 *Compatibility Range: Android 6.0 - Android 15 (API 23-35)*
 
+

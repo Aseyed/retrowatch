@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:ns1="urn:oasis:names:tc:xliff:document:1.2" xmlns:ns2="http://schemas.android.com/tools">
+    <string-array name="call_type_array">
+        <item>Call state idle</item>
+        <item>Call received</item>
+    </string-array>
+    <string-array name="clock_indicator_array">
+        <item>설정 선택</item>
+        <item>보이기</item>
+        <item>감추기</item>
+    </string-array>
+    <string-array name="clock_style_array">
+        <item>스타일 선택</item>
+        <item>아날로그</item>
+        <item>디지털</item>
+        <item>혼합</item>
+        <item>사용자 정의</item>
+    </string-array>
+    <string-array name="filter_icon_type_array">
+        <item>아이콘 선택</item>
+        <item>안드로이드</item>
+        <item>닻</item>
+        <item>apple</item>
+        <item>바코드</item>
+        <item>배터리 full</item>
+        <item>배터리 med</item>
+        <item>배터리 low</item>
+        <item>배터리 empty</item>
+        <item>북마크</item>
+        <item>캘린더</item>
+        <item>전화</item>
+        <item>카메라</item>
+        <item>취소</item>
+        <item>해골 캐릭터</item>
+        <item>캐릭터1</item>
+        <item>캐릭터2</item>
+        <item>캐릭터3</item>
+        <item>캐릭터4</item>
+        <item>차트</item>
+        <item>대화</item>
+        <item>chrome</item>
+        <item>클립</item>
+        <item>시계</item>
+        <item>복사</item>
+        <item>거부</item>
+        <item>문서</item>
+        <item>다운로드</item>
+        <item>지구</item>
+        <item>이메일</item>
+        <item>폴더</item>
+        <item>home</item>
+        <item>고양이</item>
+        <item>리스트</item>
+        <item>영화</item>
+        <item>음악</item>
+        <item>위치</item>
+        <item>연필</item>
+        <item>사람</item>
+        <item>그림</item>
+        <item>알약</item>
+        <item>전원</item>
+        <item>plugged</item>
+        <item>unplugged</item>
+        <item>프린트</item>
+        <item>우산</item>
+        <item>새로고침</item>
+        <item>RSS</item>
+        <item>저장</item>
+        <item>잠금</item>
+        <item>풀림</item>
+        <item>settings</item>
+        <item>smile</item>
+        <item>facebook</item>
+        <item>twitter</item>
+        <item>tag</item>
+        <item>trade</item>
+        <item>휴지통</item>
+        <item>unknown</item>
+        <item>USIM</item>
+        <item>대기</item>
+        <item>경고</item>
+        <item>wifi</item>
+        <item>windows</item>
+        <item>cloud</item>
+        <item>안테나</item>
+    </string-array>
+    <string-array name="filter_matching_type_array">
+        <item>비교 방법</item>
+        <item>문자열 일치 할 때</item>
+        <item>입력 문자로 시작할 때</item>
+        <item>입력 문자로 끝날 때</item>
+        <item>입력 문자를 포함할 때</item>
+    </string-array>
+    <string-array name="filter_replace_type_array">
+        <item>치환 방법</item>
+        <item>전체를 바꿈</item>
+        <item>동일한 부분만 바꿈</item>
+    </string-array>
+    <string-array name="filter_type_array">
+        <item>대상 메시지 타입</item>
+        <item>모든 타입</item>
+        <item>Notification</item>
+        <item>Messaging</item>
+        <item>Feed</item>
+        <item>Emergency</item>
+        <item>Package name</item>
+    </string-array>
+    <string-array name="message_type_array">
+        <item>UNDEFINED</item>
+        <item>NOTIFICATION</item>
+        <item>MESSAGING</item>
+        <item>EMERGENCY</item>
+        <item>FEED</item>
+        
+    </string-array>
+    <string-array name="rf_type_array">
+        <item>In service</item>
+        <item>Out of service</item>
+        <item>Emergency only</item>
+        <item>Power off</item>
+    </string-array>
+    <plurals name="mtrl_badge_content_description">
+    <item quantity="one">새 알림 %d개</item>
+    <item quantity="other">새 알림 %d개</item>
+  </plurals>
+    <string msgid="5976598919945601918" name="abc_action_bar_home_description">"홈으로 이동"</string>
+    <string msgid="8388173803310557296" name="abc_action_bar_up_description">"위로 이동"</string>
+    <string msgid="3937310113216875497" name="abc_action_menu_overflow_description">"추가 옵션"</string>
+    <string msgid="4692188335987374352" name="abc_action_mode_done">"완료"</string>
+    <string msgid="1189761859438369441" name="abc_activity_chooser_view_see_all">"전체 보기"</string>
+    <string msgid="2165779757652331008" name="abc_activitychooserview_choose_application">"앱 선택"</string>
+    <string msgid="4215997306490295099" name="abc_capital_off">"사용 중지"</string>
+    <string msgid="884982626291842264" name="abc_capital_on">"사용"</string>
+    <string msgid="8833365367933412986" name="abc_menu_alt_shortcut_label">"Alt+"</string>
+    <string msgid="2223301931652355242" name="abc_menu_ctrl_shortcut_label">"Ctrl+"</string>
+    <string msgid="838001238306846836" name="abc_menu_delete_shortcut_label">"Delete"</string>
+    <string msgid="7986526966204849475" name="abc_menu_enter_shortcut_label">"Enter"</string>
+    <string msgid="375214403600139847" name="abc_menu_function_shortcut_label">"Function+"</string>
+    <string msgid="4192209724446364286" name="abc_menu_meta_shortcut_label">"Meta+"</string>
+    <string msgid="4741552369836443843" name="abc_menu_shift_shortcut_label">"Shift+"</string>
+    <string msgid="5473865519181928982" name="abc_menu_space_shortcut_label">"스페이스바"</string>
+    <string msgid="6180552449598693998" name="abc_menu_sym_shortcut_label">"Sym+"</string>
+    <string msgid="5520303668377388990" name="abc_prepend_shortcut_label">"Menu+"</string>
+    <string msgid="7208076849092622260" name="abc_search_hint">"검색..."</string>
+    <string msgid="3741173234950517107" name="abc_searchview_description_clear">"검색어 삭제"</string>
+    <string msgid="693312494995508443" name="abc_searchview_description_query">"검색어"</string>
+    <string msgid="3417662926640357176" name="abc_searchview_description_search">"검색"</string>
+    <string msgid="1486535517437947103" name="abc_searchview_description_submit">"검색어 보내기"</string>
+    <string msgid="2293578557972875415" name="abc_searchview_description_voice">"음성 검색"</string>
+    <string msgid="8875138169939072951" name="abc_shareactionprovider_share_with">"공유 대상:"</string>
+    <string msgid="9055268688411532828" name="abc_shareactionprovider_share_with_application">"<ns1:g id="APPLICATION_NAME">%s</ns1:g>과(와) 공유"</string>
+    <string msgid="1656852541809559762" name="abc_toolbar_collapse_description">"접기"</string>
+    <string name="action_settings">앱 설정</string>
+    <string name="app_name">Retro Watch</string>
+    <string name="batt_type_string">Battery: </string>
+    <string name="bottomsheet_action_collapse">하단 시트 접기</string>
+    <string name="bottomsheet_action_expand">하단 시트 펼치기</string>
+    <string name="bottomsheet_action_expand_halfway">반만 펼치기</string>
+    <string name="bottomsheet_drag_handle_clicked">두 번 탭한 드래그 핸들</string>
+    <string name="bottomsheet_drag_handle_content_description">드래그 핸들</string>
+    <string name="bt_cmd_sending_error">전송이 실패하였습니다.</string>
+    <string name="bt_not_enabled_leaving">블루투스가 활성화 되지 않았습니다. 폰 설정에서 블루투스를 활성화 시키세요.</string>
+    <string name="bt_state_connect">연결중</string>
+    <string name="bt_state_connected">연결됨</string>
+    <string name="bt_state_error">에러</string>
+    <string name="bt_state_init">초기화 중</string>
+    <string name="bt_state_wait">대기중 (응답 없을 경우 수동 선택)</string>
+    <string name="bt_title">블루투스</string>
+    <string name="button_go">Go</string>
+    <string name="button_scan">장치 스캔</string>
+    <string msgid="881409763997275156" name="call_notification_answer_action">"통화"</string>
+    <string msgid="8793775615905189152" name="call_notification_answer_video_action">"동영상"</string>
+    <string msgid="3229508546291798546" name="call_notification_decline_action">"거절"</string>
+    <string msgid="2659457946726154263" name="call_notification_hang_up_action">"전화 끊기"</string>
+    <string msgid="6107532579223922871" name="call_notification_incoming_text">"수신 전화"</string>
+    <string msgid="8623827134497363134" name="call_notification_ongoing_text">"진행 중인 통화"</string>
+    <string msgid="59049573811482460" name="call_notification_screening_text">"수신 전화 검사 중"</string>
+    <string name="character_counter_content_description">입력된 글자 %1$d/%2$d</string>
+    <string name="character_counter_overflowed_content_description">글자 수 제한이 초과되었습니다(%1$d/%2$d).</string>
+    <string name="clear_text_end_icon_content_description">텍스트 삭제</string>
+    <string name="clock_indicator_title">시계 인디케이터 표시</string>
+    <string name="clock_style_title">시계 화면 스타일</string>
+    <string name="close">닫기</string>
+    <string name="command_add">Add</string>
+    <string name="command_delete">Delete</string>
+    <string name="command_edit">Edit</string>
+    <string name="command_new">New</string>
+    <string name="connect">연결할 장치 선택</string>
+    <string name="content_gmail_unread_count">Gmail unread count</string>
+    <string name="content_icon">아이콘</string>
+    <string name="content_notification">Notification</string>
+    <string name="content_undefined">Undefined</string>
+    <string name="disable_package">선택한 앱의 메시지 비활성화</string>
+    <string name="discoverable">Discover 상태로 변경</string>
+    <string name="email_addr_hint">aaa@gmail.com</string>
+    <string name="email_field_title">Gmail 주소 입력</string>
+    <string name="enable_message">선택한 메시지만 활성화</string>
+    <string name="enable_package">선택한 앱의 메시지 모두를 활성화</string>
+    <string name="error_a11y_label">오류: 잘못됨</string>
+    <string name="error_icon_content_description">오류</string>
+    <string name="exposed_dropdown_menu_content_description">드롭다운 메뉴 표시</string>
+    <string name="filter_compare_type">비교 방법</string>
+    <string name="filter_field_converted">변환된 문자열:</string>
+    <string name="filter_icon">아이콘</string>
+    <string name="filter_object_type">대상 메시지 타입</string>
+    <string name="filter_origin">비교할 문자</string>
+    <string name="filter_replace">치환할 문자(비워두면 삭제)</string>
+    <string name="filter_replace_type">치환 방법</string>
+    <string name="filter_sendmsg">메시지를 전송 - </string>
+    <string name="filter_text_blank">[공백]</string>
+    <string name="icon_content_description">대화상자 아이콘</string>
+    <string name="item_view_role_description">탭</string>
+    <string name="material_clock_toggle_content_description">오전 또는 오후를 선택하세요.</string>
+    <string name="material_hour_24h_suffix">%1$s시간</string>
+    <string name="material_hour_selection">시간 선택</string>
+    <string name="material_hour_suffix">%1$s시 정각</string>
+    <string name="material_minute_selection">분 선택</string>
+    <string name="material_minute_suffix">%1$s분</string>
+    <string name="material_timepicker_am">오전</string>
+    <string name="material_timepicker_clock_mode_description">시간 입력을 위해 시계 모드로 전환합니다.</string>
+    <string name="material_timepicker_hour">시간</string>
+    <string name="material_timepicker_minute">분</string>
+    <string name="material_timepicker_pm">오후</string>
+    <string name="material_timepicker_select_time">시간 선택</string>
+    <string name="material_timepicker_text_input_mode_description">시간 입력을 위해 텍스트 입력 모드로 전환합니다.</string>
+    <string name="msg_rss_update_success">RSS 가 등록되었습니다.</string>
+    <string name="mtrl_badge_numberless_content_description">새 알림</string>
+    <string name="mtrl_checkbox_state_description_checked">선택됨</string>
+    <string name="mtrl_checkbox_state_description_indeterminate">일부 선택됨</string>
+    <string name="mtrl_checkbox_state_description_unchecked">선택되지 않음</string>
+    <string name="mtrl_chip_close_icon_content_description">%1$s 삭제</string>
+    <string name="mtrl_exceed_max_badge_number_content_description" ns2:ignore="PluralsCandidate">새 알림 %1$d개 초과</string>
+    <string name="mtrl_picker_a11y_next_month">다음 달로 변경</string>
+    <string name="mtrl_picker_a11y_prev_month">이전 달로 변경</string>
+    <string name="mtrl_picker_announce_current_range_selection">시작일 선택: %1$s, 종료일 선택: %2$s</string>
+    <string name="mtrl_picker_announce_current_selection">현재 %1$s 선택됨</string>
+    <string name="mtrl_picker_announce_current_selection_none">없음</string>
+    <string name="mtrl_picker_cancel">취소</string>
+    <string name="mtrl_picker_confirm">확인</string>
+    <string name="mtrl_picker_date_header_selected">%1$s</string>
+    <string name="mtrl_picker_date_header_title">날짜 선택</string>
+    <string name="mtrl_picker_date_header_unselected">선택한 날짜</string>
+    <string name="mtrl_picker_day_of_week_column_header">%1$s</string>
+    <string name="mtrl_picker_end_date_description">종료일: %1$s</string>
+    <string name="mtrl_picker_invalid_format">형식이 잘못되었습니다.</string>
+    <string name="mtrl_picker_invalid_format_example">예: %1$s</string>
+    <string name="mtrl_picker_invalid_format_use">올바른 형식: %1$s</string>
+    <string name="mtrl_picker_invalid_range">날짜 범위가 잘못되었습니다.</string>
+    <string name="mtrl_picker_navigate_to_current_year_description">현재 연도(%1$d)로 이동</string>
+    <string name="mtrl_picker_navigate_to_year_description">%1$d년으로 이동</string>
+    <string name="mtrl_picker_out_of_range">%1$s은 범위를 벗어난 날짜입니다.</string>
+    <string name="mtrl_picker_range_header_only_end_selected">시작일~%1$s</string>
+    <string name="mtrl_picker_range_header_only_start_selected">%1$s~종료일</string>
+    <string name="mtrl_picker_range_header_selected">%1$s~%2$s</string>
+    <string name="mtrl_picker_range_header_title">기간 선택</string>
+    <string name="mtrl_picker_range_header_unselected">시작일~종료일</string>
+    <string name="mtrl_picker_save">저장</string>
+    <string name="mtrl_picker_start_date_description">시작일: %1$s</string>
+    <string name="mtrl_picker_text_input_date_hint">날짜</string>
+    <string name="mtrl_picker_text_input_date_range_end_hint">종료일</string>
+    <string name="mtrl_picker_text_input_date_range_start_hint">시작일</string>
+    <string name="mtrl_picker_text_input_day_abbr">일</string>
+    <string name="mtrl_picker_text_input_month_abbr">월</string>
+    <string name="mtrl_picker_text_input_year_abbr">년</string>
+    <string name="mtrl_picker_today_description">오늘(%1$s)</string>
+    <string name="mtrl_picker_toggle_to_calendar_input_mode">캘린더 입력 모드로 전환</string>
+    <string name="mtrl_picker_toggle_to_day_selection">탭하여 캘린더 뷰로 전환</string>
+    <string name="mtrl_picker_toggle_to_text_input_mode">텍스트 입력 모드로 전환</string>
+    <string name="mtrl_picker_toggle_to_year_selection">탭하여 연도 뷰로 전환</string>
+    <string name="mtrl_timepicker_cancel">취소</string>
+    <string name="mtrl_timepicker_confirm">확인</string>
+    <string name="none_found">발견된 장치가 없습니다.</string>
+    <string name="none_paired">페어링 된 장치가 없습니다.</string>
+    <string name="noti_receiver_name">RetroWatch noti receiver</string>
+    <string name="noti_set_gmail_addr">시계 컨트롤 탭에서 Gmail 주소를 입력해야 정확한 정보가 표시됩니다.</string>
+    <string name="noti_settings">알림 권한 설정</string>
+    <string name="password_toggle_content_description">비밀번호 표시</string>
+    <string name="refresh_contents">메시지 새로고침</string>
+    <string name="rss_find_more">RSS 브라우저</string>
+    <string name="rss_title">RSS 제목 입력</string>
+    <string name="rss_type_here">RSS 추가</string>
+    <string name="rss_url">URL 입력</string>
+    <string name="scanning">장치 찾는 중...</string>
+    <string msgid="6264217191555673260" name="search_menu_title">"검색"</string>
+    <string name="searchview_clear_text_content_description">텍스트 삭제</string>
+    <string name="searchview_navigation_content_description">뒤로</string>
+    <string name="select_device">연결할 장치 선택</string>
+    <string name="send_contents">시계로 데이터 전송</string>
+    <string name="service_name">Retro Watch Service</string>
+    <string name="settings_background_service">백그라운드로 실행</string>
+    <string name="side_sheet_accessibility_pane_title">사이드 시트</string>
+    <string msgid="6277540029070332960" name="status_bar_notification_info_overflow">"999+"</string>
+    <string name="text_enabled">이미 활성화 된 메시지입니다. 메시지를 삭제하고 싶으시면 필터탭으로 이동해서 해당하는 필터를 삭제하세요.</string>
+    <string name="title_filters">필터 설정</string>
+    <string name="title_messagelist">메시지 목록</string>
+    <string name="title_other_devices">사용가능한 다른 장치들</string>
+    <string name="title_paired_devices">페어링 된 장치</string>
+    <string name="title_rss">RSS</string>
+    <string name="title_watchcontrol">시계 컨트롤</string>
+    <string name="update_time_title">메시지 업데이트 간격</string>
+    <string name="warning_error_while_adding_rss">에러! 등록할 수 없습니다!</string>
+    <string name="warning_loading_wait">로딩중...</string>
+    <string name="warning_select_compare_type">비교 방법을 선택하세요.</string>
+    <string name="warning_select_replace_type">치환 방법을 선택하세요.</string>
+    <string name="warning_select_type">필터링할 메시지 타입이 필요합니다.</string>
+    <string name="warning_type_rss_field">URL, 제목을 입력하세요.</string>
+    <string name="warning_type_target">비교할 글자를 입력하세요.</string>
+    <string name="web_view_name">RSS Browser</string>
+</resources>
