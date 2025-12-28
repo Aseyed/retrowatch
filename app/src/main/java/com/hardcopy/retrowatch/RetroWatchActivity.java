@@ -29,7 +29,6 @@ import com.hardcopy.retrowatch.utils.Logs;
 import com.hardcopy.retrowatch.utils.RecycleUtils;
 import com.hardcopy.retrowatch.utils.Utils;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
@@ -49,6 +48,8 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.tabs.TabLayout;
 import androidx.core.content.ContextCompat;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager.widget.ViewPager;
@@ -58,7 +59,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class RetroWatchActivity extends FragmentActivity implements IFragmentListener {
+public class RetroWatchActivity extends AppCompatActivity implements IFragmentListener {
 
     // Debugging
     private static final String TAG = "RetroWatchActivity";
@@ -104,10 +105,17 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 		
 		// IMPORTANT: Request permissions FIRST before initializing full UI
 		if (!checkPermissions()) {
-			// Show simple permission request screen
-			setContentView(R.layout.activity_permission_request);
-			mTextStatus = (TextView) findViewById(R.id.status_text);
-			requestAppPermissions();
+			try {
+				// Show simple permission request screen
+				setContentView(R.layout.activity_permission_request);
+				mTextStatus = (TextView) findViewById(R.id.status_text);
+				if (mTextStatus == null) {
+					Log.e(TAG, "mTextStatus is null in activity_permission_request");
+				}
+				requestAppPermissions();
+			} catch (Exception e) {
+				Log.e(TAG, "Error in permission request setup: " + e.getMessage(), e);
+			}
 		} else {
 			// Permissions already granted, initialize normally
 			initializeUI();
@@ -125,7 +133,7 @@ public class RetroWatchActivity extends FragmentActivity implements IFragmentLis
 			
 			Log.d(TAG, "Step 3: Setting up action bar");
 			// Set up the action bar
-			final ActionBar actionBar = getActionBar();
+			final ActionBar actionBar = getSupportActionBar();
 			if (actionBar != null) {
 				actionBar.setDisplayShowTitleEnabled(true);
 			}
