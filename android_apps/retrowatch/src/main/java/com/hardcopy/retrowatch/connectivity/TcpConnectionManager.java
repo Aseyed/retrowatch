@@ -219,6 +219,8 @@ public class TcpConnectionManager {
         private final Socket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
+        private int consecutiveTimeouts = 0;
+        private static final int MAX_CONSECUTIVE_TIMEOUTS = 100; // ~16 minutes at 10s timeout
         
         public ConnectedThread(Socket socket) {
             Logs.d(TAG, "create ConnectedThread");
@@ -264,7 +266,15 @@ public class TcpConnectionManager {
             
             while (mState == STATE_CONNECTED && !Thread.currentThread().isInterrupted()) {
                 try {
+                    // Check if socket is still connected before reading
+                    if (mmSocket.isClosed() || !mmSocket.isConnected()) {
+                        Logs.d(TAG, "Socket is closed or disconnected");
+                        break;
+                    }
+                    
                     bytes = mmInStream.read(buffer);
+                    consecutiveTimeouts = 0; // Reset timeout counter on successful read
+                    
                     if (bytes > 0) {
                         // Create a copy of the buffer to avoid race conditions
                         byte[] readBuf = new byte[bytes];
@@ -280,10 +290,35 @@ public class TcpConnectionManager {
                 } catch (java.net.SocketTimeoutException e) {
                     // Timeout is normal - just continue reading
                     // This prevents the thread from hanging
-                    Logs.d(TAG, "Read timeout (normal)");
+                    consecutiveTimeouts++;
+                    if (consecutiveTimeouts % 10 == 0) {
+                        Logs.d(TAG, "Read timeout (normal) - " + consecutiveTimeouts + " consecutive timeouts");
+                    }
+                    
+                    // Check if we should still be connected
+                    if (mState != STATE_CONNECTED) {
+                        Logs.d(TAG, "State changed during timeout - exiting read loop");
+                        break;
+                    }
+                    
+                    // Safety check: if too many timeouts, something might be wrong
+                    if (consecutiveTimeouts >= MAX_CONSECUTIVE_TIMEOUTS) {
+                        Logs.e(TAG, "Too many consecutive timeouts - closing connection");
+                        connectionLost();
+                        break;
+                    }
+                    
                     continue;
+                } catch (java.net.SocketException e) {
+                    Logs.e(TAG, "Socket error: " + e.getMessage());
+                    connectionLost();
+                    break;
                 } catch (IOException e) {
                     Logs.e(TAG, "Read error: " + e.getMessage());
+                    connectionLost();
+                    break;
+                } catch (Exception e) {
+                    Logs.e(TAG, "Unexpected error in read loop: " + e.getMessage());
                     connectionLost();
                     break;
                 }
