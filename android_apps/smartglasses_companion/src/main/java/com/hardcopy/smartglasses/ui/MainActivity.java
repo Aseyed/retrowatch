@@ -151,22 +151,38 @@ public class MainActivity extends AppCompatActivity {
     }
     
     private void sendMessage() {
+        if (!CompanionForegroundService.isRunningHint().equals("RUNNING")) {
+            Toast.makeText(this, "Service not running. Please start the service first.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        
         String message = messageInput.getText().toString().trim();
         if (message.isEmpty()) {
             Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
             return;
         }
+        
         CompanionForegroundService.sendNotify(this, message);
         Toast.makeText(this, "Message sent: " + message, Toast.LENGTH_SHORT).show();
         messageInput.setText(""); // Clear input
     }
     
     private void sendClockData() {
+        if (!CompanionForegroundService.isRunningHint().equals("RUNNING")) {
+            Toast.makeText(this, "Service not running. Please start the service first.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        
         CompanionForegroundService.sendTime(this);
         Toast.makeText(this, "Clock data sent", Toast.LENGTH_SHORT).show();
     }
     
     private void sendBatteryStatus() {
+        if (!CompanionForegroundService.isRunningHint().equals("RUNNING")) {
+            Toast.makeText(this, "Service not running. Please start the service first.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        
         CompanionForegroundService.sendBatteryStatus(this);
         Toast.makeText(this, "Battery status sent", Toast.LENGTH_SHORT).show();
     }

@@ -222,39 +222,93 @@ public class CompanionForegroundService extends Service {
     }
     
     public synchronized void sendBatteryStatus() {
-        android.content.IntentFilter ifilter = new android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED);
-        android.content.Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
-        if (batteryStatus != null) {
-            int level = batteryStatus.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1);
-            int scale = batteryStatus.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1);
-            int batteryPct = (level * 100) / scale;
-            String batteryText = "Battery: " + batteryPct + "%";
-            sendFrame(ProtoV2.TYPE_NOTIFY, ProtoV2.FLAG_ACK_REQ, batteryText.getBytes(StandardCharsets.UTF_8));
+        try {
+            android.content.IntentFilter ifilter = new android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED);
+            android.content.Context appContext = getApplicationContext();
+            if (appContext == null) {
+                android.util.Log.e("CompanionService", "Cannot get application context for battery status");
+                return;
+            }
+            android.content.Intent batteryStatus = appContext.registerReceiver(null, ifilter);
+            if (batteryStatus != null) {
+                int level = batteryStatus.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1);
+                int scale = batteryStatus.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1);
+                if (scale > 0) {
+                    int batteryPct = (level * 100) / scale;
+                    String batteryText = "Battery: " + batteryPct + "%";
+                    sendFrame(ProtoV2.TYPE_NOTIFY, ProtoV2.FLAG_ACK_REQ, batteryText.getBytes(StandardCharsets.UTF_8));
+                }
+            }
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error getting battery status: " + e.getMessage(), e);
+        }
+    }
+    
+    // Check if service is connected
+    private boolean isConnected() {
+        synchronized (this) {
+            return out != null && (socket != null || (tcpConnection != null && tcpConnection.isConnected()));
         }
     }
     
     // Static methods for UI access
     public static void sendNotify(Context context, String text) {
-        if (instance != null) {
+        if (instance == null) {
+            android.util.Log.w("CompanionService", "Cannot send notify - service not running");
+            return;
+        }
+        if (!instance.isConnected()) {
+            android.util.Log.w("CompanionService", "Cannot send notify - not connected");
+            return;
+        }
+        try {
             instance.sendNotify(text);
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error sending notify: " + e.getMessage(), e);
         }
     }
     
     public static void sendTime(Context context) {
-        if (instance != null) {
+        if (instance == null) {
+            android.util.Log.w("CompanionService", "Cannot send time - service not running");
+            return;
+        }
+        if (!instance.isConnected()) {
+            android.util.Log.w("CompanionService", "Cannot send time - not connected");
+            return;
+        }
+        try {
             instance.sendTime();
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error sending time: " + e.getMessage(), e);
         }
     }
     
     public static void sendBatteryStatus(Context context) {
-        if (instance != null) {
+        if (instance == null) {
+            android.util.Log.w("CompanionService", "Cannot send battery status - service not running");
+            return;
+        }
+        if (!instance.isConnected()) {
+            android.util.Log.w("CompanionService", "Cannot send battery status - not connected");
+            return;
+        }
+        try {
             instance.sendBatteryStatus();
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error sending battery status: " + e.getMessage(), e);
         }
     }
     
     public static void sendCall(Context context, String callerInfo) {
         if (instance != null) {
-            instance.sendCall(callerInfo);
+            try {
+                instance.sendCall(callerInfo);
+            } catch (Exception e) {
+                android.util.Log.e("CompanionService", "Error sending call: " + e.getMessage(), e);
+            }
+        } else {
+            android.util.Log.w("CompanionService", "Cannot send call - service not running");
         }
     }
     
@@ -341,13 +395,20 @@ public class CompanionForegroundService extends Service {
     }
 
     private synchronized void sendFrame(byte type, byte flags, byte[] payload) {
-        if (out == null) return;
-        byte[] frame = ProtoV2.encode(type, flags, txSeq++, payload);
+        if (out == null) {
+            android.util.Log.w("CompanionService", "Cannot send frame - output stream is null (not connected)");
+            return;
+        }
         try {
+            byte[] frame = ProtoV2.encode(type, flags, txSeq++, payload);
             out.write(frame);
             out.flush();
+            android.util.Log.d("CompanionService", "Frame sent: type=" + type + ", size=" + frame.length);
         } catch (IOException e) {
+            android.util.Log.e("CompanionService", "Error sending frame: " + e.getMessage());
             // Best effort: connection will be torn down by read loop or next write.
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Unexpected error sending frame: " + e.getMessage(), e);
         }
     }
 

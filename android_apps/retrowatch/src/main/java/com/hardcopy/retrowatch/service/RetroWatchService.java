@@ -795,13 +795,77 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	 * Connect to device (TCP or Bluetooth)
 	 */
 	public void connectDevice() {
+		Logs.d(TAG, "connectDevice() called - USE_TCP_FOR_TESTING=" + USE_TCP_FOR_TESTING);
+		
+		// Ensure service handler is initialized
+		if (mServiceHandler == null) {
+			Logs.d(TAG, "Service handler is null - creating new one");
+			mServiceHandler = new ServiceHandler();
+		}
+		
 		if (USE_TCP_FOR_TESTING) {
-			if (mTcpManager != null) {
+			// Load TCP settings from preferences
+			Settings settings = Settings.getInstance(mContext);
+			mTcpHost = settings.getTcpHost();
+			mTcpPort = settings.getTcpPort();
+			
+			// Validate settings
+			if (mTcpHost == null || mTcpHost.isEmpty()) {
+				Logs.e(TAG, "TCP host is empty - using default");
+				mTcpHost = "192.168.1.100";
+				settings.setTcpHost(mTcpHost);
+			}
+			if (mTcpPort <= 0) {
+				Logs.e(TAG, "TCP port is invalid - using default");
+				mTcpPort = 8888;
+				settings.setTcpPort(mTcpPort);
+			}
+			
+			Logs.d(TAG, "Connecting via TCP to " + mTcpHost + ":" + mTcpPort);
+			
+			// Initialize TCP manager if needed
+			if (mTcpManager == null) {
+				Logs.d(TAG, "Creating new TcpConnectionManager");
+				mTcpManager = new TcpConnectionManager(mServiceHandler);
+			}
+			
+			// Update TCP address from settings
+			mTcpManager.setTcpAddress(mTcpHost, mTcpPort);
+			
+			// Initialize transaction builder if needed
+			if (mTransactionBuilder == null) {
+				if (mActivityHandler != null) {
+					mTransactionBuilder = new TransactionBuilder(mTcpManager, mActivityHandler);
+				} else {
+					Logs.w(TAG, "Activity handler is null - transaction builder will be created later");
+				}
+			}
+			if (mTransactionReceiver == null) {
+				if (mActivityHandler != null) {
+					mTransactionReceiver = new TransactionReceiver(mActivityHandler);
+				} else {
+					Logs.w(TAG, "Activity handler is null - transaction receiver will be created later");
+				}
+			}
+			
+			// Connect
+			try {
 				mTcpManager.connect();
+				Logs.d(TAG, "TCP connect() called successfully");
+			} catch (Exception e) {
+				Logs.e(TAG, "Error calling TCP connect(): " + e.getMessage(), e);
+				if (mActivityHandler != null) {
+					mActivityHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
+				}
 			}
 		} else {
 			if (mConnectionInfo.getDeviceAddress() != null && mBtManager != null) {
 				connectDevice(mConnectionInfo.getDeviceAddress());
+			} else {
+				Logs.e(TAG, "Cannot connect - no device address or BT manager");
+				if (mActivityHandler != null) {
+					mActivityHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
+				}
 			}
 		}
 	}

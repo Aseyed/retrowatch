@@ -523,10 +523,22 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 			break;
 			
 		case IFragmentListener.CALLBACK_REQUEST_CONNECT:
-			if(mService != null) {
-				mService.connectDevice();
-				Toast.makeText(this, "Connecting...", Toast.LENGTH_SHORT).show();
+			if(mService == null) {
+				Toast.makeText(this, "Service not available. Please wait for service to start.", Toast.LENGTH_LONG).show();
+				// Try to start service if not bound
+				if (!mIsServiceBound) {
+					doStartService();
+				}
+				break;
 			}
+			
+			// Ensure service is set up
+			if (mActivityHandler != null) {
+				mService.setupService(mActivityHandler);
+			}
+			
+			Toast.makeText(this, "Connecting...", Toast.LENGTH_SHORT).show();
+			mService.connectDevice();
 			break;
 			
 		case IFragmentListener.CALLBACK_REQUEST_DISCONNECT:
