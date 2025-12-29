@@ -243,7 +243,8 @@ public class CompanionForegroundService extends Service {
         try {
             tcpConnection = new TcpConnectionHelper(host, port);
             if (!tcpConnection.connect()) {
-                updateNoti("TCP connection failed");
+                updateNoti("TCP connection failed: " + host + ":" + port);
+                android.util.Log.e("CompanionService", "TCP connection failed to " + host + ":" + port);
                 return;
             }
 

@@ -103,16 +103,30 @@ public class TcpConnectionManager {
     }
     
     public synchronized void write(byte[] out) {
-        ConnectedThread r;
-        synchronized (this) {
-            if (mState != STATE_CONNECTED) return;
-            r = mConnectedThread;
+        if (mState != STATE_CONNECTED) {
+            Logs.e(TAG, "Cannot write - not connected (state: " + mState + ")");
+            return;
         }
-        r.write(out);
+        
+        if (mConnectedThread == null) {
+            Logs.e(TAG, "Cannot write - ConnectedThread is null");
+            return;
+        }
+        
+        if (out == null || out.length == 0) {
+            Logs.e(TAG, "Cannot write - buffer is null or empty");
+            return;
+        }
+        
+        Logs.d(TAG, "Writing " + out.length + " bytes");
+        mConnectedThread.write(out);
     }
     
     private synchronized void connected(Socket socket) {
-        Logs.d(TAG, "connected");
+        Logs.d(TAG, "connected to " + mHost + ":" + mPort);
+        
+        // Store socket reference
+        mSocket = socket;
         
         if (mConnectThread != null) {
             mConnectThread.cancel();
@@ -124,9 +138,19 @@ public class TcpConnectionManager {
             mConnectedThread = null;
         }
         
+        // Create and start connected thread
         mConnectedThread = new ConnectedThread(socket);
+        
+        // Validate socket is still connected
+        if (!socket.isConnected() || socket.isClosed()) {
+            Logs.e(TAG, "Socket is not connected or is closed");
+            connectionFailed();
+            return;
+        }
+        
         mConnectedThread.start();
         
+        // Send device name message
         Message msg = mHandler.obtainMessage(MESSAGE_DEVICE_NAME);
         android.os.Bundle bundle = new android.os.Bundle();
         bundle.putString(Constants.SERVICE_HANDLER_MSG_KEY_DEVICE_ADDRESS, mHost + ":" + mPort);
@@ -135,6 +159,7 @@ public class TcpConnectionManager {
         mHandler.sendMessage(msg);
         
         setState(STATE_CONNECTED);
+        Logs.d(TAG, "Connection established and thread started");
     }
     
     private void connectionFailed() {
@@ -156,26 +181,30 @@ public class TcpConnectionManager {
     }
     
     private class ConnectThread extends Thread {
+        private Socket mConnectSocket = null;
+        
         public ConnectThread() {
             setName("ConnectThread");
         }
         
         public void run() {
-            Logs.i(TAG, "BEGIN mConnectThread");
+            Logs.i(TAG, "BEGIN mConnectThread - connecting to " + mHost + ":" + mPort);
             
             try {
-                Socket socket = new Socket(mHost, mPort);
-                connected(socket);
+                mConnectSocket = new Socket(mHost, mPort);
+                Logs.d(TAG, "Socket created, calling connected()");
+                connected(mConnectSocket);
             } catch (IOException e) {
-                Logs.e(TAG, "Connection failed: " + e.getMessage());
+                Logs.e(TAG, "Connection failed to " + mHost + ":" + mPort + ": " + e.getMessage());
                 connectionFailed();
             }
         }
         
         public void cancel() {
             try {
-                if (mSocket != null) {
-                    mSocket.close();
+                if (mConnectSocket != null && !mConnectSocket.isClosed()) {
+                    mConnectSocket.close();
+                    Logs.d(TAG, "ConnectThread socket closed");
                 }
             } catch (IOException e) {
                 Logs.e(TAG, "close() of connect socket failed: " + e.getMessage());
@@ -197,41 +226,80 @@ public class TcpConnectionManager {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
+                Logs.d(TAG, "Streams created successfully");
             } catch (IOException e) {
-                Logs.e(TAG, "temp sockets not created: " + e.getMessage());
+                Logs.e(TAG, "Failed to get streams: " + e.getMessage());
+                // Don't set streams to null - connection will fail
             }
             
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+            
+            // Validate streams
+            if (mmInStream == null || mmOutStream == null) {
+                Logs.e(TAG, "Streams are null - connection will fail");
+            }
         }
         
         public void run() {
             Logs.i(TAG, "BEGIN mConnectedThread");
+            
+            // Check if streams are valid
+            if (mmInStream == null) {
+                Logs.e(TAG, "InputStream is null - cannot read");
+                connectionLost();
+                return;
+            }
+            
             byte[] buffer = new byte[1024];
             int bytes;
             
-            while (mState == STATE_CONNECTED) {
+            while (mState == STATE_CONNECTED && !Thread.currentThread().isInterrupted()) {
                 try {
                     bytes = mmInStream.read(buffer);
                     if (bytes > 0) {
-                        mHandler.obtainMessage(MESSAGE_READ, bytes, -1, buffer)
+                        // Create a copy of the buffer to avoid race conditions
+                        byte[] readBuf = new byte[bytes];
+                        System.arraycopy(buffer, 0, readBuf, 0, bytes);
+                        mHandler.obtainMessage(MESSAGE_READ, bytes, -1, readBuf)
                                 .sendToTarget();
+                    } else if (bytes < 0) {
+                        // End of stream
+                        Logs.d(TAG, "End of stream detected");
+                        break;
                     }
                 } catch (IOException e) {
-                    Logs.e(TAG, "disconnected: " + e.getMessage());
+                    Logs.e(TAG, "Read error: " + e.getMessage());
                     connectionLost();
                     break;
                 }
             }
+            Logs.d(TAG, "ConnectedThread exiting");
         }
         
         public void write(byte[] buffer) {
+            if (mmOutStream == null) {
+                Logs.e(TAG, "Cannot write - OutputStream is null");
+                return;
+            }
+            
+            if (buffer == null || buffer.length == 0) {
+                Logs.e(TAG, "Cannot write - buffer is null or empty");
+                return;
+            }
+            
             try {
                 mmOutStream.write(buffer);
+                mmOutStream.flush(); // Ensure data is sent immediately
+                Logs.d(TAG, "Wrote " + buffer.length + " bytes");
                 mHandler.obtainMessage(MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
                 Logs.e(TAG, "Exception during write: " + e.getMessage());
+                connectionLost();
+            } catch (NullPointerException e) {
+                Logs.e(TAG, "NullPointerException during write - stream may be closed");
+                connectionLost();
             }
         }
         

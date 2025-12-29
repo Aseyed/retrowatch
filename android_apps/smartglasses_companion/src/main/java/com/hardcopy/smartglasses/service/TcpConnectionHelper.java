@@ -1,5 +1,7 @@
 package com.hardcopy.smartglasses.service;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -9,6 +11,8 @@ import java.net.Socket;
  * TCP Connection helper for testing with simulator
  */
 public class TcpConnectionHelper {
+    private static final String TAG = "TcpConnectionHelper";
+    
     private Socket socket;
     private InputStream in;
     private OutputStream out;
@@ -22,11 +26,14 @@ public class TcpConnectionHelper {
     
     public boolean connect() {
         try {
+            Log.d(TAG, "Connecting to " + host + ":" + port);
             socket = new Socket(host, port);
             in = socket.getInputStream();
             out = socket.getOutputStream();
+            Log.d(TAG, "Connected successfully to " + host + ":" + port);
             return true;
         } catch (IOException e) {
+            Log.e(TAG, "Connection failed to " + host + ":" + port + ": " + e.getMessage(), e);
             return false;
         }
     }

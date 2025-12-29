@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -116,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                     port = Integer.parseInt(portStr);
                 }
             } catch (NumberFormatException e) {
-                // Use default port
+                Toast.makeText(this, "Invalid port number, using default: " + port, Toast.LENGTH_SHORT).show();
             }
             
             // Save settings
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     .putInt(KEY_TCP_PORT, port)
                     .apply();
             
+            Toast.makeText(this, "Connecting to " + host + ":" + port + "...", Toast.LENGTH_SHORT).show();
             CompanionForegroundService.connectTcp(this, host, port);
         } else {
             if (!ensureBtConnectPermission()) return;
