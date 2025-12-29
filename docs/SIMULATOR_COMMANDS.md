@@ -73,7 +73,7 @@ cd desktop_tools\arduino_simulator
 2. **To connect via TCP:**
    - Select **"TCP Server"** radio button
    - Click **"Start Server"**
-   - Note the IP address shown (e.g., `192.168.1.100:8888`)
+   - Note the IP address shown (e.g., `192.168.52.99:8888`)
    - Use this IP in your Android app
 
 3. **To connect via COM Port:**

@@ -53,7 +53,7 @@ public class CompanionForegroundService extends Service {
     
     // TCP connection for testing (set to true to use TCP instead of Bluetooth)
     public static final boolean USE_TCP_FOR_TESTING = true;
-    public static final String TCP_HOST = "192.168.1.100"; // Default - user can change in UI
+    public static final String TCP_HOST = "192.168.52.99"; // Default - user can change in UI
     public static final int TCP_PORT = 8888; // Default - user can change in UI
 
     private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
@@ -258,9 +258,22 @@ public class CompanionForegroundService extends Service {
     // Check if service is connected
     private boolean isConnected() {
         synchronized (this) {
-            boolean connected = out != null && (socket != null || (tcpConnection != null && tcpConnection.isConnected()));
-            android.util.Log.d("CompanionService", "isConnected() check: out=" + (out != null) + ", socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null) + ", tcpConnected=" + (tcpConnection != null && tcpConnection.isConnected()) + ", result=" + connected);
-            return connected;
+            // For TCP: check if connection exists and is actually connected
+            if (tcpConnection != null && tcpConnection.isConnected()) {
+                // Also verify output stream is available
+                OutputStream testStream = tcpConnection.getOutputStream();
+                boolean connected = testStream != null;
+                android.util.Log.d("CompanionService", "isConnected() TCP check: tcpConnection=" + (tcpConnection != null) + ", isConnected()=" + tcpConnection.isConnected() + ", outputStream=" + (testStream != null) + ", result=" + connected);
+                return connected;
+            }
+            // For Bluetooth: check socket and output stream
+            if (socket != null && out != null) {
+                boolean connected = true;
+                android.util.Log.d("CompanionService", "isConnected() BT check: socket=" + (socket != null) + ", out=" + (out != null) + ", result=" + connected);
+                return connected;
+            }
+            android.util.Log.d("CompanionService", "isConnected() check: not connected (no active connection)");
+            return false;
         }
     }
     
@@ -493,23 +506,28 @@ public class CompanionForegroundService extends Service {
         // Always try to get fresh stream reference to avoid stale references
         OutputStream streamToUse = null;
         
-        // Priority 1: If TCP connection exists and is connected, use it
+        // Priority 1: If TCP connection exists and is connected, ALWAYS get fresh stream
         if (tcpConnection != null && tcpConnection.isConnected()) {
             streamToUse = tcpConnection.getOutputStream();
             if (streamToUse != null) {
                 synchronized (this) {
                     out = streamToUse; // Update stored reference
                 }
-                android.util.Log.d("CompanionService", "Using output stream from TCP connection");
+                android.util.Log.d("CompanionService", "Using fresh output stream from TCP connection");
             } else {
-                android.util.Log.w("CompanionService", "TCP connection exists but output stream is null!");
+                android.util.Log.e("CompanionService", "ERROR: TCP connection exists and isConnected()=true but getOutputStream() returned null!");
+                // Connection might be in a bad state - clear it
+                synchronized (this) {
+                    out = null;
+                }
+                return;
             }
         }
         
-        // Priority 2: Try stored reference if TCP didn't work
-        if (streamToUse == null && out != null) {
+        // Priority 2: Try stored reference if TCP didn't work (for Bluetooth)
+        if (streamToUse == null && out != null && socket != null) {
             streamToUse = out;
-            android.util.Log.d("CompanionService", "Using stored output stream reference");
+            android.util.Log.d("CompanionService", "Using stored output stream reference (Bluetooth)");
         }
         
         // Priority 3: Try Bluetooth socket as fallback
@@ -529,24 +547,36 @@ public class CompanionForegroundService extends Service {
         
         // Final check - if still null, we can't send
         if (streamToUse == null) {
-            android.util.Log.w("CompanionService", "Cannot send frame - output stream is null (not connected)");
-            android.util.Log.w("CompanionService", "  socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null));
+            android.util.Log.e("CompanionService", "Cannot send frame - output stream is null (not connected)");
+            android.util.Log.e("CompanionService", "  socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null));
             if (tcpConnection != null) {
-                android.util.Log.w("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
+                android.util.Log.e("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
                 if (tcpConnection.isConnected()) {
-                    android.util.Log.w("CompanionService", "  tcpConnection.getOutputStream()=" + tcpConnection.getOutputStream());
+                    OutputStream testStream = tcpConnection.getOutputStream();
+                    android.util.Log.e("CompanionService", "  tcpConnection.getOutputStream()=" + testStream);
                 }
             }
             return;
         }
         
-        // Verify connection is still active before sending
-        if (tcpConnection != null && !tcpConnection.isConnected()) {
-            android.util.Log.w("CompanionService", "Cannot send frame - TCP connection is not connected");
-            synchronized (this) {
-                out = null; // Clear stale reference
+        // Verify connection is still active before sending (double-check for TCP)
+        if (tcpConnection != null) {
+            if (!tcpConnection.isConnected()) {
+                android.util.Log.w("CompanionService", "Cannot send frame - TCP connection is not connected");
+                synchronized (this) {
+                    out = null; // Clear stale reference
+                }
+                return;
             }
-            return;
+            // Verify stream is still valid
+            OutputStream verifyStream = tcpConnection.getOutputStream();
+            if (verifyStream != streamToUse) {
+                android.util.Log.w("CompanionService", "Stream reference changed - updating");
+                streamToUse = verifyStream;
+                synchronized (this) {
+                    out = streamToUse;
+                }
+            }
         }
         
         try {

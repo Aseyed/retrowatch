@@ -88,7 +88,7 @@ public class Settings {
 	
 	public synchronized String getTcpHost() {
 		SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-		return prefs.getString(Constants.PREFERENCE_KEY_TCP_HOST, "192.168.1.100");
+		return prefs.getString(Constants.PREFERENCE_KEY_TCP_HOST, "192.168.52.99");
 	}
 	
 	public synchronized void setTcpPort(int port) {

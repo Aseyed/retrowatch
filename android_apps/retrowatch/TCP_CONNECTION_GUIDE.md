@@ -15,7 +15,7 @@ This guide explains how to use TCP connection to test the RetroWatch Android app
 2. In the simulator:
    - Select "TCP Server" radio button
    - Click "Start Server"
-   - Note the IP address shown (e.g., `192.168.1.100:8888`)
+   - Note the IP address shown (e.g., `192.168.52.99:8888`)
 
 ### Step 2: Find Your PC's IP Address
 
@@ -45,7 +45,7 @@ The Android app needs to be modified to support TCP connections. Two options:
    ```java
    // In RetroWatchService initialization
    private static final boolean USE_TCP = true; // Set to true for testing
-   private static final String TCP_HOST = "192.168.1.100"; // Your PC IP
+   private static final String TCP_HOST = "192.168.52.99"; // Your PC IP
    private static final int TCP_PORT = 8888;
    ```
 
@@ -63,7 +63,7 @@ The Android app needs to be modified to support TCP connections. Two options:
    // In initialization
    if (mUseTcp) {
        mTcpManager = new TcpConnectionManager(mHandler);
-       mTcpManager.setTcpAddress("192.168.1.100", 8888); // Your PC IP
+       mTcpManager.setTcpAddress("192.168.52.99", 8888); // Your PC IP
    }
    
    // In connect method
@@ -126,7 +126,7 @@ Here's a minimal example of adding TCP support to RetroWatchService:
 ```java
 // Add at top of class
 private static final boolean USE_TCP_FOR_TESTING = true; // Change to false for Bluetooth
-private static final String TCP_HOST = "192.168.1.100"; // Your PC IP
+private static final String TCP_HOST = "192.168.52.99"; // Your PC IP
 private static final int TCP_PORT = 8888;
 
 private TcpConnectionManager mTcpManager;

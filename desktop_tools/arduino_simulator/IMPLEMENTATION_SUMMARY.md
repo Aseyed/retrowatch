@@ -154,7 +154,7 @@ cd retrowatch_arduino_simulator
 ### 3. Connect (TCP Method)
 
 1. In simulator: Select "TCP Server", click "Start Server"
-2. Note IP address (e.g., `192.168.1.100:8888`)
+2. Note IP address (e.g., `192.168.52.99:8888`)
 3. Modify Android app to connect via TCP
 4. Connect from Android app
 

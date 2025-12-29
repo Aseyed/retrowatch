@@ -41,7 +41,7 @@ public class TcpConnectionManager {
     private ConnectThread mConnectThread;
     
     // Default TCP settings (can be changed)
-    private String mHost = "192.168.1.100"; // Change to your PC's IP
+    private String mHost = "192.168.52.99"; // Change to your PC's IP
     private int mPort = 8888;
     
     public TcpConnectionManager(Handler handler) {

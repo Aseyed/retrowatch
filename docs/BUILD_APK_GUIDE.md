@@ -27,11 +27,11 @@ export ANDROID_HOME=/path/to/android/sdk
 
 **For RetroWatch App (`app/`):**
 - Edit: `app/src/main/java/com/hardcopy/retrowatch/service/RetroWatchService.java`
-- Change: `TCP_HOST = "192.168.1.100"` to your PC's IP address
+- Change: `TCP_HOST = "192.168.52.99"` to your PC's IP address
 
 **For SmartGlasses Companion (`smartglasses_companion/`):**
 - Edit: `smartglasses_companion/src/main/java/com/hardcopy/smartglasses/service/CompanionForegroundService.java`
-- Change: `TCP_HOST = "192.168.1.100"` to your PC's IP address
+- Change: `TCP_HOST = "192.168.52.99"` to your PC's IP address
 
 ## Building APKs
 

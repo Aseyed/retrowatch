@@ -71,7 +71,7 @@ java -jar build/libs/retrowatch_arduino_simulator.jar
 1. Start the simulator
 2. Select "TCP Server" mode
 3. Click "Start Server"
-4. Note the IP address and port (e.g., `192.168.1.100:8888`)
+4. Note the IP address and port (e.g., `192.168.52.99:8888`)
 5. Modify Android app to connect via TCP (or use a Bluetooth-to-TCP bridge)
 
 **Pros:**

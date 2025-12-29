@@ -66,13 +66,13 @@ adb install smartglasses_companion/build/outputs/apk/debug/smartglasses_companio
    ```
    - Select "TCP Server"
    - Click "Start Server"
-   - Note IP address (e.g., `192.168.1.100`)
+   - Note IP address (e.g., `192.168.52.99`)
 
 2. **In RetroWatch App:**
    - Open app
    - Go to "Watch Control" tab
    - Scroll to "TCP Server (Simulator)" section
-   - Enter IP: `192.168.1.100` (or your PC's IP)
+   - Enter IP: `192.168.52.99` (or your PC's IP)
    - Enter Port: `8888`
    - Settings save automatically
    - App connects automatically

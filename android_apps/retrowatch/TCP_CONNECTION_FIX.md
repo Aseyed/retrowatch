@@ -50,7 +50,7 @@
    ```
    - Select "TCP Server"
    - Click "Start Server"
-   - Note IP address (e.g., `192.168.1.100`)
+   - Note IP address (e.g., `192.168.52.99`)
 
 4. **In RetroWatch app:**
    - Go to "Watch Control" tab
@@ -74,10 +74,10 @@
 
 ### Log Messages to Look For:
 ```
-TcpConnectionManager: connect to 192.168.1.100:8888
-TcpConnectionManager: BEGIN mConnectThread - connecting to 192.168.1.100:8888
+TcpConnectionManager: connect to 192.168.52.99:8888
+TcpConnectionManager: BEGIN mConnectThread - connecting to 192.168.52.99:8888
 TcpConnectionManager: Socket created, calling connected()
-TcpConnectionManager: connected to 192.168.1.100:8888
+TcpConnectionManager: connected to 192.168.52.99:8888
 TcpConnectionManager: Streams created successfully
 TcpConnectionManager: Connection established and thread started
 TcpConnectionManager: BEGIN mConnectedThread

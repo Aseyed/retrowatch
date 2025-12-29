@@ -14,7 +14,7 @@ Since you don't have COM ports available, use **TCP Server mode** to connect you
    - Select **"TCP Server"** radio button (not COM Port)
    - Click **"Start Server"**
    - You'll see: `Status: Server Running (192.168.x.x:8888)`
-   - **Note the IP address** shown (e.g., `192.168.1.100`)
+   - **Note the IP address** shown (e.g., `192.168.52.99`)
 
 ## Step 2: Find Your PC's IP Address
 
@@ -40,7 +40,7 @@ The Android app (`app/` folder) currently only supports Bluetooth. You need to a
 
 4. **Set your PC's IP address:**
    ```java
-   private static final String TCP_HOST = "192.168.1.100"; // Change to your PC's IP
+   private static final String TCP_HOST = "192.168.52.99"; // Change to your PC's IP
    private static final int TCP_PORT = 8888;
    ```
 

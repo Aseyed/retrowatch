@@ -45,7 +45,7 @@ Both Android apps now have **UI input fields** for TCP server IP and port:
 **Location:** Watch Control tab → TCP Server section
 
 **Fields:**
-- **Server IP:** Text input (default: 192.168.1.100)
+- **Server IP:** Text input (default: 192.168.52.99)
 - **Server Port:** Number input (default: 8888)
 
 **How to use:**
@@ -62,7 +62,7 @@ Both Android apps now have **UI input fields** for TCP server IP and port:
 **Location:** Main screen → TCP Server Settings section
 
 **Fields:**
-- **Server IP:** Text input (default: 192.168.1.100)
+- **Server IP:** Text input (default: 192.168.52.99)
 - **Server Port:** Number input (default: 8888)
 
 **How to use:**

@@ -144,7 +144,7 @@
                 android:layout_width="0dip" 
                 android:layout_height="wrap_content"
                 android:layout_weight="4"
-                android:hint="192.168.1.100"
+                android:hint="192.168.52.99"
                 android:inputType="text"
                 style="@style/AppTheme.FormEditText" />
         </LinearLayout>

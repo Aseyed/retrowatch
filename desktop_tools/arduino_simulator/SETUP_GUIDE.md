@@ -85,7 +85,7 @@ This method uses TCP sockets instead of Bluetooth.
    - Run the simulator
    - Select "TCP Server" mode
    - Click "Start Server"
-   - Note the IP address and port (e.g., `192.168.1.100:8888`)
+   - Note the IP address and port (e.g., `192.168.52.99:8888`)
 
 2. **Modify Android App (Temporary):**
    
@@ -98,7 +98,7 @@ This method uses TCP sockets instead of Bluetooth.
    - Or use Android emulator with port forwarding
 
 3. **Connect:**
-   - Android app connects to `IP:PORT` (e.g., `192.168.1.100:8888`)
+   - Android app connects to `IP:PORT` (e.g., `192.168.52.99:8888`)
    - Messages flow over TCP
 
 #### Advantages

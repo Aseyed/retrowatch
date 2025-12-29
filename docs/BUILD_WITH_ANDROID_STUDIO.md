@@ -27,13 +27,13 @@ Android Studio will:
 ### RetroWatch App
 
 1. Navigate to: `app/src/main/java/com/hardcopy/retrowatch/service/RetroWatchService.java`
-2. Find line with: `private static final String TCP_HOST = "192.168.1.100";`
+2. Find line with: `private static final String TCP_HOST = "192.168.52.99";`
 3. Change to your PC's IP address (e.g., `"192.168.1.105"`)
 
 ### SmartGlasses Companion
 
 1. Navigate to: `smartglasses_companion/src/main/java/com/hardcopy/smartglasses/service/CompanionForegroundService.java`
-2. Find line with: `public static final String TCP_HOST = "192.168.1.100";`
+2. Find line with: `public static final String TCP_HOST = "192.168.52.99";`
 3. Change to your PC's IP address (e.g., `"192.168.1.105"`)
 
 **To find your PC's IP:**
@@ -167,12 +167,12 @@ Android Studio will:
 ```java
 // In RetroWatchService.java
 private static final boolean USE_TCP_FOR_TESTING = true; // false = Bluetooth
-private static final String TCP_HOST = "192.168.1.100"; // Your PC IP
+private static final String TCP_HOST = "192.168.52.99"; // Your PC IP
 private static final int TCP_PORT = 8888;
 
 // In CompanionForegroundService.java  
 public static final boolean USE_TCP_FOR_TESTING = true; // false = Bluetooth
-public static final String TCP_HOST = "192.168.1.100"; // Your PC IP
+public static final String TCP_HOST = "192.168.52.99"; // Your PC IP
 public static final int TCP_PORT = 8888;
 ```
 

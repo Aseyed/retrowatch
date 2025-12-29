@@ -46,7 +46,7 @@
 
 1. **Enter TCP settings:**
    - Go to "Watch Control" tab
-   - Enter server IP (e.g., `192.168.1.100`)
+   - Enter server IP (e.g., `192.168.52.99`)
    - Enter port (e.g., `8888`)
    - Settings save automatically
 
@@ -73,11 +73,11 @@
 **On Connect:**
 ```
 RetroWatchService: connectDevice() called - USE_TCP_FOR_TESTING=true
-RetroWatchService: Connecting via TCP to 192.168.1.100:8888
+RetroWatchService: Connecting via TCP to 192.168.52.99:8888
 RetroWatchService: Creating new TcpConnectionManager (if needed)
-TcpConnectionManager: connect to 192.168.1.100:8888
+TcpConnectionManager: connect to 192.168.52.99:8888
 TcpConnectionManager: Socket created, calling connected()
-TcpConnectionManager: connected to 192.168.1.100:8888
+TcpConnectionManager: connected to 192.168.52.99:8888
 TcpConnectionManager: Connection established and thread started
 ```
 
@@ -131,5 +131,5 @@ TcpConnectionManager: Connection established and thread started
 - Settings are saved automatically when you type in the fields
 - Service must be running before connecting
 - TCP manager is created automatically if needed
-- Default values: IP=`192.168.1.100`, Port=`8888`
+- Default values: IP=`192.168.52.99`, Port=`8888`
 

@@ -27,12 +27,12 @@ cd desktop_tools/arduino_simulator
 **In Simulator:**
 - Select **"TCP Server"** radio button
 - Click **"Start Server"**
-- Note the IP address shown (e.g., `192.168.1.100:8888`)
+- Note the IP address shown (e.g., `192.168.52.99:8888`)
 
 #### 3. Check IP Address and Port
 
 **In SmartGlasses App:**
-- Enter the **exact IP address** from the simulator (e.g., `192.168.1.100`)
+- Enter the **exact IP address** from the simulator (e.g., `192.168.52.99`)
 - Enter the **port** (usually `8888`)
 - Click **"Connect"**
 
@@ -60,7 +60,7 @@ adb logcat | grep -E "TcpConnectionHelper|CompanionService|SmartGlasses"
 ```
 
 **Look for:**
-- `Connecting to 192.168.1.100:8888`
+- `Connecting to 192.168.52.99:8888`
 - `Connected successfully` (success)
 - `Connection failed` (failure with error message)
 
@@ -91,7 +91,7 @@ adb logcat | grep -E "TcpConnectionHelper|CompanionService|SmartGlasses"
 ### ✅ Success Indicators
 
 When connection works, you should see:
-1. **Toast message:** "Connecting to 192.168.1.100:8888..."
+1. **Toast message:** "Connecting to 192.168.52.99:8888..."
 2. **Notification updates:** "Connecting TCP..." → "Connected (TCP)"
 3. **In simulator:** "Client connected" message in log panel
 4. **Status:** Service notification shows "Connected (TCP)"
@@ -136,9 +136,9 @@ adb logcat -s TcpConnectionHelper CompanionService
 
 **Test TCP connection from PC:**
 ```bash
-telnet 192.168.1.100 8888
+telnet 192.168.52.99 8888
 # Or
-nc 192.168.1.100 8888
+nc 192.168.52.99 8888
 ```
 
 If this connects, the server is reachable. If not, check firewall/network.

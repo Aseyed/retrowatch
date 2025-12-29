@@ -86,7 +86,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	
 	// TCP Connection (for testing with simulator)
 	private static final boolean USE_TCP_FOR_TESTING = true; // Set to false for Bluetooth
-	private String mTcpHost = "192.168.1.100"; // Default - user can change in UI
+	private String mTcpHost = "192.168.52.99"; // Default - user can change in UI
 	private int mTcpPort = 8888; // Default - user can change in UI
 	private TcpConnectionManager mTcpManager = null;
 	
@@ -812,7 +812,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			// Validate settings
 			if (mTcpHost == null || mTcpHost.isEmpty()) {
 				Logs.e(TAG, "TCP host is empty - using default");
-				mTcpHost = "192.168.1.100";
+				mTcpHost = "192.168.52.99";
 				settings.setTcpHost(mTcpHost);
 			}
 			if (mTcpPort <= 0) {

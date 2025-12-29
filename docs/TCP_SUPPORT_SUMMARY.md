@@ -19,7 +19,7 @@
 ```java
 // In RetroWatchService.java
 private static final boolean USE_TCP_FOR_TESTING = true; // Set to false for Bluetooth
-private static final String TCP_HOST = "192.168.1.100"; // Change to your PC's IP
+private static final String TCP_HOST = "192.168.52.99"; // Change to your PC's IP
 private static final int TCP_PORT = 8888;
 ```
 
@@ -40,7 +40,7 @@ private static final int TCP_PORT = 8888;
 ```java
 // In CompanionForegroundService.java
 public static final boolean USE_TCP_FOR_TESTING = true; // Set to false for Bluetooth
-public static final String TCP_HOST = "192.168.1.100"; // Change to your PC's IP
+public static final String TCP_HOST = "192.168.52.99"; // Change to your PC's IP
 public static final int TCP_PORT = 8888;
 ```
 
@@ -95,7 +95,7 @@ cd retrowatch_arduino_simulator
 
 1. Select **"TCP Server"** mode
 2. Click **"Start Server"**
-3. Note the IP address shown (e.g., `192.168.1.100:8888`)
+3. Note the IP address shown (e.g., `192.168.52.99:8888`)
 
 ### Step 2: Update IP Address in Apps
 
@@ -103,11 +103,11 @@ cd retrowatch_arduino_simulator
 
 1. **RetroWatch App:**
    - Edit: `app/src/main/java/com/hardcopy/retrowatch/service/RetroWatchService.java`
-   - Change: `TCP_HOST = "192.168.1.100"` to your PC's actual IP
+   - Change: `TCP_HOST = "192.168.52.99"` to your PC's actual IP
 
 2. **SmartGlasses Companion:**
    - Edit: `smartglasses_companion/src/main/java/com/hardcopy/smartglasses/service/CompanionForegroundService.java`
-   - Change: `TCP_HOST = "192.168.1.100"` to your PC's actual IP
+   - Change: `TCP_HOST = "192.168.52.99"` to your PC's actual IP
 
 ### Step 3: Build and Install
 
