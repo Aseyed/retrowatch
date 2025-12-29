@@ -837,14 +837,14 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				if (mActivityHandler != null) {
 					mTransactionBuilder = new TransactionBuilder(mTcpManager, mActivityHandler);
 				} else {
-					Logs.w(TAG, "Activity handler is null - transaction builder will be created later");
+					Logs.d(TAG, "Activity handler is null - transaction builder will be created later");
 				}
 			}
 			if (mTransactionReceiver == null) {
 				if (mActivityHandler != null) {
 					mTransactionReceiver = new TransactionReceiver(mActivityHandler);
 				} else {
-					Logs.w(TAG, "Activity handler is null - transaction receiver will be created later");
+					Logs.d(TAG, "Activity handler is null - transaction receiver will be created later");
 				}
 			}
 			
@@ -853,7 +853,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				mTcpManager.connect();
 				Logs.d(TAG, "TCP connect() called successfully");
 			} catch (Exception e) {
-				Logs.e(TAG, "Error calling TCP connect(): " + e.getMessage(), e);
+				Logs.e(TAG, "Error calling TCP connect(): " + e.getMessage());
 				if (mActivityHandler != null) {
 					mActivityHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
 				}
