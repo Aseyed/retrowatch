@@ -64,6 +64,15 @@ public class BluetoothServerManager {
                         // Close previous connection if any
                         if (clientSocket != null && !clientSocket.isClosed()) {
                             try {
+                                // Stop old read thread
+                                if (readThread != null && readThread.isAlive()) {
+                                    readThread.interrupt();
+                                    try {
+                                        readThread.join(500);
+                                    } catch (InterruptedException e) {
+                                        Thread.currentThread().interrupt();
+                                    }
+                                }
                                 clientSocket.close();
                             } catch (IOException e) {
                                 // Ignore
@@ -71,8 +80,16 @@ public class BluetoothServerManager {
                         }
                         
                         clientSocket = socket;
+                        // Set socket timeouts to prevent hanging
+                        clientSocket.setSoTimeout(30000); // 30 second read timeout
+                        clientSocket.setTcpNoDelay(true); // Disable Nagle's algorithm
+                        clientSocket.setKeepAlive(true); // Enable keep-alive
+                        
                         inputStream = clientSocket.getInputStream();
                         outputStream = clientSocket.getOutputStream();
+                        
+                        // Reset decoder for new connection (clear any partial frame state)
+                        decoder.reset();
                         
                         startReadThread();
                         
@@ -139,29 +156,54 @@ public class BluetoothServerManager {
     }
 
     private void startReadThread() {
+        // Stop old read thread if still running
         if (readThread != null && readThread.isAlive()) {
-            return;
+            readThread.interrupt();
+            try {
+                readThread.join(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
         
         readThread = new Thread(() -> {
             byte[] buffer = new byte[1024];
-            while (running && clientSocket != null && !clientSocket.isClosed()) {
+            gui.log("Read thread started - waiting for data...");
+            
+            while (running && clientSocket != null && !clientSocket.isClosed() && !Thread.currentThread().isInterrupted()) {
                 try {
                     int bytesRead = inputStream.read(buffer);
                     if (bytesRead > 0) {
+                        // Log raw bytes received for debugging
+                        gui.log("[RAW] Received " + bytesRead + " bytes");
+                        
+                        // Feed to decoder
                         decoder.feed(buffer, 0, bytesRead);
                     } else if (bytesRead < 0) {
                         // Connection closed
-                        gui.log("Client disconnected");
+                        gui.log("Client disconnected (EOF)");
                         break;
+                    } else if (bytesRead == 0) {
+                        // Shouldn't happen with blocking read, but handle it
+                        gui.log("[WARN] Read returned 0 bytes");
+                        Thread.sleep(100); // Small delay to avoid tight loop
                     }
+                } catch (java.net.SocketTimeoutException e) {
+                    // Timeout is normal - just continue reading
+                    // This prevents the thread from hanging
+                    continue;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    gui.log("Read thread interrupted");
+                    break;
                 } catch (IOException e) {
-                    if (running) {
+                    if (running && !Thread.currentThread().isInterrupted()) {
                         gui.log("Read error: " + e.getMessage());
                     }
                     break;
                 }
             }
+            gui.log("Read thread exiting");
         });
         readThread.setDaemon(true);
         readThread.start();

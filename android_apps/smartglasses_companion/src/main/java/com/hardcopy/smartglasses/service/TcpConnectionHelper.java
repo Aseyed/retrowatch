@@ -27,11 +27,32 @@ public class TcpConnectionHelper {
     public boolean connect() {
         try {
             Log.d(TAG, "Connecting to " + host + ":" + port);
-            socket = new Socket(host, port);
+            
+            // Create socket with timeout
+            socket = new Socket();
+            socket.setSoTimeout(30000); // 30 second read timeout
+            socket.setTcpNoDelay(true); // Disable Nagle's algorithm for faster response
+            socket.setKeepAlive(true); // Enable keep-alive
+            
+            // Connect with timeout
+            java.net.InetSocketAddress socketAddress = new java.net.InetSocketAddress(host, port);
+            socket.connect(socketAddress, 5000); // 5 second connection timeout
+            
             in = socket.getInputStream();
             out = socket.getOutputStream();
+            
             Log.d(TAG, "Connected successfully to " + host + ":" + port);
+            Log.d(TAG, "Socket configured: SoTimeout=30s, TCP_NODELAY=true, KeepAlive=true");
             return true;
+        } catch (java.net.SocketTimeoutException e) {
+            Log.e(TAG, "Connection timeout to " + host + ":" + port);
+            return false;
+        } catch (java.net.UnknownHostException e) {
+            Log.e(TAG, "Unknown host: " + host);
+            return false;
+        } catch (java.net.ConnectException e) {
+            Log.e(TAG, "Connection refused to " + host + ":" + port + " - server may not be running");
+            return false;
         } catch (IOException e) {
             Log.e(TAG, "Connection failed to " + host + ":" + port + ": " + e.getMessage(), e);
             return false;

@@ -80,10 +80,12 @@ public final class ProtoV2StreamDecoder {
     private void parseFrame(byte[] body) {
         // Body = VER TYPE FLAGS SEQ LEN PAYLOAD CRC16H CRC16L
         if (body.length < 7) {
+            System.err.println("[ProtoV2] Frame too short: " + body.length + " bytes (min 7)");
             return; // too short, ignore
         }
         byte ver = body[0];
         if (ver != ProtoV2.VER) {
+            System.err.println("[ProtoV2] Bad version: 0x" + String.format("%02X", ver) + " (expected 0x" + String.format("%02X", ProtoV2.VER) + ")");
             return; // bad version, ignore
         }
         byte type = body[1];
@@ -92,6 +94,7 @@ public final class ProtoV2StreamDecoder {
         int len = body[4] & 0xFF;
         int expected = 5 + len + 2;
         if (body.length != expected) {
+            System.err.println("[ProtoV2] Length mismatch: got " + body.length + ", expected " + expected + " (len=" + len + ")");
             return; // length mismatch, ignore
         }
 
@@ -100,6 +103,7 @@ public final class ProtoV2StreamDecoder {
         System.arraycopy(body, 0, crcData, 0, crcData.length);
         int crcCalc = ProtoV2.crc16CcittFalse(crcData);
         if (crcCalc != crcRead) {
+            System.err.println("[ProtoV2] CRC mismatch: read=0x" + String.format("%04X", crcRead) + ", calc=0x" + String.format("%04X", crcCalc));
             return; // crc mismatch, ignore
         }
 

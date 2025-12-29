@@ -244,7 +244,20 @@ class MainPanel extends JPanel {
 
     public void onMessageReceived(byte type, byte[] payload) {
         String typeStr = getTypeString(type);
-        String payloadStr = payload != null ? new String(payload) : "";
+        String payloadStr = "";
+        if (payload != null && payload.length > 0) {
+            try {
+                // Try to decode as UTF-8 string
+                payloadStr = new String(payload, java.nio.charset.StandardCharsets.UTF_8);
+            } catch (Exception e) {
+                // If not valid UTF-8, show hex representation
+                StringBuilder hex = new StringBuilder();
+                for (byte b : payload) {
+                    hex.append(String.format("%02X ", b));
+                }
+                payloadStr = "[" + hex.toString().trim() + "]";
+            }
+        }
         log("RECV: " + typeStr + " | " + payloadStr);
         
         // Auto-respond with ACK if ACK_REQ flag was set

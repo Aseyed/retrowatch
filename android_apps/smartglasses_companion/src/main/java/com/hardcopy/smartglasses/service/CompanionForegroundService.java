@@ -401,7 +401,15 @@ public class CompanionForegroundService extends Service {
             synchronized (this) {
                 in = tcpConnection.getInputStream();
                 out = tcpConnection.getOutputStream();
-                android.util.Log.d("CompanionService", "TCP streams set - out=" + (out != null));
+                android.util.Log.d("CompanionService", "TCP streams set - out=" + (out != null) + ", in=" + (in != null));
+                
+                // Verify streams are not null
+                if (out == null) {
+                    android.util.Log.e("CompanionService", "ERROR: Output stream is null after connection!");
+                }
+                if (in == null) {
+                    android.util.Log.e("CompanionService", "ERROR: Input stream is null after connection!");
+                }
             }
 
             updateNoti("Connected (TCP)");
@@ -426,9 +434,38 @@ public class CompanionForegroundService extends Service {
 
             byte[] buf = new byte[256];
             while (!Thread.currentThread().isInterrupted() && tcpConnection.isConnected()) {
-                int n = in.read(buf);
-                if (n <= 0) break;
-                decoder.feed(buf, n);
+                try {
+                    int n = in.read(buf);
+                    if (n > 0) {
+                        android.util.Log.d("CompanionService", "Received " + n + " bytes from server");
+                        decoder.feed(buf, n);
+                    } else if (n < 0) {
+                        // Connection closed
+                        android.util.Log.d("CompanionService", "Server closed connection (EOF)");
+                        break;
+                    } else if (n == 0) {
+                        // Shouldn't happen with blocking read, but handle it
+                        android.util.Log.w("CompanionService", "Read returned 0 bytes");
+                        Thread.sleep(100);
+                    }
+                } catch (java.net.SocketTimeoutException e) {
+                    // Timeout is normal - just continue reading
+                    // This prevents the thread from hanging
+                    android.util.Log.d("CompanionService", "Read timeout (normal) - continuing");
+                    // Check if we should still be connected
+                    if (!tcpConnection.isConnected()) {
+                        android.util.Log.d("CompanionService", "Connection lost during timeout");
+                        break;
+                    }
+                    continue;
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    android.util.Log.d("CompanionService", "Read thread interrupted");
+                    break;
+                } catch (IOException e) {
+                    android.util.Log.e("CompanionService", "Read error: " + e.getMessage(), e);
+                    break;
+                }
             }
         } catch (IOException e) {
             updateNoti("Disconnected (I/O)");
@@ -452,38 +489,90 @@ public class CompanionForegroundService extends Service {
     }
 
     private synchronized void sendFrame(byte type, byte flags, byte[] payload) {
-        // Check if we have a valid output stream
-        OutputStream streamToUse = out;
+        // Always try to get fresh stream reference to avoid stale references
+        OutputStream streamToUse = null;
+        
+        // First, try to use the stored reference
+        if (out != null) {
+            streamToUse = out;
+        }
+        
+        // If stored reference is null or TCP connection exists, try to get it from connection
+        if (streamToUse == null && tcpConnection != null && tcpConnection.isConnected()) {
+            android.util.Log.d("CompanionService", "Output stream is null - getting from TCP connection");
+            streamToUse = tcpConnection.getOutputStream();
+            if (streamToUse != null) {
+                out = streamToUse; // Update stored reference
+                android.util.Log.d("CompanionService", "Recovered output stream from TCP connection");
+            }
+        }
+        
+        // If still null, try Bluetooth socket
+        if (streamToUse == null && socket != null) {
+            try {
+                streamToUse = socket.getOutputStream();
+                if (streamToUse != null) {
+                    out = streamToUse;
+                    android.util.Log.d("CompanionService", "Recovered output stream from Bluetooth socket");
+                }
+            } catch (IOException e) {
+                android.util.Log.e("CompanionService", "Failed to get output stream from socket: " + e.getMessage());
+            }
+        }
+        
+        // Final check - if still null, we can't send
         if (streamToUse == null) {
             android.util.Log.w("CompanionService", "Cannot send frame - output stream is null (not connected)");
             android.util.Log.w("CompanionService", "  socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null));
             if (tcpConnection != null) {
                 android.util.Log.w("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
             }
-            // Try to get output stream again if TCP connection exists
-            if (tcpConnection != null && tcpConnection.isConnected()) {
-                android.util.Log.d("CompanionService", "Attempting to recover output stream from TCP connection");
-                streamToUse = tcpConnection.getOutputStream();
-                if (streamToUse != null) {
-                    out = streamToUse;
-                    android.util.Log.d("CompanionService", "Recovered output stream");
-                } else {
-                    android.util.Log.e("CompanionService", "Failed to recover output stream");
-                    return;
-                }
-            } else {
-                return;
+            return;
+        }
+        
+        // Verify connection is still active before sending
+        if (tcpConnection != null && !tcpConnection.isConnected()) {
+            android.util.Log.w("CompanionService", "Cannot send frame - TCP connection is not connected");
+            synchronized (this) {
+                out = null; // Clear stale reference
             }
+            return;
         }
         
         try {
             byte[] frame = ProtoV2.encode(type, flags, txSeq++, payload);
+            
+            // Log frame details before sending
+            android.util.Log.d("CompanionService", "Sending frame: type=" + type + ", flags=" + flags + ", seq=" + (txSeq-1) + ", payloadLen=" + (payload != null ? payload.length : 0) + ", frameSize=" + frame.length + " bytes");
+            
+            // Write frame
             streamToUse.write(frame);
+            
+            // CRITICAL: Flush immediately to ensure data is sent
+            // Flush must be called to ensure data is actually transmitted over the network
             streamToUse.flush();
-            android.util.Log.d("CompanionService", "Frame sent: type=" + type + ", flags=" + flags + ", seq=" + (txSeq-1) + ", payloadLen=" + (payload != null ? payload.length : 0) + ", frameSize=" + frame.length + " bytes");
+            
+            android.util.Log.d("CompanionService", "Frame sent and flushed successfully - " + frame.length + " bytes transmitted");
+            
+            // Verify stream is still valid
+            if (streamToUse != out) {
+                android.util.Log.w("CompanionService", "Warning: stream reference changed after write");
+            }
+        } catch (java.net.SocketException e) {
+            android.util.Log.e("CompanionService", "Socket error sending frame: " + e.getMessage(), e);
+            // Connection is broken - clear output stream
+            synchronized (this) {
+                out = null;
+            }
         } catch (IOException e) {
             android.util.Log.e("CompanionService", "Error sending frame: " + e.getMessage(), e);
             // Best effort: connection will be torn down by read loop or next write.
+            // Clear output stream on error
+            synchronized (this) {
+                if (streamToUse == out) {
+                    out = null;
+                }
+            }
         } catch (Exception e) {
             android.util.Log.e("CompanionService", "Unexpected error sending frame: " + e.getMessage(), e);
         }

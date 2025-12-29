@@ -60,6 +60,7 @@ public class MainWindow extends JFrame {
         
         comPortBridge = new ComPortBridge(this::onDataReceived);
         tcpServerBridge = new TcpServerBridge(this::onDataReceived);
+        tcpServerBridge.setConnectionCallback(this::onClientConnected);
         
         // Create UI
         createUI();
@@ -282,8 +283,28 @@ public class MainWindow extends JFrame {
         updateUIForMode();
     }
     
+    private void onClientConnected() {
+        // Reset protocol parser when new client connects
+        // This clears any partial frame state from previous connections
+        protocolParser.reset();
+        log("Client connected - parser reset");
+    }
+    
     private void onDataReceived(byte[] data) {
         log("RECV", "Received " + data.length + " bytes");
+        
+        // Log raw bytes for debugging (first 32 bytes)
+        if (data.length > 0) {
+            StringBuilder hex = new StringBuilder();
+            int maxBytes = Math.min(data.length, 32);
+            for (int i = 0; i < maxBytes; i++) {
+                hex.append(String.format("%02X ", data[i] & 0xFF));
+            }
+            if (data.length > 32) {
+                hex.append("...");
+            }
+            log("RAW", hex.toString().trim());
+        }
         
         // Process each byte through protocol parser
         for (byte b : data) {
