@@ -467,8 +467,9 @@ public class CompanionForegroundService extends Service {
                     break;
                 }
             }
-        } catch (IOException e) {
-            updateNoti("Disconnected (I/O)");
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Unexpected error in runTcpIo: " + e.getMessage(), e);
+            updateNoti("Disconnected (Error)");
         } finally {
             try {
                 // Send a test message before disconnecting
