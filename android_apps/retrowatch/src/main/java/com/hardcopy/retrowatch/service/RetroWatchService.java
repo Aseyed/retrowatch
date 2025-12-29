@@ -881,9 +881,8 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				TransactionBuilder.Transaction transaction = mTransactionBuilder.makeTransaction();
 				transaction.begin();
 				transaction.setCommand(Transaction.COMMAND_TYPE_ADD_NORMAL_OBJ);
-				transaction.setId(999);
 				transaction.setIcon(Transaction.ICON_TYPE_APP_NOTI);
-				transaction.setMessage("Disconnecting...");
+				transaction.setMessage(999, "Disconnecting...");
 				transaction.settingFinished();
 				transaction.sendTransaction();
 				// Give it a moment to send
@@ -973,7 +972,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 						sendTimeToDevice();
 						Logs.d(TAG, "Sent clock data after connection");
 					} else {
-						Logs.w(TAG, "Cannot send test data - TransactionBuilder is null");
+						Logs.d(TAG, "Cannot send test data - TransactionBuilder is null");
 					}
 					
 					// Fully update remote device every 1 hour
