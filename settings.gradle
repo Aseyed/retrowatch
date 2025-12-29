@@ -1,4 +1,8 @@
-include ':app'
+// Android Applications
+include ':android_apps:retrowatch'
+project(':android_apps:retrowatch').projectDir = new File('android_apps/retrowatch')
+include ':android_apps:smartglasses_companion'
+project(':android_apps:smartglasses_companion').projectDir = new File('android_apps/smartglasses_companion')
 
 
 

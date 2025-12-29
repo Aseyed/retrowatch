@@ -1,55 +1,88 @@
-retrowatch
-==========
+# RetroWatch Project
 
-Retro watch is open source smart watch project using Arduino and Android.
+Open source smart watch project with Android apps, Arduino hardware, and desktop simulation tools.
 
-==========
-[How-To: RetroWatch 제작방법 - 상세버전 (한글)](http://www.hardcopyworld.com/ngine/aduino/index.php/archives/376)
+## Project Structure
 
-[RetroWatch 안드로이드 앱 사용방법](http://www.hardcopyworld.com/ngine/android/index.php/archives/192)
+```
+retrowatch/
+├── android_apps/              # Android Applications
+│   ├── retrowatch/           # RetroWatch Android App (Main)
+│   └── smartglasses_companion/ # SmartGlasses Companion App
+├── desktop_tools/             # Desktop Development Tools
+│   ├── arduino_simulator/    # Arduino Simulator (Java)
+│   └── bluetooth_test_device/ # Bluetooth Test Device (Java)
+├── hardware/                  # Hardware Source Code
+│   └── arduino/              # Arduino Firmware
+├── legacy/                    # Legacy Code
+│   └── RetroWatch_Android/   # Old Android implementations
+├── docs/                      # Documentation
+└── scripts/                   # Build Scripts
+```
 
+## Quick Start
 
-[How-To: Make your own smart watch (ENG)](http://www.hardcopyworld.com/ngine/aduino/index.php/archives/670) - translated by Chang-Han Jeon.
+### Android Apps
 
-[Translated in Polish](http://akademia.nettigo.pl/smartwatch/index.html) - by [Sebastian](http://akademia.nettigo.pl/)
+**Build APKs:**
+```bash
+# In Android Studio: Build → Build APK(s)
+# Or via Gradle:
+./gradlew :android_apps:retrowatch:assembleDebug
+./gradlew :android_apps:smartglasses_companion:assembleDebug
+```
 
-==========
-[Source tree](#)
+**APK Locations:**
+- RetroWatch: `android_apps/retrowatch/build/outputs/apk/debug/app-debug.apk`
+- SmartGlasses: `android_apps/smartglasses_companion/build/outputs/apk/debug/smartglasses_companion-debug.apk`
 
------------------------------------
-RetroWatch_Android
+### Desktop Simulator
 
-  [RetroWatch](#) : requires Android v4.3 or over (Recommended)
-  
-  [RetroWatchLE](#) : requires Android v4.0 or over. This source doesn't collect Notification data. (This source is no longer supported)
-   
------------------------------------
-RetroWatch_Arduino
-: Recommed to compile with Arduino 1.0.x version to avoid OLED(SSD1306) library compatibility error.
+**Run Simulator:**
+```bash
+cd desktop_tools/arduino_simulator
+../../gradlew run
+```
 
-  [RetroWatchArduino](#) : uses I2C OLED, Adafruit library, requires one button.
-  
-  [RetroWatchArduino_no_button](#) : I2C OLED, Adafruit library, works without buttons.
-  
-  [RetroWatchArduino_spi](#) : SPI OLED, Adafruit library, requires one button.
-  
-  [RetroWatchArduino_spi_no_button](#) : SPI OLED, Adafruit library, works without buttons.
-  
-  [RetroWatchArduino_u8glib](#)	: I2C OLED, u8glib library, requires one button. (I recommend this!!!).
-  
-  [RetroWatchArduino_u8glib_no_button](#) : I2C OLED, u8glib library, works without buttons.
-  
-  [RetroWatchArduino_u8glib_spi](#) : SPI OLED, u8glib library, requires one button.
-  
-  [RetroWatchArduino_u8glib_spi_no_button](#) : SPI OLED, u8glib library, works without buttons.
-  
+### Arduino Hardware
 
-==========
+**Arduino Code:**
+- Location: `hardware/arduino/`
+- Main: `hardware/arduino/RetroWatchArduino_ProMicro/`
 
-Do you want to post feedback, bugreport, suggestion or question? Use below links:
+## Features
 
-[QnA: ](http://www.hardcopyworld.com/gnuboard5/bbs/board.php?bo_table=qna)
+- ✅ **Android Apps** - RetroWatch and SmartGlasses Companion
+- ✅ **TCP Support** - Connect to simulator via TCP (IP/Port input in UI)
+- ✅ **Arduino Simulator** - Desktop simulator for testing
+- ✅ **Bluetooth Support** - Production Bluetooth connectivity
+- ✅ **Arduino Firmware** - Multiple hardware variants
 
-Email : godstale@hotmail.com
+## Documentation
 
+See `docs/` folder for:
+- Build guides
+- Setup instructions
+- Architecture documentation
+- TCP connection guides
+
+## Building
+
+### Prerequisites
+- Android Studio (for Android apps)
+- Java 11+ (for desktop tools)
+- Gradle (included)
+
+### Android Apps
+Open in Android Studio and build, or use Gradle commands above.
+
+### Desktop Tools
+```bash
+cd desktop_tools/arduino_simulator
+../../gradlew build
+```
+
+## License
+
+See LICENSE file.
 

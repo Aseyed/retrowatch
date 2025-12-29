@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SmartGlasses" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Keep minimal -->
+    </style>
+</resources>
+
+
+
