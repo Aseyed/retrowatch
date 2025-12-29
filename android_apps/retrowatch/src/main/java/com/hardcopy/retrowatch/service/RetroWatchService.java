@@ -407,7 +407,14 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			// Set transaction parameters
 			transaction.setCommand(Transaction.COMMAND_TYPE_ADD_EMERGENCY_OBJ);
 			transaction.setIcon(obj.mIconType);
-			transaction.setMessage(obj.mId, obj.mFilteredString);
+			// For phone calls, include phone number if available
+			String message = obj.mFilteredString;
+			if (obj.mPackageName != null && obj.mPackageName.equals(ContentObject.TELEPHONY_CALL_PACKAGE_NAME) 
+					&& obj.mExtraData != null && !obj.mExtraData.isEmpty()) {
+				// Include phone number in message: "Caller Name (Phone Number)"
+				message = message + " (" + obj.mExtraData + ")";
+			}
+			transaction.setMessage(obj.mId, message);
 			
 			transaction.settingFinished();
 			transaction.sendTransaction();
@@ -782,6 +789,43 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				mTcpManager.connect();
 			}
 		}
+	}
+	
+	/**
+	 * Connect to device (TCP or Bluetooth)
+	 */
+	public void connectDevice() {
+		if (USE_TCP_FOR_TESTING) {
+			if (mTcpManager != null) {
+				mTcpManager.connect();
+			}
+		} else {
+			if (mConnectionInfo.getDeviceAddress() != null && mBtManager != null) {
+				connectDevice(mConnectionInfo.getDeviceAddress());
+			}
+		}
+	}
+	
+	/**
+	 * Disconnect from device
+	 */
+	public void disconnectDevice() {
+		if (USE_TCP_FOR_TESTING) {
+			if (mTcpManager != null) {
+				mTcpManager.stop();
+			}
+		} else {
+			if (mBtManager != null) {
+				mBtManager.stop();
+			}
+		}
+	}
+	
+	/**
+	 * Send clock/time data to device
+	 */
+	public void sendClockData() {
+		sendTimeToDevice();
 	}
 	
 	/**

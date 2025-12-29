@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView deviceText;
     private EditText tcpHostInput;
     private EditText tcpPortInput;
+    private EditText messageInput;
 
     private static final String PREFS = "smartglasses_prefs";
     private static final String KEY_MAC = "device_mac";
@@ -61,13 +62,23 @@ public class MainActivity extends AppCompatActivity {
         Button pickBtn = findViewById(R.id.pickDeviceBtn);
         Button connectBtn = findViewById(R.id.connectBtn);
         Button disconnectBtn = findViewById(R.id.disconnectBtn);
+        messageInput = findViewById(R.id.messageInput);
+        Button sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        Button sendClockBtn = findViewById(R.id.sendClockBtn);
+        Button sendBatteryBtn = findViewById(R.id.sendBatteryBtn);
 
         startBtn.setOnClickListener(v -> CompanionForegroundService.start(this));
         stopBtn.setOnClickListener(v -> CompanionForegroundService.stop(this));
         notiAccessBtn.setOnClickListener(v -> openNotificationAccessSettings());
         pickBtn.setOnClickListener(v -> pickDevice());
         connectBtn.setOnClickListener(v -> connect());
-        disconnectBtn.setOnClickListener(v -> CompanionForegroundService.disconnect(this));
+        disconnectBtn.setOnClickListener(v -> {
+            CompanionForegroundService.disconnect(this);
+            Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
+        });
+        sendMessageBtn.setOnClickListener(v -> sendMessage());
+        sendClockBtn.setOnClickListener(v -> sendClockData());
+        sendBatteryBtn.setOnClickListener(v -> sendBatteryStatus());
 
         ensureRuntimePermissions();
     }
@@ -137,6 +148,27 @@ public class MainActivity extends AppCompatActivity {
             }
             CompanionForegroundService.connect(this, mac);
         }
+    }
+    
+    private void sendMessage() {
+        String message = messageInput.getText().toString().trim();
+        if (message.isEmpty()) {
+            Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        CompanionForegroundService.sendNotify(this, message);
+        Toast.makeText(this, "Message sent: " + message, Toast.LENGTH_SHORT).show();
+        messageInput.setText(""); // Clear input
+    }
+    
+    private void sendClockData() {
+        CompanionForegroundService.sendTime(this);
+        Toast.makeText(this, "Clock data sent", Toast.LENGTH_SHORT).show();
+    }
+    
+    private void sendBatteryStatus() {
+        CompanionForegroundService.sendBatteryStatus(this);
+        Toast.makeText(this, "Battery status sent", Toast.LENGTH_SHORT).show();
     }
 
     private void openNotificationAccessSettings() {

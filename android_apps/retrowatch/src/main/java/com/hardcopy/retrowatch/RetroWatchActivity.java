@@ -522,6 +522,27 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 			}
 			break;
 			
+		case IFragmentListener.CALLBACK_REQUEST_CONNECT:
+			if(mService != null) {
+				mService.connectDevice();
+				Toast.makeText(this, "Connecting...", Toast.LENGTH_SHORT).show();
+			}
+			break;
+			
+		case IFragmentListener.CALLBACK_REQUEST_DISCONNECT:
+			if(mService != null) {
+				mService.disconnectDevice();
+				Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
+			}
+			break;
+			
+		case IFragmentListener.CALLBACK_REQUEST_SEND_CLOCK:
+			if(mService != null) {
+				mService.sendClockData();
+				Toast.makeText(this, "Clock data sent", Toast.LENGTH_SHORT).show();
+			}
+			break;
+			
 		default:
 			break;
 		}

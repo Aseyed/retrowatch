@@ -34,6 +34,9 @@ public interface IFragmentListener {
 	public static final int CALLBACK_REQUEST_RUN_IN_BACKGROUND = 25;
 	public static final int CALLBACK_REQUEST_SET_TCP_HOST = 26;
 	public static final int CALLBACK_REQUEST_SET_TCP_PORT = 27;
+	public static final int CALLBACK_REQUEST_CONNECT = 28;
+	public static final int CALLBACK_REQUEST_DISCONNECT = 29;
+	public static final int CALLBACK_REQUEST_SEND_CLOCK = 30;
 	
 	public void OnFragmentCallback(int msgType, int arg0, int arg1, String arg2, String arg3, Object arg4);
 }

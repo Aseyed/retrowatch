@@ -192,6 +192,9 @@ public class TcpConnectionManager {
             
             try {
                 mConnectSocket = new Socket(mHost, mPort);
+                // Set socket timeout to prevent hanging
+                mConnectSocket.setSoTimeout(5000); // 5 second timeout
+                mConnectSocket.setTcpNoDelay(true); // Disable Nagle's algorithm for faster response
                 Logs.d(TAG, "Socket created, calling connected()");
                 connected(mConnectSocket);
             } catch (IOException e) {
@@ -224,6 +227,11 @@ public class TcpConnectionManager {
             OutputStream tmpOut = null;
             
             try {
+                // Set socket options to prevent hanging
+                socket.setSoTimeout(10000); // 10 second read timeout
+                socket.setTcpNoDelay(true); // Disable Nagle's algorithm
+                socket.setKeepAlive(true); // Enable keep-alive
+                
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
                 Logs.d(TAG, "Streams created successfully");
@@ -268,6 +276,12 @@ public class TcpConnectionManager {
                         Logs.d(TAG, "End of stream detected");
                         break;
                     }
+                    // bytes == 0 means no data available (shouldn't happen with blocking read, but handle it)
+                } catch (java.net.SocketTimeoutException e) {
+                    // Timeout is normal - just continue reading
+                    // This prevents the thread from hanging
+                    Logs.d(TAG, "Read timeout (normal)");
+                    continue;
                 } catch (IOException e) {
                     Logs.e(TAG, "Read error: " + e.getMessage());
                     connectionLost();

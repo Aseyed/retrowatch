@@ -26,15 +26,19 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.view.View.OnClickListener;
 
 /**
  * This fragment shows user defined message filters.
@@ -50,6 +54,9 @@ public class WatchControlFragment extends Fragment {
 	private CheckBox mCheckBackground;
 	private EditText mEditTcpHost = null;
 	private EditText mEditTcpPort = null;
+	private Button mBtnConnect = null;
+	private Button mBtnDisconnect = null;
+	private Button mBtnSendClock = null;
 	
 	private int mPresetClockStyle = -1;
 	private int mPresetIndicator = -1;
@@ -176,6 +183,32 @@ public class WatchControlFragment extends Fragment {
 			}
 			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 			@Override public void afterTextChanged(Editable s) {}
+		});
+		
+		// Connect/Disconnect buttons
+		mBtnConnect = (Button) rootView.findViewById(R.id.btn_connect);
+		mBtnConnect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_CONNECT, 0, 0, null, null, null);
+			}
+		});
+		
+		mBtnDisconnect = (Button) rootView.findViewById(R.id.btn_disconnect);
+		mBtnDisconnect.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_DISCONNECT, 0, 0, null, null, null);
+			}
+		});
+		
+		// Send Clock Data button
+		mBtnSendClock = (Button) rootView.findViewById(R.id.btn_send_clock);
+		mBtnSendClock.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_SEND_CLOCK, 0, 0, null, null, null);
+			}
 		});
 		
 		return rootView;

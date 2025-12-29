@@ -59,6 +59,7 @@ public class CompanionForegroundService extends Service {
     private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private static volatile boolean runningHint = false;
+    private static volatile CompanionForegroundService instance = null;
 
     private Handler mainHandler;
     private Thread ioThread;
@@ -123,6 +124,7 @@ public class CompanionForegroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
         runningHint = true;
         mainHandler = new Handler(Looper.getMainLooper());
         ensureNotificationChannel();
@@ -158,6 +160,7 @@ public class CompanionForegroundService extends Service {
 
     @Override
     public void onDestroy() {
+        instance = null;
         runningHint = false;
         shutdownIo();
         super.onDestroy();
@@ -192,6 +195,71 @@ public class CompanionForegroundService extends Service {
     public synchronized void sendNotify(String text) {
         if (text == null) text = "";
         sendFrame(ProtoV2.TYPE_NOTIFY, ProtoV2.FLAG_ACK_REQ, text.getBytes(StandardCharsets.UTF_8));
+    }
+    
+    public synchronized void sendCall(String callerInfo) {
+        if (callerInfo == null) callerInfo = "Unknown";
+        // Truncate to 64 bytes for protocol
+        byte[] payload = callerInfo.getBytes(StandardCharsets.UTF_8);
+        if (payload.length > 64) {
+            payload = java.util.Arrays.copyOf(payload, 64);
+        }
+        sendFrame(ProtoV2.TYPE_CALL, ProtoV2.FLAG_ACK_REQ, payload);
+    }
+    
+    public synchronized void sendTime() {
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        byte[] payload = new byte[7];
+        int year = cal.get(java.util.Calendar.YEAR);
+        payload[0] = (byte) (year & 0xFF);
+        payload[1] = (byte) ((year >> 8) & 0xFF);
+        payload[2] = (byte) (cal.get(java.util.Calendar.MONTH) + 1); // 1-12
+        payload[3] = (byte) cal.get(java.util.Calendar.DAY_OF_MONTH); // 1-31
+        payload[4] = (byte) cal.get(java.util.Calendar.HOUR_OF_DAY); // 0-23
+        payload[5] = (byte) cal.get(java.util.Calendar.MINUTE); // 0-59
+        payload[6] = (byte) cal.get(java.util.Calendar.SECOND); // 0-59
+        sendFrame(ProtoV2.TYPE_TIME, ProtoV2.FLAG_ACK_REQ, payload);
+    }
+    
+    public synchronized void sendBatteryStatus() {
+        android.content.IntentFilter ifilter = new android.content.IntentFilter(android.content.Intent.ACTION_BATTERY_CHANGED);
+        android.content.Intent batteryStatus = getApplicationContext().registerReceiver(null, ifilter);
+        if (batteryStatus != null) {
+            int level = batteryStatus.getIntExtra(android.os.BatteryManager.EXTRA_LEVEL, -1);
+            int scale = batteryStatus.getIntExtra(android.os.BatteryManager.EXTRA_SCALE, -1);
+            int batteryPct = (level * 100) / scale;
+            String batteryText = "Battery: " + batteryPct + "%";
+            sendFrame(ProtoV2.TYPE_NOTIFY, ProtoV2.FLAG_ACK_REQ, batteryText.getBytes(StandardCharsets.UTF_8));
+        }
+    }
+    
+    // Static methods for UI access
+    public static void sendNotify(Context context, String text) {
+        if (instance != null) {
+            instance.sendNotify(text);
+        }
+    }
+    
+    public static void sendTime(Context context) {
+        if (instance != null) {
+            instance.sendTime();
+        }
+    }
+    
+    public static void sendBatteryStatus(Context context) {
+        if (instance != null) {
+            instance.sendBatteryStatus();
+        }
+    }
+    
+    public static void sendCall(Context context, String callerInfo) {
+        if (instance != null) {
+            instance.sendCall(callerInfo);
+        }
+    }
+    
+    public static CompanionForegroundService getInstance() {
+        return instance;
     }
 
     private void runIo(String mac) {
