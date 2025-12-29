@@ -345,11 +345,11 @@ public class TcpConnectionManager {
                                 .sendToTarget();
                     } else if (bytes < 0) {
                         // End of stream - server closed connection
-                        Logs.w(TAG, "End of stream detected (EOF) - server closed connection");
+                        Logs.d(TAG, "End of stream detected (EOF) - server closed connection");
                         break;
                     } else {
                         // bytes == 0 - shouldn't happen with blocking read
-                        Logs.w(TAG, "Read returned 0 bytes (unexpected)");
+                        Logs.d(TAG, "Read returned 0 bytes (unexpected)");
                     }
                 } catch (java.net.SocketTimeoutException e) {
                     // Timeout is normal - just continue reading
@@ -416,7 +416,7 @@ public class TcpConnectionManager {
                 mHandler.obtainMessage(MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
-                Logs.e(TAG, "Exception during write: " + e.getMessage(), e);
+                Logs.e(TAG, "Exception during write: " + e.getMessage());
                 connectionLost();
             } catch (NullPointerException e) {
                 Logs.e(TAG, "NullPointerException during write - stream may be closed");
