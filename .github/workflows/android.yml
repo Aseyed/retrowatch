@@ -46,11 +46,19 @@ jobs:
         ANDROID_HOME: ${{ env.ANDROID_HOME }}
         ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
 
+    - name: List APK files
+      run: |
+        echo "RetroWatch APK files:"
+        ls -la android_apps/retrowatch/build/outputs/apk/debug/ || echo "Directory not found"
+        echo ""
+        echo "SmartGlasses Companion APK files:"
+        ls -la android_apps/smartglasses_companion/build/outputs/apk/debug/ || echo "Directory not found"
+
     - name: Upload RetroWatch APK
       uses: actions/upload-artifact@v4
       with:
         name: retrowatch-debug-apk
-        path: android_apps/retrowatch/build/outputs/apk/debug/app-debug.apk
+        path: android_apps/retrowatch/build/outputs/apk/debug/*.apk
         retention-days: 30
         if-no-files-found: warn
 
