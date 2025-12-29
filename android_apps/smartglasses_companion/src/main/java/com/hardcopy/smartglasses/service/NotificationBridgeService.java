@@ -13,7 +13,7 @@ import android.telephony.PhoneStateListener;
  */
 public class NotificationBridgeService extends NotificationListenerService {
 
-    private static PhoneStateListenerCompat phoneListener = null;
+    private static PhoneStateListener phoneListener = null;
 
     @Override
     public void onCreate() {
