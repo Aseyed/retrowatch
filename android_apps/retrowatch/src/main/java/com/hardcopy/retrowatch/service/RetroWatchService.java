@@ -874,6 +874,25 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	 * Disconnect from device
 	 */
 	public void disconnectDevice() {
+		// Send a test message before disconnecting
+		if (mTransactionBuilder != null && (mTcpManager != null && mTcpManager.getState() == TcpConnectionManager.STATE_CONNECTED)) {
+			try {
+				Logs.d(TAG, "Sending test message before disconnect");
+				TransactionBuilder.Transaction transaction = mTransactionBuilder.makeTransaction();
+				transaction.begin();
+				transaction.setCommand(Transaction.COMMAND_TYPE_ADD_NORMAL_OBJ);
+				transaction.setId(999);
+				transaction.setIcon(Transaction.ICON_TYPE_APP_NOTI);
+				transaction.setMessage("Disconnecting...");
+				transaction.settingFinished();
+				transaction.sendTransaction();
+				// Give it a moment to send
+				Thread.sleep(200);
+			} catch (Exception e) {
+				Logs.e(TAG, "Error sending disconnect message: " + e.getMessage());
+			}
+		}
+		
 		if (USE_TCP_FOR_TESTING) {
 			if (mTcpManager != null) {
 				mTcpManager.stop();
@@ -946,6 +965,16 @@ public class RetroWatchService extends Service implements IContentManagerListene
 					
 				case BluetoothManager.STATE_CONNECTED:  // Same value as TcpConnectionManager.STATE_CONNECTED
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_CONNECTED).sendToTarget();
+					
+					// Send test message immediately after connection
+					Logs.d(TAG, "Connection established - sending test data");
+					if (mTransactionBuilder != null) {
+						// Send clock data as test
+						sendTimeToDevice();
+						Logs.d(TAG, "Sent clock data after connection");
+					} else {
+						Logs.w(TAG, "Cannot send test data - TransactionBuilder is null");
+					}
 					
 					// Fully update remote device every 1 hour
 					reserveRemoteUpdate(5000);

@@ -148,6 +148,10 @@ public class TcpConnectionManager {
             return;
         }
         
+        // Set state to connected BEFORE starting the thread
+        setState(STATE_CONNECTED);
+        
+        // Start the connected thread
         mConnectedThread.start();
         
         // Send device name message
@@ -158,8 +162,7 @@ public class TcpConnectionManager {
         msg.setData(bundle);
         mHandler.sendMessage(msg);
         
-        setState(STATE_CONNECTED);
-        Logs.d(TAG, "Connection established and thread started");
+        Logs.d(TAG, "Connection established and thread started - state is already CONNECTED");
     }
     
     private void connectionFailed() {

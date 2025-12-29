@@ -151,6 +151,17 @@ public class CompanionForegroundService extends Service {
                     }
                 }
             } else if (ACTION_DISCONNECT.equals(action)) {
+                // Send a test message before disconnecting
+                synchronized (this) {
+                    if (isConnected()) {
+                        try {
+                            sendNotify("Disconnecting...");
+                            Thread.sleep(200); // Give it a moment to send
+                        } catch (Exception e) {
+                            android.util.Log.e("CompanionService", "Error sending disconnect message: " + e.getMessage());
+                        }
+                    }
+                }
                 updateNoti("Disconnected");
                 shutdownIo();
             }
@@ -373,10 +384,28 @@ public class CompanionForegroundService extends Service {
             synchronized (this) {
                 in = tcpConnection.getInputStream();
                 out = tcpConnection.getOutputStream();
+                android.util.Log.d("CompanionService", "TCP streams set - out=" + (out != null));
             }
 
             updateNoti("Connected (TCP)");
+            
+            // Wait a moment for streams to be fully ready
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            
             sendStatusConnected();
+            
+            // Send a test message to verify connection
+            try {
+                Thread.sleep(200);
+                sendNotify("Connected to server");
+                android.util.Log.d("CompanionService", "Sent test message after connection");
+            } catch (Exception e) {
+                android.util.Log.e("CompanionService", "Error sending test message: " + e.getMessage());
+            }
 
             byte[] buf = new byte[256];
             while (!Thread.currentThread().isInterrupted() && tcpConnection.isConnected()) {
@@ -388,6 +417,17 @@ public class CompanionForegroundService extends Service {
             updateNoti("Disconnected (I/O)");
         } finally {
             try {
+                // Send a test message before disconnecting
+                synchronized (this) {
+                    if (out != null && tcpConnection != null && tcpConnection.isConnected()) {
+                        try {
+                            sendNotify("Disconnecting...");
+                            Thread.sleep(200); // Give it a moment to send
+                        } catch (Exception e) {
+                            android.util.Log.e("CompanionService", "Error sending disconnect message: " + e.getMessage());
+                        }
+                    }
+                }
                 sendStatusDisconnected();
             } catch (Throwable ignored) {}
             shutdownIo();
@@ -395,17 +435,24 @@ public class CompanionForegroundService extends Service {
     }
 
     private synchronized void sendFrame(byte type, byte flags, byte[] payload) {
-        if (out == null) {
+        // Check if we have a valid output stream
+        OutputStream streamToUse = out;
+        if (streamToUse == null) {
             android.util.Log.w("CompanionService", "Cannot send frame - output stream is null (not connected)");
+            android.util.Log.w("CompanionService", "  socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null));
+            if (tcpConnection != null) {
+                android.util.Log.w("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
+            }
             return;
         }
+        
         try {
             byte[] frame = ProtoV2.encode(type, flags, txSeq++, payload);
-            out.write(frame);
-            out.flush();
-            android.util.Log.d("CompanionService", "Frame sent: type=" + type + ", size=" + frame.length);
+            streamToUse.write(frame);
+            streamToUse.flush();
+            android.util.Log.d("CompanionService", "Frame sent: type=" + type + ", size=" + frame.length + " bytes");
         } catch (IOException e) {
-            android.util.Log.e("CompanionService", "Error sending frame: " + e.getMessage());
+            android.util.Log.e("CompanionService", "Error sending frame: " + e.getMessage(), e);
             // Best effort: connection will be torn down by read loop or next write.
         } catch (Exception e) {
             android.util.Log.e("CompanionService", "Unexpected error sending frame: " + e.getMessage(), e);
