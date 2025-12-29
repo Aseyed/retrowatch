@@ -167,7 +167,7 @@ public class TcpConnectionManager {
                 Socket socket = new Socket(mHost, mPort);
                 connected(socket);
             } catch (IOException e) {
-                Logs.e(TAG, "Connection failed", e);
+                Logs.e(TAG, "Connection failed: " + e.getMessage());
                 connectionFailed();
             }
         }
@@ -178,7 +178,7 @@ public class TcpConnectionManager {
                     mSocket.close();
                 }
             } catch (IOException e) {
-                Logs.e(TAG, "close() of connect socket failed", e);
+                Logs.e(TAG, "close() of connect socket failed: " + e.getMessage());
             }
         }
     }
@@ -198,7 +198,7 @@ public class TcpConnectionManager {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                Logs.e(TAG, "temp sockets not created", e);
+                Logs.e(TAG, "temp sockets not created: " + e.getMessage());
             }
             
             mmInStream = tmpIn;
@@ -218,7 +218,7 @@ public class TcpConnectionManager {
                                 .sendToTarget();
                     }
                 } catch (IOException e) {
-                    Logs.e(TAG, "disconnected", e);
+                    Logs.e(TAG, "disconnected: " + e.getMessage());
                     connectionLost();
                     break;
                 }
@@ -231,7 +231,7 @@ public class TcpConnectionManager {
                 mHandler.obtainMessage(MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
-                Logs.e(TAG, "Exception during write", e);
+                Logs.e(TAG, "Exception during write: " + e.getMessage());
             }
         }
         
@@ -239,7 +239,7 @@ public class TcpConnectionManager {
             try {
                 mmSocket.close();
             } catch (IOException e) {
-                Logs.e(TAG, "close() of connected socket failed", e);
+                Logs.e(TAG, "close() of connected socket failed: " + e.getMessage());
             }
         }
     }

@@ -815,14 +815,12 @@ public class RetroWatchService extends Service implements IContentManagerListene
 		public void handleMessage(Message msg) {
 			
 			switch(msg.what) {
-			case BluetoothManager.MESSAGE_STATE_CHANGE:
-			case TcpConnectionManager.MESSAGE_STATE_CHANGE:
+			case BluetoothManager.MESSAGE_STATE_CHANGE:  // Same value as TcpConnectionManager.MESSAGE_STATE_CHANGE
 				// Connection state Changed (Bluetooth or TCP)
 				Logs.d(TAG, "Service - MESSAGE_STATE_CHANGE: " + msg.arg1);
 				
 				switch (msg.arg1) {
-				case BluetoothManager.STATE_NONE:
-				case TcpConnectionManager.STATE_NONE:
+				case BluetoothManager.STATE_NONE:  // Same value as TcpConnectionManager.STATE_NONE
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_INITIALIZED).sendToTarget();
 					if(mRefreshTimer != null) {
 						mRefreshTimer.cancel();
@@ -834,13 +832,11 @@ public class RetroWatchService extends Service implements IContentManagerListene
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_LISTENING).sendToTarget();
 					break;
 					
-				case BluetoothManager.STATE_CONNECTING:
-				case TcpConnectionManager.STATE_CONNECTING:
+				case BluetoothManager.STATE_CONNECTING:  // Same value as TcpConnectionManager.STATE_CONNECTING
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_CONNECTING).sendToTarget();
 					break;
 					
-				case BluetoothManager.STATE_CONNECTED:
-				case TcpConnectionManager.STATE_CONNECTED:
+				case BluetoothManager.STATE_CONNECTED:  // Same value as TcpConnectionManager.STATE_CONNECTED
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_CONNECTED).sendToTarget();
 					
 					// Fully update remote device every 1 hour
@@ -849,13 +845,11 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				}
 				break;
 
-			case BluetoothManager.MESSAGE_WRITE:
-			case TcpConnectionManager.MESSAGE_WRITE:
+			case BluetoothManager.MESSAGE_WRITE:  // Same value as TcpConnectionManager.MESSAGE_WRITE
 				Logs.d(TAG, "Service - MESSAGE_WRITE: ");
 				break;
 
-			case BluetoothManager.MESSAGE_READ:
-			case TcpConnectionManager.MESSAGE_READ:
+			case BluetoothManager.MESSAGE_READ:  // Same value as TcpConnectionManager.MESSAGE_READ
 				Logs.d(TAG, "Service - MESSAGE_READ: ");
 				
 				byte[] readBuf = (byte[]) msg.obj;
@@ -864,8 +858,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 					mTransactionReceiver.setByteArray(readBuf);
 				break;
 				
-			case BluetoothManager.MESSAGE_DEVICE_NAME:
-			case TcpConnectionManager.MESSAGE_DEVICE_NAME:
+			case BluetoothManager.MESSAGE_DEVICE_NAME:  // Same value as TcpConnectionManager.MESSAGE_DEVICE_NAME
 				Logs.d(TAG, "Service - MESSAGE_DEVICE_NAME: ");
 				
 				// save connected device's name and notify using toast
@@ -882,8 +875,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				}
 				break;
 				
-			case BluetoothManager.MESSAGE_TOAST:
-			case TcpConnectionManager.MESSAGE_TOAST:
+			case BluetoothManager.MESSAGE_TOAST:  // Same value as TcpConnectionManager.MESSAGE_TOAST
 				Logs.d(TAG, "Service - MESSAGE_TOAST: ");
 				
 //				Toast.makeText(getApplicationContext(), 
