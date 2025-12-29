@@ -258,7 +258,9 @@ public class CompanionForegroundService extends Service {
     // Check if service is connected
     private boolean isConnected() {
         synchronized (this) {
-            return out != null && (socket != null || (tcpConnection != null && tcpConnection.isConnected()));
+            boolean connected = out != null && (socket != null || (tcpConnection != null && tcpConnection.isConnected()));
+            android.util.Log.d("CompanionService", "isConnected() check: out=" + (out != null) + ", socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null) + ", tcpConnected=" + (tcpConnection != null && tcpConnection.isConnected()) + ", result=" + connected);
+            return connected;
         }
     }
     
@@ -266,48 +268,63 @@ public class CompanionForegroundService extends Service {
     public static void sendNotify(Context context, String text) {
         if (instance == null) {
             android.util.Log.w("CompanionService", "Cannot send notify - service not running");
+            android.widget.Toast.makeText(context, "Service not running", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         if (!instance.isConnected()) {
             android.util.Log.w("CompanionService", "Cannot send notify - not connected");
+            android.widget.Toast.makeText(context, "Not connected to server", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         try {
+            android.util.Log.d("CompanionService", "Sending notify: " + text);
             instance.sendNotify(text);
+            android.widget.Toast.makeText(context, "Message sent: " + text, android.widget.Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             android.util.Log.e("CompanionService", "Error sending notify: " + e.getMessage(), e);
+            android.widget.Toast.makeText(context, "Error: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
         }
     }
     
     public static void sendTime(Context context) {
         if (instance == null) {
             android.util.Log.w("CompanionService", "Cannot send time - service not running");
+            android.widget.Toast.makeText(context, "Service not running", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         if (!instance.isConnected()) {
             android.util.Log.w("CompanionService", "Cannot send time - not connected");
+            android.widget.Toast.makeText(context, "Not connected to server", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         try {
+            android.util.Log.d("CompanionService", "Sending time");
             instance.sendTime();
+            android.widget.Toast.makeText(context, "Clock data sent", android.widget.Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             android.util.Log.e("CompanionService", "Error sending time: " + e.getMessage(), e);
+            android.widget.Toast.makeText(context, "Error: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
         }
     }
     
     public static void sendBatteryStatus(Context context) {
         if (instance == null) {
             android.util.Log.w("CompanionService", "Cannot send battery status - service not running");
+            android.widget.Toast.makeText(context, "Service not running", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         if (!instance.isConnected()) {
             android.util.Log.w("CompanionService", "Cannot send battery status - not connected");
+            android.widget.Toast.makeText(context, "Not connected to server", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         try {
+            android.util.Log.d("CompanionService", "Sending battery status");
             instance.sendBatteryStatus();
+            android.widget.Toast.makeText(context, "Battery status sent", android.widget.Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             android.util.Log.e("CompanionService", "Error sending battery status: " + e.getMessage(), e);
+            android.widget.Toast.makeText(context, "Error: " + e.getMessage(), android.widget.Toast.LENGTH_SHORT).show();
         }
     }
     
@@ -443,14 +460,27 @@ public class CompanionForegroundService extends Service {
             if (tcpConnection != null) {
                 android.util.Log.w("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
             }
-            return;
+            // Try to get output stream again if TCP connection exists
+            if (tcpConnection != null && tcpConnection.isConnected()) {
+                android.util.Log.d("CompanionService", "Attempting to recover output stream from TCP connection");
+                streamToUse = tcpConnection.getOutputStream();
+                if (streamToUse != null) {
+                    out = streamToUse;
+                    android.util.Log.d("CompanionService", "Recovered output stream");
+                } else {
+                    android.util.Log.e("CompanionService", "Failed to recover output stream");
+                    return;
+                }
+            } else {
+                return;
+            }
         }
         
         try {
             byte[] frame = ProtoV2.encode(type, flags, txSeq++, payload);
             streamToUse.write(frame);
             streamToUse.flush();
-            android.util.Log.d("CompanionService", "Frame sent: type=" + type + ", size=" + frame.length + " bytes");
+            android.util.Log.d("CompanionService", "Frame sent: type=" + type + ", flags=" + flags + ", seq=" + (txSeq-1) + ", payloadLen=" + (payload != null ? payload.length : 0) + ", frameSize=" + frame.length + " bytes");
         } catch (IOException e) {
             android.util.Log.e("CompanionService", "Error sending frame: " + e.getMessage(), e);
             // Best effort: connection will be torn down by read loop or next write.

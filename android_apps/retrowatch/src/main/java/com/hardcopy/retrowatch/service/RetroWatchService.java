@@ -874,8 +874,15 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	 * Disconnect from device
 	 */
 	public void disconnectDevice() {
-		// Send a test message before disconnecting
-		if (mTransactionBuilder != null && (mTcpManager != null && mTcpManager.getState() == TcpConnectionManager.STATE_CONNECTED)) {
+		// Send a test message before disconnecting (works for both TCP and Bluetooth)
+		boolean isConnected = false;
+		if (USE_TCP_FOR_TESTING) {
+			isConnected = (mTcpManager != null && mTcpManager.getState() == TcpConnectionManager.STATE_CONNECTED);
+		} else {
+			isConnected = (mBtManager != null && mBtManager.getState() == BluetoothManager.STATE_CONNECTED);
+		}
+		
+		if (mTransactionBuilder != null && isConnected) {
 			try {
 				Logs.d(TAG, "Sending test message before disconnect");
 				TransactionBuilder.Transaction transaction = mTransactionBuilder.makeTransaction();

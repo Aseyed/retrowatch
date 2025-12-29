@@ -67,7 +67,20 @@ public class TcpConnectionManager {
     public synchronized void connect() {
         Logs.d(TAG, "connect to " + mHost + ":" + mPort);
         
+        // Validate host and port before attempting connection
+        if (mHost == null || mHost.isEmpty()) {
+            Logs.e(TAG, "Cannot connect - host is null or empty");
+            connectionFailed();
+            return;
+        }
+        if (mPort <= 0 || mPort > 65535) {
+            Logs.e(TAG, "Cannot connect - invalid port: " + mPort);
+            connectionFailed();
+            return;
+        }
+        
         if (mState == STATE_CONNECTING) {
+            Logs.d(TAG, "Already connecting - canceling previous attempt");
             if (mConnectThread != null) {
                 mConnectThread.cancel();
                 mConnectThread = null;
@@ -75,10 +88,12 @@ public class TcpConnectionManager {
         }
         
         if (mState == STATE_CONNECTED) {
+            Logs.d(TAG, "Already connected - disconnecting first");
             if (mConnectedThread != null) {
                 mConnectedThread.cancel();
                 mConnectedThread = null;
             }
+            setState(STATE_NONE);
         }
         
         setState(STATE_CONNECTING);
@@ -194,19 +209,47 @@ public class TcpConnectionManager {
             Logs.i(TAG, "BEGIN mConnectThread - connecting to " + mHost + ":" + mPort);
             
             try {
-                mConnectSocket = new Socket(mHost, mPort);
-                // Set socket timeout to prevent hanging
-                mConnectSocket.setSoTimeout(5000); // 5 second timeout
+                // Create unconnected socket first
+                mConnectSocket = new Socket();
+                
+                // Set socket options before connecting
+                mConnectSocket.setSoTimeout(10000); // 10 second read timeout
                 mConnectSocket.setTcpNoDelay(true); // Disable Nagle's algorithm for faster response
-                Logs.d(TAG, "Socket created, calling connected()");
+                mConnectSocket.setKeepAlive(true); // Enable keep-alive
+                
+                // Connect with timeout to prevent hanging
+                java.net.InetSocketAddress socketAddress = new java.net.InetSocketAddress(mHost, mPort);
+                mConnectSocket.connect(socketAddress, 5000); // 5 second connection timeout
+                
+                Logs.d(TAG, "Socket connected successfully, calling connected()");
                 connected(mConnectSocket);
+            } catch (java.net.SocketTimeoutException e) {
+                Logs.e(TAG, "Connection timeout to " + mHost + ":" + mPort + " - server not reachable");
+                connectionFailed();
+            } catch (java.net.UnknownHostException e) {
+                Logs.e(TAG, "Unknown host: " + mHost + " - check server address");
+                connectionFailed();
+            } catch (java.net.ConnectException e) {
+                Logs.e(TAG, "Connection refused to " + mHost + ":" + mPort + " - server may not be running");
+                connectionFailed();
             } catch (IOException e) {
                 Logs.e(TAG, "Connection failed to " + mHost + ":" + mPort + ": " + e.getMessage());
                 connectionFailed();
+            } catch (Exception e) {
+                Logs.e(TAG, "Unexpected error during connection: " + e.getMessage());
+                connectionFailed();
+            } finally {
+                // Clean up if connection failed
+                if (mConnectSocket != null && !mConnectSocket.isConnected()) {
+                    try {
+                        mConnectSocket.close();
+                    } catch (IOException ignored) {}
+                }
             }
         }
         
         public void cancel() {
+            Logs.d(TAG, "ConnectThread cancel() called");
             try {
                 if (mConnectSocket != null && !mConnectSocket.isClosed()) {
                     mConnectSocket.close();
@@ -215,6 +258,8 @@ public class TcpConnectionManager {
             } catch (IOException e) {
                 Logs.e(TAG, "close() of connect socket failed: " + e.getMessage());
             }
+            // Interrupt the thread to stop blocking operations
+            interrupt();
         }
     }
     

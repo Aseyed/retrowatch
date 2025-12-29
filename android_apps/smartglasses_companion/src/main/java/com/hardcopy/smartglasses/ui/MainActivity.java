@@ -163,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
         }
         
         CompanionForegroundService.sendNotify(this, message);
-        Toast.makeText(this, "Message sent: " + message, Toast.LENGTH_SHORT).show();
         messageInput.setText(""); // Clear input
     }
     
@@ -174,7 +173,6 @@ public class MainActivity extends AppCompatActivity {
         }
         
         CompanionForegroundService.sendTime(this);
-        Toast.makeText(this, "Clock data sent", Toast.LENGTH_SHORT).show();
     }
     
     private void sendBatteryStatus() {
@@ -184,7 +182,6 @@ public class MainActivity extends AppCompatActivity {
         }
         
         CompanionForegroundService.sendBatteryStatus(this);
-        Toast.makeText(this, "Battery status sent", Toast.LENGTH_SHORT).show();
     }
 
     private void openNotificationAccessSettings() {
