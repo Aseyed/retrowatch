@@ -222,7 +222,10 @@ public class TcpConnectionManager {
                 mConnectSocket.connect(socketAddress, 5000); // 5 second connection timeout
                 
                 Logs.d(TAG, "Socket connected successfully, calling connected()");
-                connected(mConnectSocket);
+                // Pass socket to ConnectedThread - don't close it here
+                Socket socketToPass = mConnectSocket;
+                mConnectSocket = null; // Clear reference so finally block doesn't close it
+                connected(socketToPass);
             } catch (java.net.SocketTimeoutException e) {
                 Logs.e(TAG, "Connection timeout to " + mHost + ":" + mPort + " - server not reachable");
                 connectionFailed();
@@ -239,9 +242,10 @@ public class TcpConnectionManager {
                 Logs.e(TAG, "Unexpected error during connection: " + e.getMessage());
                 connectionFailed();
             } finally {
-                // Clean up if connection failed
-                if (mConnectSocket != null && !mConnectSocket.isConnected()) {
+                // Only clean up if connection failed (socket not passed to ConnectedThread)
+                if (mConnectSocket != null) {
                     try {
+                        Logs.d(TAG, "Cleaning up failed connection socket");
                         mConnectSocket.close();
                     } catch (IOException ignored) {}
                 }
@@ -309,6 +313,14 @@ public class TcpConnectionManager {
                 return;
             }
             
+            if (mmOutStream == null) {
+                Logs.e(TAG, "OutputStream is null - cannot write");
+                connectionLost();
+                return;
+            }
+            
+            Logs.d(TAG, "ConnectedThread started - socket connected: " + mmSocket.isConnected() + ", closed: " + mmSocket.isClosed());
+            
             byte[] buffer = new byte[1024];
             int bytes;
             
@@ -316,25 +328,29 @@ public class TcpConnectionManager {
                 try {
                     // Check if socket is still connected before reading
                     if (mmSocket.isClosed() || !mmSocket.isConnected()) {
-                        Logs.d(TAG, "Socket is closed or disconnected");
+                        Logs.d(TAG, "Socket is closed or disconnected - exiting read loop");
                         break;
                     }
                     
+                    Logs.d(TAG, "Reading from socket (timeout: 10s)...");
                     bytes = mmInStream.read(buffer);
                     consecutiveTimeouts = 0; // Reset timeout counter on successful read
                     
                     if (bytes > 0) {
+                        Logs.d(TAG, "Received " + bytes + " bytes from server");
                         // Create a copy of the buffer to avoid race conditions
                         byte[] readBuf = new byte[bytes];
                         System.arraycopy(buffer, 0, readBuf, 0, bytes);
                         mHandler.obtainMessage(MESSAGE_READ, bytes, -1, readBuf)
                                 .sendToTarget();
                     } else if (bytes < 0) {
-                        // End of stream
-                        Logs.d(TAG, "End of stream detected");
+                        // End of stream - server closed connection
+                        Logs.w(TAG, "End of stream detected (EOF) - server closed connection");
                         break;
+                    } else {
+                        // bytes == 0 - shouldn't happen with blocking read
+                        Logs.w(TAG, "Read returned 0 bytes (unexpected)");
                     }
-                    // bytes == 0 means no data available (shouldn't happen with blocking read, but handle it)
                 } catch (java.net.SocketTimeoutException e) {
                     // Timeout is normal - just continue reading
                     // This prevents the thread from hanging
@@ -385,14 +401,22 @@ public class TcpConnectionManager {
                 return;
             }
             
+            // Check socket state before writing
+            if (mmSocket.isClosed() || !mmSocket.isConnected()) {
+                Logs.e(TAG, "Cannot write - socket is closed or disconnected");
+                connectionLost();
+                return;
+            }
+            
             try {
+                Logs.d(TAG, "Writing " + buffer.length + " bytes to server");
                 mmOutStream.write(buffer);
                 mmOutStream.flush(); // Ensure data is sent immediately
-                Logs.d(TAG, "Wrote " + buffer.length + " bytes");
+                Logs.d(TAG, "Successfully wrote and flushed " + buffer.length + " bytes");
                 mHandler.obtainMessage(MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
-                Logs.e(TAG, "Exception during write: " + e.getMessage());
+                Logs.e(TAG, "Exception during write: " + e.getMessage(), e);
                 connectionLost();
             } catch (NullPointerException e) {
                 Logs.e(TAG, "NullPointerException during write - stream may be closed");

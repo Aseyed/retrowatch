@@ -493,27 +493,33 @@ public class CompanionForegroundService extends Service {
         // Always try to get fresh stream reference to avoid stale references
         OutputStream streamToUse = null;
         
-        // First, try to use the stored reference
-        if (out != null) {
-            streamToUse = out;
-        }
-        
-        // If stored reference is null or TCP connection exists, try to get it from connection
-        if (streamToUse == null && tcpConnection != null && tcpConnection.isConnected()) {
-            android.util.Log.d("CompanionService", "Output stream is null - getting from TCP connection");
+        // Priority 1: If TCP connection exists and is connected, use it
+        if (tcpConnection != null && tcpConnection.isConnected()) {
             streamToUse = tcpConnection.getOutputStream();
             if (streamToUse != null) {
-                out = streamToUse; // Update stored reference
-                android.util.Log.d("CompanionService", "Recovered output stream from TCP connection");
+                synchronized (this) {
+                    out = streamToUse; // Update stored reference
+                }
+                android.util.Log.d("CompanionService", "Using output stream from TCP connection");
+            } else {
+                android.util.Log.w("CompanionService", "TCP connection exists but output stream is null!");
             }
         }
         
-        // If still null, try Bluetooth socket
+        // Priority 2: Try stored reference if TCP didn't work
+        if (streamToUse == null && out != null) {
+            streamToUse = out;
+            android.util.Log.d("CompanionService", "Using stored output stream reference");
+        }
+        
+        // Priority 3: Try Bluetooth socket as fallback
         if (streamToUse == null && socket != null) {
             try {
                 streamToUse = socket.getOutputStream();
                 if (streamToUse != null) {
-                    out = streamToUse;
+                    synchronized (this) {
+                        out = streamToUse;
+                    }
                     android.util.Log.d("CompanionService", "Recovered output stream from Bluetooth socket");
                 }
             } catch (IOException e) {
@@ -527,6 +533,9 @@ public class CompanionForegroundService extends Service {
             android.util.Log.w("CompanionService", "  socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null));
             if (tcpConnection != null) {
                 android.util.Log.w("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
+                if (tcpConnection.isConnected()) {
+                    android.util.Log.w("CompanionService", "  tcpConnection.getOutputStream()=" + tcpConnection.getOutputStream());
+                }
             }
             return;
         }
