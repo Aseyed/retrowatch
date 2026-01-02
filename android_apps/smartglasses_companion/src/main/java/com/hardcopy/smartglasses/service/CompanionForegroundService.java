@@ -247,7 +247,7 @@ public class CompanionForegroundService extends Service {
         }
         
         // Create delayed notification sender
-        final String message = "N:" + (title != null ? title : "") + "\n" + ":" + (text != null ? text : "");
+        final String message = "N:" + (title != null ? title : "")  + ":" + (text != null ? text : "") + "\n";
         pendingNotificationSender = new Runnable() {
             @Override
             public void run() {
