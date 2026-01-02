@@ -218,7 +218,7 @@ public class CompanionForegroundService extends Service {
         }
     }
     
-    // Forward notification (App Inventor format: "N:text:title\n")
+    // Forward notification (App Inventor format: "N:title:text\n")
     // Delays sending by 5 seconds and resets clock timer
     public synchronized void forwardNotification(String packageName, String title, String text) {
         if (!isConnected()) {
@@ -237,7 +237,7 @@ public class CompanionForegroundService extends Service {
         }
         
         // Create delayed notification sender
-        final String message = "N:" + (text != null ? text : "") + ":" + (title != null ? title : "") + "\n";
+        final String message = "N:" + (title != null ? title : "") + "\n" + ":" + (text != null ? text : "");
         pendingNotificationSender = new Runnable() {
             @Override
             public void run() {
