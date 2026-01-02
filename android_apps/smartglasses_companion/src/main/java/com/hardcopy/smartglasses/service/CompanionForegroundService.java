@@ -205,6 +205,12 @@ public class CompanionForegroundService extends Service {
                     out.write(data);
                     out.flush();
                     android.util.Log.d("CompanionService", "Sent plain text: " + text);
+                    
+                    // Print message in output box (remove newline for display)
+                    String displayText = text.trim();
+                    if (displayText.length() > 0) {
+                        com.hardcopy.smartglasses.ui.MainActivity.appendToOutput(displayText + "\n");
+                    }
                 }
             }
         } catch (IOException e) {
@@ -254,7 +260,7 @@ public class CompanionForegroundService extends Service {
         }
     }
     
-    // Send time message (App Inventor format: "T:HH:MM:SS\n")
+    // Send time message (App Inventor format: "T:HH:MM\n")
     public synchronized void sendTimeMessage() {
         if (!isConnected()) {
             return;
@@ -263,8 +269,7 @@ public class CompanionForegroundService extends Service {
             java.util.Calendar cal = java.util.Calendar.getInstance();
             int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
             int minute = cal.get(java.util.Calendar.MINUTE);
-            int second = cal.get(java.util.Calendar.SECOND);
-            String timeStr = String.format("T:%02d:%02d:%02d\n", hour, minute, second);
+            String timeStr = String.format("T:%02d:%02d\n", hour, minute);
             sendPlainText(timeStr);
             android.util.Log.d("CompanionService", "Sent time message: " + timeStr);
         } catch (Exception e) {

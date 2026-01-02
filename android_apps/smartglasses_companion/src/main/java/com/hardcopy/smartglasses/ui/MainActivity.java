@@ -42,6 +42,10 @@ public class MainActivity extends AppCompatActivity {
     
     private Handler statusUpdateHandler;
     private Runnable statusUpdateRunnable;
+    
+    // Static reference for service to update output
+    private static MainActivity instance = null;
+    private static Handler mainHandler = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         messageInput = findViewById(R.id.messageInput);
         selectDeviceBtn = findViewById(R.id.selectDeviceBtn);
         sendMessageBtn = findViewById(R.id.sendMessageBtn);
+        Button clearLogBtn = findViewById(R.id.clearLogBtn);
 
         // Initialize status
         statusText.setText("disconnected");
@@ -66,7 +71,14 @@ public class MainActivity extends AppCompatActivity {
         // Set up send button
         sendMessageBtn.setOnClickListener(v -> sendMessage());
         
-        // Request all necessary permissions on startup
+        // Set up clear log button
+        clearLogBtn.setOnClickListener(v -> {
+            if (outputText != null) {
+                outputText.setText("");
+            }
+        });
+        
+        // Request all necessary permissions on startup (show only one dialog)
         requestAllPermissions();
         
         // Check notification service on startup
@@ -75,6 +87,20 @@ public class MainActivity extends AppCompatActivity {
         // Start periodic status updates
         statusUpdateHandler = new Handler(Looper.getMainLooper());
         startStatusUpdates();
+        
+        // Set static instance for service access
+        instance = this;
+        mainHandler = new Handler(Looper.getMainLooper());
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        instance = null;
+        mainHandler = null;
+        if (statusUpdateHandler != null && statusUpdateRunnable != null) {
+            statusUpdateHandler.removeCallbacks(statusUpdateRunnable);
+        }
     }
     
     private void startStatusUpdates() {
@@ -88,13 +114,6 @@ public class MainActivity extends AppCompatActivity {
         statusUpdateHandler.post(statusUpdateRunnable);
     }
     
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (statusUpdateHandler != null && statusUpdateRunnable != null) {
-            statusUpdateHandler.removeCallbacks(statusUpdateRunnable);
-        }
-    }
     
     private void selectAndConnectDevice() {
         // Request permission first if needed
@@ -132,10 +151,10 @@ public class MainActivity extends AppCompatActivity {
     private void requestNotificationAccess() {
         if (!isNotificationListenerEnabled(this)) {
             android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-            builder.setTitle("دسترسی به نوتیفیکیشن")
-                    .setMessage("برای ارسال نوتیفیکیشن‌ها به بلوتوث، لطفاً دسترسی به نوتیفیکیشن را فعال کنید.")
-                    .setPositiveButton("تنظیمات", (dialog, which) -> openNotificationAccessSettings())
-                    .setNegativeButton("بعداً", null)
+            builder.setTitle("Notification Access Required")
+                    .setMessage("Please enable notification access to send notifications to Bluetooth device.")
+                    .setPositiveButton("Settings", (dialog, which) -> openNotificationAccessSettings())
+                    .setNegativeButton("Later", null)
                     .show();
         }
     }
@@ -144,14 +163,24 @@ public class MainActivity extends AppCompatActivity {
         if (outputText != null) {
             String current = outputText.getText().toString();
             outputText.setText(current + text);
-            // Auto-scroll to bottom (find parent ScrollView)
-            android.view.ViewParent parent = outputText.getParent();
-            if (parent instanceof android.widget.ScrollView) {
-                final android.widget.ScrollView scrollView = (android.widget.ScrollView) parent;
+            // Auto-scroll to bottom
+            android.widget.ScrollView scrollView = findViewById(R.id.outputScrollView);
+            if (scrollView != null) {
                 scrollView.post(() -> {
                     scrollView.fullScroll(android.view.View.FOCUS_DOWN);
                 });
             }
+        }
+    }
+    
+    // Static method for service to append to output
+    public static void appendToOutput(String text) {
+        if (mainHandler != null && instance != null) {
+            mainHandler.post(() -> {
+                if (instance.outputText != null) {
+                    instance.appendOutput(text);
+                }
+            });
         }
     }
 
@@ -217,27 +246,94 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void requestAllPermissions() {
-        // Request Bluetooth permissions
+        // Check what permissions are needed
+        boolean needBtPermission = false;
+        boolean needNotiPermission = false;
+        boolean needNotiListener = false;
+        
         if (Build.VERSION.SDK_INT >= 31) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, 
-                    new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN}, 
-                    REQ_BT_CONNECT);
+                needBtPermission = true;
             }
         }
         
-        // Request notification permission (Android 13+)
         if (Build.VERSION.SDK_INT >= 33) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, 
-                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 
-                    REQ_POST_NOTI);
+                needNotiPermission = true;
             }
         }
         
-        // Request notification listener access
         if (!isNotificationListenerEnabled(this)) {
+            needNotiListener = true;
+        }
+        
+        // If no permissions needed, return
+        if (!needBtPermission && !needNotiPermission && !needNotiListener) {
+            return;
+        }
+        
+        // Show single dialog explaining permissions, then request them sequentially
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setTitle("Permissions Required")
+                .setMessage("This app needs Bluetooth and Notification permissions to function properly. Please grant all permissions when prompted.")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    // Request permissions sequentially
+                    requestPermissionsSequentially(needBtPermission, needNotiPermission, needNotiListener);
+                })
+                .setCancelable(false)
+                .show();
+    }
+    
+    private void requestPermissionsSequentially(boolean needBt, boolean needNoti, boolean needNotiListener) {
+        // Request Bluetooth permissions first
+        if (needBt && Build.VERSION.SDK_INT >= 31) {
+            ActivityCompat.requestPermissions(this, 
+                new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN}, 
+                REQ_BT_CONNECT);
+            // Note: onRequestPermissionsResult will handle continuing with next permission
+            return;
+        }
+        
+        // Request notification permission
+        if (needNoti && Build.VERSION.SDK_INT >= 33) {
+            ActivityCompat.requestPermissions(this, 
+                new String[]{Manifest.permission.POST_NOTIFICATIONS}, 
+                REQ_POST_NOTI);
+            return;
+        }
+        
+        // Request notification listener access last
+        if (needNotiListener) {
             requestNotificationAccess();
+        }
+    }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        
+        // After Bluetooth permissions, request notification permission
+        if (requestCode == REQ_BT_CONNECT) {
+            if (Build.VERSION.SDK_INT >= 33) {
+                if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, 
+                        new String[]{Manifest.permission.POST_NOTIFICATIONS}, 
+                        REQ_POST_NOTI);
+                    return;
+                }
+            }
+            // If notification permission already granted or not needed, check notification listener
+            if (!isNotificationListenerEnabled(this)) {
+                requestNotificationAccess();
+            }
+            return;
+        }
+        
+        // After notification permission, request notification listener access
+        if (requestCode == REQ_POST_NOTI) {
+            if (!isNotificationListenerEnabled(this)) {
+                requestNotificationAccess();
+            }
         }
     }
 
