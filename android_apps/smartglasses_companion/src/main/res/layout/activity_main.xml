@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
+    <!-- Spacer to push content lower -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
     <!-- Top row: Select Device button and status (like App Inventor) -->
     <LinearLayout
         android:orientation="horizontal"
@@ -42,12 +47,13 @@
         <EditText
             android:id="@+id/messageInput"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:hint="Enter message"
             android:inputType="text"
             android:padding="8dp"
-            android:layout_marginEnd="8dp" />
+            android:layout_marginEnd="8dp"
+            android:maxLines="1" />
         
         <Button
             android:id="@+id/sendMessageBtn"
@@ -68,6 +74,7 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="12sp"
+            android:textColor="#000000"
             android:padding="8dp"
             android:gravity="top|start"
             android:fontFamily="monospace" />
