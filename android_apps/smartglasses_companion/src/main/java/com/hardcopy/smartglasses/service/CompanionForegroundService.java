@@ -228,7 +228,7 @@ public class CompanionForegroundService extends Service {
         }
     }
     
-    // Forward notification (App Inventor format: "N:title:text\n")
+    // Forward notification (App Inventor format: "N:appName:title:text\n")
     // Delays sending by 5 seconds and resets clock timer
     public synchronized void forwardNotification(String packageName, String title, String text) {
         if (!isConnected()) {
@@ -246,8 +246,11 @@ public class CompanionForegroundService extends Service {
             pendingNotificationSender = null;
         }
         
+        // Get application name from package name
+        String appName = getApplicationName(packageName);
+        
         // Create delayed notification sender
-        final String message = "N:" + (title != null ? title : "")  + ":" + (text != null ? text : "") + "\n";
+        final String message = "N:" + appName + ":" + (title != null ? title : "") + ":" + (text != null ? text : "") + "\n";
         pendingNotificationSender = new Runnable() {
             @Override
             public void run() {
@@ -268,6 +271,47 @@ public class CompanionForegroundService extends Service {
             notificationDelayHandler.postDelayed(pendingNotificationSender, 5000);
             android.util.Log.d("CompanionService", "Scheduled notification to be sent in 5 seconds");
         }
+    }
+    
+    // Get application name from package name (always returns readable name, never full package name)
+    private String getApplicationName(String packageName) {
+        if (packageName == null || packageName.isEmpty()) {
+            return "Unknown";
+        }
+        
+        try {
+            android.content.pm.PackageManager pm = getPackageManager();
+            if (pm != null) {
+                android.content.pm.ApplicationInfo appInfo = pm.getApplicationInfo(packageName, 0);
+                if (appInfo != null) {
+                    CharSequence appLabel = pm.getApplicationLabel(appInfo);
+                    if (appLabel != null && !appLabel.toString().isEmpty()) {
+                        return appLabel.toString();
+                    }
+                }
+            }
+        } catch (android.content.pm.PackageManager.NameNotFoundException e) {
+            android.util.Log.d("CompanionService", "Package not found: " + packageName);
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error getting app name: " + e.getMessage(), e);
+        }
+        
+        // If we can't get the app name, extract a shorter identifier from package name
+        // e.g., "com.example.myapp" -> "myapp"
+        if (packageName != null && packageName.contains(".")) {
+            String[] parts = packageName.split("\\.");
+            if (parts.length > 0) {
+                String lastPart = parts[parts.length - 1];
+                // Capitalize first letter for better readability
+                if (lastPart.length() > 0) {
+                    return lastPart.substring(0, 1).toUpperCase() + 
+                           (lastPart.length() > 1 ? lastPart.substring(1) : "");
+                }
+            }
+        }
+        
+        // Final fallback
+        return "App";
     }
     
     // Send time message (App Inventor format: "T:HH:MM\n")
