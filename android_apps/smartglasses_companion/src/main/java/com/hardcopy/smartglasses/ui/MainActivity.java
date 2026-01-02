@@ -272,13 +272,18 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         
+        // Create final copies for lambda
+        final boolean finalNeedBt = needBtPermission;
+        final boolean finalNeedNoti = needNotiPermission;
+        final boolean finalNeedNotiListener = needNotiListener;
+        
         // Show single dialog explaining permissions, then request them sequentially
         android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
         builder.setTitle("Permissions Required")
                 .setMessage("This app needs Bluetooth and Notification permissions to function properly. Please grant all permissions when prompted.")
                 .setPositiveButton("OK", (dialog, which) -> {
                     // Request permissions sequentially
-                    requestPermissionsSequentially(needBtPermission, needNotiPermission, needNotiListener);
+                    requestPermissionsSequentially(finalNeedBt, finalNeedNoti, finalNeedNotiListener);
                 })
                 .setCancelable(false)
                 .show();
