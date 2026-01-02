@@ -111,18 +111,28 @@ public class CompanionForegroundService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
-        runningHint = true;
-        mainHandler = new Handler(Looper.getMainLooper());
-        timerHandler = new Handler(Looper.getMainLooper());
-        notificationDelayHandler = new Handler(Looper.getMainLooper());
-        ensureNotificationChannel();
-        startPeriodicTimeSender();
+        try {
+            instance = this;
+            runningHint = true;
+            mainHandler = new Handler(Looper.getMainLooper());
+            timerHandler = new Handler(Looper.getMainLooper());
+            notificationDelayHandler = new Handler(Looper.getMainLooper());
+            ensureNotificationChannel();
+            // Don't start periodic time sender until connected
+            // startPeriodicTimeSender();
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error in onCreate: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        startForeground(NOTI_ID, buildNotification("Idle"));
+        try {
+            startForeground(NOTI_ID, buildNotification("Idle"));
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error starting foreground: " + e.getMessage(), e);
+            // Try to continue anyway
+        }
 
         if (intent != null) {
             String action = intent.getAction();
@@ -585,26 +595,52 @@ public class CompanionForegroundService extends Service {
     }
 
     private void ensureNotificationChannel() {
-        if (Build.VERSION.SDK_INT < 26) return;
-        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "SmartGlasses Companion", NotificationManager.IMPORTANCE_LOW);
-        channel.setDescription("Connection status for SmartGlasses");
-        nm.createNotificationChannel(channel);
+        try {
+            if (Build.VERSION.SDK_INT < 26) return;
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (nm == null) {
+                android.util.Log.e("CompanionService", "NotificationManager is null");
+                return;
+            }
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "SmartGlasses Companion", NotificationManager.IMPORTANCE_LOW);
+            channel.setDescription("Connection status for SmartGlasses");
+            nm.createNotificationChannel(channel);
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error creating notification channel: " + e.getMessage(), e);
+        }
     }
 
     private Notification buildNotification(String text) {
-        Intent intent = new Intent(this, MainActivity.class);
-        PendingIntent pi = PendingIntent.getActivity(
-                this, 0, intent,
-                Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0
-        );
-        return new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_stat_glasses)
-                .setContentTitle("SmartGlasses")
-                .setContentText(text)
-                .setOngoing(true)
-                .setContentIntent(pi)
-                .build();
+        try {
+            Intent intent = new Intent(this, MainActivity.class);
+            PendingIntent pi = PendingIntent.getActivity(
+                    this, 0, intent,
+                    Build.VERSION.SDK_INT >= 23 ? PendingIntent.FLAG_IMMUTABLE : 0
+            );
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setContentTitle("SmartGlasses")
+                    .setContentText(text)
+                    .setOngoing(true)
+                    .setContentIntent(pi);
+            
+            // Try to set icon, fallback to default if not found
+            try {
+                builder.setSmallIcon(R.drawable.ic_stat_glasses);
+            } catch (Exception e) {
+                android.util.Log.w("CompanionService", "Icon not found, using default: " + e.getMessage());
+                builder.setSmallIcon(android.R.drawable.ic_dialog_info);
+            }
+            
+            return builder.build();
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error building notification: " + e.getMessage(), e);
+            // Return a minimal notification as fallback
+            return new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.ic_dialog_info)
+                    .setContentTitle("SmartGlasses")
+                    .setContentText(text != null ? text : "Running")
+                    .build();
+        }
     }
 
     private void updateNoti(String text) {

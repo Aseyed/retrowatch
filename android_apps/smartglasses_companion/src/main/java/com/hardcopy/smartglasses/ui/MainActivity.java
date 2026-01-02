@@ -97,6 +97,13 @@ public class MainActivity extends AppCompatActivity {
             });
         }
         
+        // Initialize handlers FIRST before using them
+        statusUpdateHandler = new Handler(Looper.getMainLooper());
+        mainHandler = new Handler(Looper.getMainLooper());
+        
+        // Set static instance for service access
+        instance = this;
+        
         // Delay permission request until after onCreate completes
         // This prevents crashes if activity isn't fully ready
         statusUpdateHandler.postDelayed(() -> {
@@ -116,12 +123,7 @@ public class MainActivity extends AppCompatActivity {
         }
         
         // Start periodic status updates
-        statusUpdateHandler = new Handler(Looper.getMainLooper());
         startStatusUpdates();
-        
-        // Set static instance for service access
-        instance = this;
-        mainHandler = new Handler(Looper.getMainLooper());
     }
     
     @Override
