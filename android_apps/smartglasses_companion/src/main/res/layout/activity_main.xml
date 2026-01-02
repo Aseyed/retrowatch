@@ -26,57 +26,22 @@
         android:textSize="14sp"
         android:paddingBottom="12dp" />
 
-    <!-- TCP Connection Settings -->
-    <TextView
+    <!-- Output area (like App Inventor) -->
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TCP Server Settings (for Simulator)"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp">
+        android:layout_height="200dp"
+        android:layout_marginBottom="12dp">
         <TextView
-            android:layout_width="0dp"
+            android:id="@+id/outputText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Server IP:"
-            android:textSize="14sp" />
-        <EditText
-            android:id="@+id/tcpHostInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:hint="192.168.52.99"
-            android:inputType="text"
-            android:textSize="14sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp">
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Server Port:"
-            android:textSize="14sp" />
-        <EditText
-            android:id="@+id/tcpPortInput"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:hint="8888"
-            android:inputType="number"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:text=""
+            android:textSize="12sp"
+            android:background="#F5F5F5"
+            android:padding="8dp"
+            android:gravity="top|start"
+            android:fontFamily="monospace" />
+    </ScrollView>
 
     <Button
         android:id="@+id/startServiceBtn"

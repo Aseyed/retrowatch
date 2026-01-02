@@ -68,8 +68,6 @@ public class Constants {
 	public static final String PREFERENCE_KEY_IS_FIRST_EXEC = "IsFirstExec";
 	public static final String PREFERENCE_KEY_GMAIL_ADDRESS = "GmailAddress";
 	public static final String PREFERENCE_KEY_RUN_IN_BG = "RunInBackground";
-	public static final String PREFERENCE_KEY_TCP_HOST = "TcpHost";
-	public static final String PREFERENCE_KEY_TCP_PORT = "TcpPort";
     
 	//---------- Request parameter
 	public static final String REQUEST_URL_NOTICE = "http://tortuga.ipdisk.co.kr/search/hotclip_notice_json.php";

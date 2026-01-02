@@ -30,15 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView statusText;
     private TextView deviceText;
-    private EditText tcpHostInput;
-    private EditText tcpPortInput;
+    private TextView outputText;
     private EditText messageInput;
 
     private static final String PREFS = "smartglasses_prefs";
     private static final String KEY_MAC = "device_mac";
     private static final String KEY_NAME = "device_name";
-    private static final String KEY_TCP_HOST = "tcp_host";
-    private static final String KEY_TCP_PORT = "tcp_port";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,14 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
         statusText = findViewById(R.id.statusText);
         deviceText = findViewById(R.id.deviceText);
-        tcpHostInput = findViewById(R.id.tcpHostInput);
-        tcpPortInput = findViewById(R.id.tcpPortInput);
-
-        // Load saved TCP settings
-        String savedHost = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_TCP_HOST, CompanionForegroundService.TCP_HOST);
-        int savedPort = getSharedPreferences(PREFS, MODE_PRIVATE).getInt(KEY_TCP_PORT, CompanionForegroundService.TCP_PORT);
-        tcpHostInput.setText(savedHost);
-        tcpPortInput.setText(String.valueOf(savedPort));
+        outputText = findViewById(R.id.outputText);
 
         Button startBtn = findViewById(R.id.startServiceBtn);
         Button stopBtn = findViewById(R.id.stopServiceBtn);
@@ -67,27 +57,73 @@ public class MainActivity extends AppCompatActivity {
         Button sendClockBtn = findViewById(R.id.sendClockBtn);
         Button sendBatteryBtn = findViewById(R.id.sendBatteryBtn);
 
-        startBtn.setOnClickListener(v -> CompanionForegroundService.start(this));
-        stopBtn.setOnClickListener(v -> CompanionForegroundService.stop(this));
+        startBtn.setOnClickListener(v -> {
+            CompanionForegroundService.start(this);
+            appendOutput("Service started\n");
+        });
+        stopBtn.setOnClickListener(v -> {
+            CompanionForegroundService.stop(this);
+            appendOutput("Service stopped\n");
+        });
         notiAccessBtn.setOnClickListener(v -> openNotificationAccessSettings());
         pickBtn.setOnClickListener(v -> pickDevice());
         connectBtn.setOnClickListener(v -> connect());
         disconnectBtn.setOnClickListener(v -> {
             CompanionForegroundService.disconnect(this);
+            appendOutput("Disconnected\n");
             Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
         });
         sendMessageBtn.setOnClickListener(v -> sendMessage());
         sendClockBtn.setOnClickListener(v -> sendClockData());
         sendBatteryBtn.setOnClickListener(v -> sendBatteryStatus());
 
+        // Check notification service on startup (like App Inventor Screen1.Initialize)
+        checkNotificationService();
         ensureRuntimePermissions();
+    }
+    
+    private void checkNotificationService() {
+        if (isNotificationListenerEnabled(this)) {
+            appendOutput("notification started\n");
+        } else {
+            appendOutput("notification service not enabled\n");
+        }
+    }
+    
+    private void appendOutput(String text) {
+        if (outputText != null) {
+            String current = outputText.getText().toString();
+            outputText.setText(current + text);
+            // Auto-scroll to bottom (find parent ScrollView)
+            android.view.ViewParent parent = outputText.getParent();
+            if (parent instanceof android.widget.ScrollView) {
+                final android.widget.ScrollView scrollView = (android.widget.ScrollView) parent;
+                scrollView.post(() -> {
+                    scrollView.fullScroll(android.view.View.FOCUS_DOWN);
+                });
+            }
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        statusText.setText(buildStatusText());
+        updateStatus();
         deviceText.setText(getSavedDeviceLine());
+        checkNotificationService();
+    }
+    
+    private void updateStatus() {
+        String status = buildStatusText();
+        // Update status text based on connection (like App Inventor)
+        CompanionForegroundService service = CompanionForegroundService.getInstance();
+        if (service != null && service.isConnected()) {
+            statusText.setText("connected");
+        } else if (status.contains("STOPPED")) {
+            statusText.setText("disconnected");
+        } else {
+            statusText.setText(status);
+        }
     }
 
     private String buildStatusText() {
@@ -112,42 +148,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void connect() {
-        // Use TCP if enabled in service, otherwise use Bluetooth
-        if (CompanionForegroundService.USE_TCP_FOR_TESTING) {
-            // Get IP and port from input fields
-            String host = tcpHostInput.getText().toString().trim();
-            String portStr = tcpPortInput.getText().toString().trim();
-            
-            if (host.isEmpty()) {
-                host = CompanionForegroundService.TCP_HOST;
-            }
-            
-            int port = CompanionForegroundService.TCP_PORT;
-            try {
-                if (!portStr.isEmpty()) {
-                    port = Integer.parseInt(portStr);
-                }
-            } catch (NumberFormatException e) {
-                Toast.makeText(this, "Invalid port number, using default: " + port, Toast.LENGTH_SHORT).show();
-            }
-            
-            // Save settings
-            getSharedPreferences(PREFS, MODE_PRIVATE).edit()
-                    .putString(KEY_TCP_HOST, host)
-                    .putInt(KEY_TCP_PORT, port)
-                    .apply();
-            
-            Toast.makeText(this, "Connecting to " + host + ":" + port + "...", Toast.LENGTH_SHORT).show();
-            CompanionForegroundService.connectTcp(this, host, port);
-        } else {
-            if (!ensureBtConnectPermission()) return;
-            String mac = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_MAC, null);
-            if (mac == null || mac.length() == 0) {
-                pickDevice();
-                return;
-            }
-            CompanionForegroundService.connect(this, mac);
+        if (!ensureBtConnectPermission()) return;
+        String mac = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_MAC, null);
+        if (mac == null || mac.length() == 0) {
+            pickDevice();
+            return;
         }
+        String name = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_NAME, null);
+        appendOutput((name != null ? name : mac) + " connected\n");
+        statusText.setText("connected");
+        CompanionForegroundService.connect(this, mac);
     }
     
     private void sendMessage() {
@@ -162,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         
+        appendOutput(message + "\n");
         CompanionForegroundService.sendNotify(this, message);
         messageInput.setText(""); // Clear input
     }
@@ -172,6 +183,12 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+        int minute = cal.get(java.util.Calendar.MINUTE);
+        int second = cal.get(java.util.Calendar.SECOND);
+        String timeStr = String.format("%02d:%02d:%02d", hour, minute, second);
+        appendOutput(timeStr + "\n");
         CompanionForegroundService.sendTime(this);
     }
     
@@ -235,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
                         .putString(KEY_MAC, mac)
                         .apply();
                 deviceText.setText(getSavedDeviceLine());
+                appendOutput((name != null ? name : mac) + "\n");
             }
         }
     }

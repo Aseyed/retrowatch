@@ -510,18 +510,6 @@ public class RetroWatchActivity extends AppCompatActivity implements IFragmentLi
 			}
 			break;
 			
-		case IFragmentListener.CALLBACK_REQUEST_SET_TCP_HOST:
-			if(mService != null && arg2 != null) {
-				mService.setTcpHost(arg2);
-			}
-			break;
-			
-		case IFragmentListener.CALLBACK_REQUEST_SET_TCP_PORT:
-			if(mService != null) {
-				mService.setTcpPort(arg0);
-			}
-			break;
-			
 		case IFragmentListener.CALLBACK_REQUEST_CONNECT:
 			if(mService == null) {
 				Toast.makeText(this, "Service not available. Please wait for service to start.", Toast.LENGTH_LONG).show();

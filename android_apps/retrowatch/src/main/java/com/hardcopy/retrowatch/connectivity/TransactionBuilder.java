@@ -22,22 +22,15 @@ import android.os.Handler;
 
 import com.hardcopy.retrowatch.utils.Constants;
 import com.hardcopy.retrowatch.utils.Logs;
-import com.hardcopy.retrowatch.connectivity.TcpConnectionManager;
 
 public class TransactionBuilder {
 	private static final String TAG = "TransactionBuilder";
 	
 	private BluetoothManager mBTManager = null;
-	private TcpConnectionManager mTcpManager = null;
 	private Handler mHandler = null;
 	
 	public TransactionBuilder(BluetoothManager bm, Handler errorHandler) {
 		mBTManager = bm;
-		mHandler = errorHandler;
-	}
-	
-	public TransactionBuilder(TcpConnectionManager tcp, Handler errorHandler) {
-		mTcpManager = tcp;
 		mHandler = errorHandler;
 	}
 	
@@ -407,18 +400,7 @@ public class TransactionBuilder {
 			}
 			
 			if(mState == STATE_SETTING_FINISHED) {
-				// Try TCP first, then Bluetooth
-				if(mTcpManager != null) {
-					if (mTcpManager.getState() == TcpConnectionManager.STATE_CONNECTED) {
-						if (mBuffer.length > 0) {
-							mTcpManager.write(mBuffer);
-							mState = STATE_TRANSFERED;
-							return true;
-						}
-						mState = STATE_ERROR;
-					}
-					mHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
-				} else if(mBTManager != null) {
+				if(mBTManager != null) {
 					// Check that we're actually connected before trying anything
 					if (mBTManager.getState() == BluetoothManager.STATE_CONNECTED) {
 						// Check that there's actually something to send

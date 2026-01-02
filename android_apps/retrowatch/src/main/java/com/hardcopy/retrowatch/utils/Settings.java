@@ -77,33 +77,4 @@ public class Settings {
 		return prefs.getBoolean(Constants.PREFERENCE_KEY_RUN_IN_BG, false);
 	}
 	
-	public synchronized void setTcpHost(String host) {
-		if(host != null && !host.isEmpty()) {
-			SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putString(Constants.PREFERENCE_KEY_TCP_HOST, host);
-			editor.commit();
-		}
-	}
-	
-	public synchronized String getTcpHost() {
-		SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-		return prefs.getString(Constants.PREFERENCE_KEY_TCP_HOST, "192.168.52.99");
-	}
-	
-	public synchronized void setTcpPort(int port) {
-		if(port > 0) {
-			SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = prefs.edit();
-			editor.putInt(Constants.PREFERENCE_KEY_TCP_PORT, port);
-			editor.commit();
-		}
-	}
-	
-	public synchronized int getTcpPort() {
-		SharedPreferences prefs = mContext.getSharedPreferences(Constants.PREFERENCE_NAME, Context.MODE_PRIVATE);
-		return prefs.getInt(Constants.PREFERENCE_KEY_TCP_PORT, 8888);
-	}
-	
-	
 }

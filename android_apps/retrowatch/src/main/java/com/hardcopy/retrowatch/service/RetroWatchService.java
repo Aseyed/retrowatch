@@ -24,7 +24,6 @@ import com.hardcopy.retrowatch.R;
 import com.hardcopy.retrowatch.connectivity.BluetoothManager;
 import com.hardcopy.retrowatch.connectivity.ConnectionInfo;
 import com.hardcopy.retrowatch.connectivity.TransactionBuilder;
-import com.hardcopy.retrowatch.connectivity.TcpConnectionManager;
 import com.hardcopy.retrowatch.connectivity.TransactionBuilder.Transaction;
 import com.hardcopy.retrowatch.connectivity.TransactionReceiver;
 import com.hardcopy.retrowatch.contents.ContentManager;
@@ -83,12 +82,6 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	// Bluetooth
 	private BluetoothAdapter mBluetoothAdapter = null;
 	private BluetoothManager mBtManager = null;
-	
-	// TCP Connection (for testing with simulator)
-	private static final boolean USE_TCP_FOR_TESTING = true; // Set to false for Bluetooth
-	private String mTcpHost = "192.168.52.99"; // Default - user can change in UI
-	private int mTcpPort = 8888; // Default - user can change in UI
-	private TcpConnectionManager mTcpManager = null;
 	
 	private ConnectionInfo mConnectionInfo = null;
 	
@@ -491,9 +484,6 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			mBtManager.stop();
 		mBtManager = null;
 		
-		if (mTcpManager != null)
-			mTcpManager.stop();
-		mTcpManager = null;
 		// Unregister broadcast receiver
 		if(mReceiver != null)
 			unregisterReceiver(mReceiver);
@@ -518,49 +508,26 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	public void setupService(Handler h) {
 		mActivityHandler = h;
 		
-		// Load TCP settings from preferences
-		if (USE_TCP_FOR_TESTING) {
-			Settings settings = Settings.getInstance(mContext);
-			mTcpHost = settings.getTcpHost();
-			mTcpPort = settings.getTcpPort();
-		}
+		// Double check BT manager instance
+		if(mBtManager == null)
+			setupBT();
 		
-		if (USE_TCP_FOR_TESTING) {
-			// Setup TCP connection for simulator testing
-			if (mTcpManager == null) {
-				mTcpManager = new TcpConnectionManager(mServiceHandler);
-				mTcpManager.setTcpAddress(mTcpHost, mTcpPort);
-			}
-			// Initialize transaction builder & receiver with TCP
-			if(mTransactionBuilder == null)
-				mTransactionBuilder = new TransactionBuilder(mTcpManager, mActivityHandler);
-			if(mTransactionReceiver == null)
-				mTransactionReceiver = new TransactionReceiver(mActivityHandler);
-			
-			// Connect via TCP
-			mTcpManager.connect();
-		} else {
-			// Double check BT manager instance
-			if(mBtManager == null)
-				setupBT();
-			
-			// Initialize transaction builder & receiver
-			if(mTransactionBuilder == null)
-				mTransactionBuilder = new TransactionBuilder(mBtManager, mActivityHandler);
-			if(mTransactionReceiver == null)
-				mTransactionReceiver = new TransactionReceiver(mActivityHandler);
-			
-			// If ConnectionInfo holds previous connection info,
-			// try to connect using it.
-			if(mConnectionInfo.getDeviceAddress() != null && mConnectionInfo.getDeviceName() != null) {
-				connectDevice(mConnectionInfo.getDeviceAddress());
-			} 
-			// or wait in listening mode
-			else {
-				if (mBtManager.getState() == BluetoothManager.STATE_NONE) {
-					// Start the bluetooth services
-					mBtManager.start();
-				}
+		// Initialize transaction builder & receiver
+		if(mTransactionBuilder == null)
+			mTransactionBuilder = new TransactionBuilder(mBtManager, mActivityHandler);
+		if(mTransactionReceiver == null)
+			mTransactionReceiver = new TransactionReceiver(mActivityHandler);
+		
+		// If ConnectionInfo holds previous connection info,
+		// try to connect using it.
+		if(mConnectionInfo.getDeviceAddress() != null && mConnectionInfo.getDeviceName() != null) {
+			connectDevice(mConnectionInfo.getDeviceAddress());
+		} 
+		// or wait in listening mode
+		else {
+			if (mBtManager.getState() == BluetoothManager.STATE_NONE) {
+				// Start the bluetooth services
+				mBtManager.start();
 			}
 		}
 	}
@@ -765,37 +732,11 @@ public class RetroWatchService extends Service implements IContentManagerListene
 		mContentManager.setGmailAddress(gmailAddr);
 	}
 	
-	public void setTcpHost(String host) {
-		if (host != null && !host.isEmpty()) {
-			mTcpHost = host;
-			Settings.getInstance(mContext).setTcpHost(host);
-			// Reconnect if TCP is active
-			if (USE_TCP_FOR_TESTING && mTcpManager != null) {
-				mTcpManager.stop();
-				mTcpManager.setTcpAddress(mTcpHost, mTcpPort);
-				mTcpManager.connect();
-			}
-		}
-	}
-	
-	public void setTcpPort(int port) {
-		if (port > 0) {
-			mTcpPort = port;
-			Settings.getInstance(mContext).setTcpPort(port);
-			// Reconnect if TCP is active
-			if (USE_TCP_FOR_TESTING && mTcpManager != null) {
-				mTcpManager.stop();
-				mTcpManager.setTcpAddress(mTcpHost, mTcpPort);
-				mTcpManager.connect();
-			}
-		}
-	}
-	
 	/**
-	 * Connect to device (TCP or Bluetooth)
+	 * Connect to device (Bluetooth)
 	 */
 	public void connectDevice() {
-		Logs.d(TAG, "connectDevice() called - USE_TCP_FOR_TESTING=" + USE_TCP_FOR_TESTING);
+		Logs.d(TAG, "connectDevice() called");
 		
 		// Ensure service handler is initialized
 		if (mServiceHandler == null) {
@@ -803,69 +744,12 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			mServiceHandler = new ServiceHandler();
 		}
 		
-		if (USE_TCP_FOR_TESTING) {
-			// Load TCP settings from preferences
-			Settings settings = Settings.getInstance(mContext);
-			mTcpHost = settings.getTcpHost();
-			mTcpPort = settings.getTcpPort();
-			
-			// Validate settings
-			if (mTcpHost == null || mTcpHost.isEmpty()) {
-				Logs.e(TAG, "TCP host is empty - using default");
-				mTcpHost = "192.168.52.99";
-				settings.setTcpHost(mTcpHost);
-			}
-			if (mTcpPort <= 0) {
-				Logs.e(TAG, "TCP port is invalid - using default");
-				mTcpPort = 8888;
-				settings.setTcpPort(mTcpPort);
-			}
-			
-			Logs.d(TAG, "Connecting via TCP to " + mTcpHost + ":" + mTcpPort);
-			
-			// Initialize TCP manager if needed
-			if (mTcpManager == null) {
-				Logs.d(TAG, "Creating new TcpConnectionManager");
-				mTcpManager = new TcpConnectionManager(mServiceHandler);
-			}
-			
-			// Update TCP address from settings
-			mTcpManager.setTcpAddress(mTcpHost, mTcpPort);
-			
-			// Initialize transaction builder if needed
-			if (mTransactionBuilder == null) {
-				if (mActivityHandler != null) {
-					mTransactionBuilder = new TransactionBuilder(mTcpManager, mActivityHandler);
-				} else {
-					Logs.d(TAG, "Activity handler is null - transaction builder will be created later");
-				}
-			}
-			if (mTransactionReceiver == null) {
-				if (mActivityHandler != null) {
-					mTransactionReceiver = new TransactionReceiver(mActivityHandler);
-				} else {
-					Logs.d(TAG, "Activity handler is null - transaction receiver will be created later");
-				}
-			}
-			
-			// Connect
-			try {
-				mTcpManager.connect();
-				Logs.d(TAG, "TCP connect() called successfully");
-			} catch (Exception e) {
-				Logs.e(TAG, "Error calling TCP connect(): " + e.getMessage());
-				if (mActivityHandler != null) {
-					mActivityHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
-				}
-			}
+		if (mConnectionInfo.getDeviceAddress() != null && mBtManager != null) {
+			connectDevice(mConnectionInfo.getDeviceAddress());
 		} else {
-			if (mConnectionInfo.getDeviceAddress() != null && mBtManager != null) {
-				connectDevice(mConnectionInfo.getDeviceAddress());
-			} else {
-				Logs.e(TAG, "Cannot connect - no device address or BT manager");
-				if (mActivityHandler != null) {
-					mActivityHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
-				}
+			Logs.e(TAG, "Cannot connect - no device address or BT manager");
+			if (mActivityHandler != null) {
+				mActivityHandler.obtainMessage(Constants.MESSAGE_CMD_ERROR_NOT_CONNECTED).sendToTarget();
 			}
 		}
 	}
@@ -874,13 +758,8 @@ public class RetroWatchService extends Service implements IContentManagerListene
 	 * Disconnect from device
 	 */
 	public void disconnectDevice() {
-		// Send a test message before disconnecting (works for both TCP and Bluetooth)
-		boolean isConnected = false;
-		if (USE_TCP_FOR_TESTING) {
-			isConnected = (mTcpManager != null && mTcpManager.getState() == TcpConnectionManager.STATE_CONNECTED);
-		} else {
-			isConnected = (mBtManager != null && mBtManager.getState() == BluetoothManager.STATE_CONNECTED);
-		}
+		// Send a test message before disconnecting
+		boolean isConnected = (mBtManager != null && mBtManager.getState() == BluetoothManager.STATE_CONNECTED);
 		
 		if (mTransactionBuilder != null && isConnected) {
 			try {
@@ -899,14 +778,8 @@ public class RetroWatchService extends Service implements IContentManagerListene
 			}
 		}
 		
-		if (USE_TCP_FOR_TESTING) {
-			if (mTcpManager != null) {
-				mTcpManager.stop();
-			}
-		} else {
-			if (mBtManager != null) {
-				mBtManager.stop();
-			}
+		if (mBtManager != null) {
+			mBtManager.stop();
 		}
 	}
 	
@@ -948,12 +821,12 @@ public class RetroWatchService extends Service implements IContentManagerListene
 		public void handleMessage(Message msg) {
 			
 			switch(msg.what) {
-			case BluetoothManager.MESSAGE_STATE_CHANGE:  // Same value as TcpConnectionManager.MESSAGE_STATE_CHANGE
-				// Connection state Changed (Bluetooth or TCP)
+			case BluetoothManager.MESSAGE_STATE_CHANGE:
+				// Connection state Changed (Bluetooth)
 				Logs.d(TAG, "Service - MESSAGE_STATE_CHANGE: " + msg.arg1);
 				
 				switch (msg.arg1) {
-				case BluetoothManager.STATE_NONE:  // Same value as TcpConnectionManager.STATE_NONE
+				case BluetoothManager.STATE_NONE:
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_INITIALIZED).sendToTarget();
 					if(mRefreshTimer != null) {
 						mRefreshTimer.cancel();
@@ -965,11 +838,11 @@ public class RetroWatchService extends Service implements IContentManagerListene
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_LISTENING).sendToTarget();
 					break;
 					
-				case BluetoothManager.STATE_CONNECTING:  // Same value as TcpConnectionManager.STATE_CONNECTING
+				case BluetoothManager.STATE_CONNECTING:
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_CONNECTING).sendToTarget();
 					break;
 					
-				case BluetoothManager.STATE_CONNECTED:  // Same value as TcpConnectionManager.STATE_CONNECTED
+				case BluetoothManager.STATE_CONNECTED:
 					mActivityHandler.obtainMessage(Constants.MESSAGE_BT_STATE_CONNECTED).sendToTarget();
 					
 					// Send test message immediately after connection
@@ -988,11 +861,11 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				}
 				break;
 
-			case BluetoothManager.MESSAGE_WRITE:  // Same value as TcpConnectionManager.MESSAGE_WRITE
+			case BluetoothManager.MESSAGE_WRITE:
 				Logs.d(TAG, "Service - MESSAGE_WRITE: ");
 				break;
 
-			case BluetoothManager.MESSAGE_READ:  // Same value as TcpConnectionManager.MESSAGE_READ
+			case BluetoothManager.MESSAGE_READ:
 				Logs.d(TAG, "Service - MESSAGE_READ: ");
 				
 				byte[] readBuf = (byte[]) msg.obj;
@@ -1001,7 +874,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 					mTransactionReceiver.setByteArray(readBuf);
 				break;
 				
-			case BluetoothManager.MESSAGE_DEVICE_NAME:  // Same value as TcpConnectionManager.MESSAGE_DEVICE_NAME
+			case BluetoothManager.MESSAGE_DEVICE_NAME:
 				Logs.d(TAG, "Service - MESSAGE_DEVICE_NAME: ");
 				
 				// save connected device's name and notify using toast
@@ -1018,7 +891,7 @@ public class RetroWatchService extends Service implements IContentManagerListene
 				}
 				break;
 				
-			case BluetoothManager.MESSAGE_TOAST:  // Same value as TcpConnectionManager.MESSAGE_TOAST
+			case BluetoothManager.MESSAGE_TOAST:
 				Logs.d(TAG, "Service - MESSAGE_TOAST: ");
 				
 //				Toast.makeText(getApplicationContext(), 

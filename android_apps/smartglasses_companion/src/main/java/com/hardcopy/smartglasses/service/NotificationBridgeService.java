@@ -30,24 +30,51 @@ public class NotificationBridgeService extends NotificationListenerService {
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-        // Check for incoming call notifications
-        String packageName = sbn.getPackageName();
-        if (packageName != null && (packageName.equals("com.android.server.telecom") || 
-            packageName.equals("com.android.phone") ||
-            packageName.contains("dialer"))) {
-            // This might be a phone call notification
-            android.app.Notification notification = sbn.getNotification();
-            if (notification != null) {
-                CharSequence title = notification.extras.getCharSequence(android.app.Notification.EXTRA_TITLE);
-                CharSequence text = notification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT);
-                if (title != null || text != null) {
-                    String callerInfo = (title != null ? title.toString() : "") + 
-                                      (text != null ? " " + text.toString() : "");
+        try {
+            String packageName = sbn.getPackageName();
+            String title = "";
+            String text = "";
+            
+            // Extract notification content (App Inventor format)
+            if (sbn.getNotification() != null) {
+                if (sbn.getNotification().extras != null) {
+                    CharSequence titleSeq = sbn.getNotification().extras.getCharSequence(android.app.Notification.EXTRA_TITLE);
+                    CharSequence textSeq = sbn.getNotification().extras.getCharSequence(android.app.Notification.EXTRA_TEXT);
+                    
+                    if (titleSeq != null) title = titleSeq.toString();
+                    if (textSeq != null) text = textSeq.toString();
+                    
+                    // Try to get big text if available
+                    if (text == null || text.isEmpty()) {
+                        CharSequence bigText = sbn.getNotification().extras.getCharSequence(android.app.Notification.EXTRA_BIG_TEXT);
+                        if (bigText != null) {
+                            text = bigText.toString();
+                        }
+                    }
+                }
+            }
+            
+            android.util.Log.d("NotificationBridge", "Notification received - Package: " + packageName + ", Title: " + title + ", Text: " + text);
+            
+            // Forward to CompanionForegroundService in App Inventor format: "N:text:title\n"
+            if (CompanionForegroundService.getInstance() != null) {
+                CompanionForegroundService.getInstance().forwardNotification(packageName, title, text);
+            }
+            
+            // Also handle phone calls separately
+            if (packageName != null && (packageName.equals("com.android.server.telecom") || 
+                packageName.equals("com.android.phone") ||
+                packageName.contains("dialer"))) {
+                if (!title.isEmpty() || !text.isEmpty()) {
+                    String callerInfo = (title != null ? title : "") + 
+                                      (text != null && !text.isEmpty() ? " " + text : "");
                     if (!callerInfo.trim().isEmpty()) {
                         CompanionForegroundService.sendCall(this, callerInfo);
                     }
                 }
             }
+        } catch (Exception e) {
+            android.util.Log.e("NotificationBridge", "Error processing notification: " + e.getMessage(), e);
         }
     }
 

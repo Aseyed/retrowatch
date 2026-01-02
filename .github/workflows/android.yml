@@ -2,9 +2,10 @@ name: Android CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -24,35 +25,38 @@ jobs:
     
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3
+      with:
+        api-level: 35
+        build-tools: 35.0.0
+        components: platform-tools,cmdline-tools;latest
     
-    - name: Create local.properties if needed
+    - name: Create local.properties
       run: |
-        if [ ! -f local.properties ]; then
-          echo "sdk.dir=$ANDROID_HOME" > local.properties
-        fi
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        echo "Created local.properties with SDK path: $ANDROID_HOME"
     
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build RetroWatch App
-      run: ./gradlew :android_apps:retrowatch:assembleDebug --stacktrace
+      run: ./gradlew :android_apps:retrowatch:assembleDebug --stacktrace --no-daemon
       env:
         ANDROID_HOME: ${{ env.ANDROID_HOME }}
         ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
 
     - name: Build SmartGlasses Companion App
-      run: ./gradlew :android_apps:smartglasses_companion:assembleDebug --stacktrace
+      run: ./gradlew :android_apps:smartglasses_companion:assembleDebug --stacktrace --no-daemon
       env:
         ANDROID_HOME: ${{ env.ANDROID_HOME }}
         ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
 
     - name: List APK files
       run: |
-        echo "RetroWatch APK files:"
-        ls -la android_apps/retrowatch/build/outputs/apk/debug/ || echo "Directory not found"
+        echo "=== RetroWatch APK files ==="
+        find android_apps/retrowatch/build/outputs/apk -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
         echo ""
-        echo "SmartGlasses Companion APK files:"
-        ls -la android_apps/smartglasses_companion/build/outputs/apk/debug/ || echo "Directory not found"
+        echo "=== SmartGlasses Companion APK files ==="
+        find android_apps/smartglasses_companion/build/outputs/apk -name "*.apk" -type f 2>/dev/null || echo "No APK files found"
 
     - name: Upload RetroWatch APK
       uses: actions/upload-artifact@v4
@@ -60,13 +64,13 @@ jobs:
         name: retrowatch-debug-apk
         path: android_apps/retrowatch/build/outputs/apk/debug/*.apk
         retention-days: 30
-        if-no-files-found: warn
+        if-no-files-found: error
 
     - name: Upload SmartGlasses Companion APK
       uses: actions/upload-artifact@v4
       with:
         name: smartglasses-companion-debug-apk
-        path: android_apps/smartglasses_companion/build/outputs/apk/debug/smartglasses_companion-debug.apk
+        path: android_apps/smartglasses_companion/build/outputs/apk/debug/*.apk
         retention-days: 30
-        if-no-files-found: warn
+        if-no-files-found: error
 

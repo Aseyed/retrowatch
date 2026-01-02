@@ -48,13 +48,6 @@ public class CompanionForegroundService extends Service {
     private static final String ACTION_CONNECT = "com.hardcopy.smartglasses.action.CONNECT";
     private static final String ACTION_DISCONNECT = "com.hardcopy.smartglasses.action.DISCONNECT";
     private static final String EXTRA_MAC = "mac";
-    private static final String EXTRA_TCP_HOST = "tcp_host";
-    private static final String EXTRA_TCP_PORT = "tcp_port";
-    
-    // TCP connection for testing (set to true to use TCP instead of Bluetooth)
-    public static final boolean USE_TCP_FOR_TESTING = true;
-    public static final String TCP_HOST = "192.168.52.99"; // Default - user can change in UI
-    public static final int TCP_PORT = 8888; // Default - user can change in UI
 
     private static final UUID SPP_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
@@ -63,9 +56,10 @@ public class CompanionForegroundService extends Service {
 
     private Handler mainHandler;
     private Thread ioThread;
+    private Handler timerHandler;
+    private Runnable timeSender;
 
     private BluetoothSocket socket;
-    private TcpConnectionHelper tcpConnection;
     private InputStream in;
     private OutputStream out;
 
@@ -97,15 +91,6 @@ public class CompanionForegroundService extends Service {
         else context.startService(i);
     }
     
-    public static void connectTcp(Context context, String host, int port) {
-        Intent i = new Intent(context, CompanionForegroundService.class);
-        i.setAction(ACTION_CONNECT);
-        i.putExtra(EXTRA_TCP_HOST, host);
-        i.putExtra(EXTRA_TCP_PORT, port);
-        if (Build.VERSION.SDK_INT >= 26) context.startForegroundService(i);
-        else context.startService(i);
-    }
-
     public static void disconnect(Context context) {
         Intent i = new Intent(context, CompanionForegroundService.class);
         i.setAction(ACTION_DISCONNECT);
@@ -127,7 +112,9 @@ public class CompanionForegroundService extends Service {
         instance = this;
         runningHint = true;
         mainHandler = new Handler(Looper.getMainLooper());
+        timerHandler = new Handler(Looper.getMainLooper());
         ensureNotificationChannel();
+        startPeriodicTimeSender();
     }
 
     @Override
@@ -137,18 +124,11 @@ public class CompanionForegroundService extends Service {
         if (intent != null) {
             String action = intent.getAction();
             if (ACTION_CONNECT.equals(action)) {
-                if (USE_TCP_FOR_TESTING) {
-                    String host = intent.getStringExtra(EXTRA_TCP_HOST);
-                    int port = intent.getIntExtra(EXTRA_TCP_PORT, TCP_PORT);
-                    if (host == null) host = TCP_HOST;
-                    connectTcpInternal(host, port);
+                String mac = intent.getStringExtra(EXTRA_MAC);
+                if (mac != null && mac.length() > 0) {
+                    connectInternal(mac);
                 } else {
-                    String mac = intent.getStringExtra(EXTRA_MAC);
-                    if (mac != null && mac.length() > 0) {
-                        connectInternal(mac);
-                    } else {
-                        updateNoti("Missing device MAC");
-                    }
+                    updateNoti("Missing device MAC");
                 }
             } else if (ACTION_DISCONNECT.equals(action)) {
                 // Send a test message before disconnecting
@@ -173,6 +153,7 @@ public class CompanionForegroundService extends Service {
     public void onDestroy() {
         instance = null;
         runningHint = false;
+        stopPeriodicTimeSender();
         shutdownIo();
         super.onDestroy();
     }
@@ -188,12 +169,6 @@ public class CompanionForegroundService extends Service {
         ioThread = new Thread(() -> runIo(macAddress), "SmartGlasses-IO");
         ioThread.start();
     }
-    
-    private void connectTcpInternal(String host, int port) {
-        shutdownIo();
-        ioThread = new Thread(() -> runTcpIo(host, port), "SmartGlasses-TCP-IO");
-        ioThread.start();
-    }
 
     public synchronized void sendStatusConnected() {
         sendFrame(ProtoV2.TYPE_STATUS, ProtoV2.FLAG_ACK_REQ, new byte[]{ProtoV2.STATUS_CONNECTED});
@@ -206,6 +181,88 @@ public class CompanionForegroundService extends Service {
     public synchronized void sendNotify(String text) {
         if (text == null) text = "";
         sendFrame(ProtoV2.TYPE_NOTIFY, ProtoV2.FLAG_ACK_REQ, text.getBytes(StandardCharsets.UTF_8));
+    }
+    
+    // Send plain text message (for App Inventor compatibility)
+    public synchronized void sendPlainText(String text) {
+        if (text == null || text.isEmpty()) return;
+        if (!isConnected()) {
+            android.util.Log.w("CompanionService", "Cannot send plain text - not connected");
+            return;
+        }
+        try {
+            synchronized (this) {
+                if (out != null) {
+                    byte[] data = text.getBytes(StandardCharsets.UTF_8);
+                    out.write(data);
+                    out.flush();
+                    android.util.Log.d("CompanionService", "Sent plain text: " + text);
+                }
+            }
+        } catch (IOException e) {
+            android.util.Log.e("CompanionService", "Error sending plain text: " + e.getMessage(), e);
+        }
+    }
+    
+    // Forward notification (App Inventor format: "N:text:title\n")
+    public synchronized void forwardNotification(String packageName, String title, String text) {
+        if (!isConnected()) {
+            android.util.Log.d("CompanionService", "Cannot forward notification - not connected");
+            return;
+        }
+        try {
+            String message = "N:" + (text != null ? text : "") + ":" + (title != null ? title : "") + "\n";
+            sendPlainText(message);
+            android.util.Log.d("CompanionService", "Forwarded notification: " + message);
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error forwarding notification: " + e.getMessage(), e);
+        }
+    }
+    
+    // Send time message (App Inventor format: "T:HH:MM:SS\n")
+    public synchronized void sendTimeMessage() {
+        if (!isConnected()) {
+            return;
+        }
+        try {
+            java.util.Calendar cal = java.util.Calendar.getInstance();
+            int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
+            int minute = cal.get(java.util.Calendar.MINUTE);
+            int second = cal.get(java.util.Calendar.SECOND);
+            String timeStr = String.format("T:%02d:%02d:%02d\n", hour, minute, second);
+            sendPlainText(timeStr);
+            android.util.Log.d("CompanionService", "Sent time message: " + timeStr);
+        } catch (Exception e) {
+            android.util.Log.e("CompanionService", "Error sending time message: " + e.getMessage(), e);
+        }
+    }
+    
+    // Start periodic time sender (every few seconds like App Inventor Clock.Timer)
+    private void startPeriodicTimeSender() {
+        stopPeriodicTimeSender(); // Stop any existing timer
+        timeSender = new Runnable() {
+            @Override
+            public void run() {
+                if (isConnected()) {
+                    sendTimeMessage();
+                }
+                // Schedule next execution (every 5 seconds)
+                if (timerHandler != null) {
+                    timerHandler.postDelayed(this, 5000);
+                }
+            }
+        };
+        if (timerHandler != null) {
+            timerHandler.postDelayed(timeSender, 5000);
+        }
+    }
+    
+    // Stop periodic time sender
+    private void stopPeriodicTimeSender() {
+        if (timerHandler != null && timeSender != null) {
+            timerHandler.removeCallbacks(timeSender);
+            timeSender = null;
+        }
     }
     
     public synchronized void sendCall(String callerInfo) {
@@ -256,16 +313,8 @@ public class CompanionForegroundService extends Service {
     }
     
     // Check if service is connected
-    private boolean isConnected() {
+    public boolean isConnected() {
         synchronized (this) {
-            // For TCP: check if connection exists and is actually connected
-            if (tcpConnection != null && tcpConnection.isConnected()) {
-                // Also verify output stream is available
-                OutputStream testStream = tcpConnection.getOutputStream();
-                boolean connected = testStream != null;
-                android.util.Log.d("CompanionService", "isConnected() TCP check: tcpConnection=" + (tcpConnection != null) + ", isConnected()=" + tcpConnection.isConnected() + ", outputStream=" + (testStream != null) + ", result=" + connected);
-                return connected;
-            }
             // For Bluetooth: check socket and output stream
             if (socket != null && out != null) {
                 boolean connected = true;
@@ -286,12 +335,13 @@ public class CompanionForegroundService extends Service {
         }
         if (!instance.isConnected()) {
             android.util.Log.w("CompanionService", "Cannot send notify - not connected");
-            android.widget.Toast.makeText(context, "Not connected to server", android.widget.Toast.LENGTH_SHORT).show();
+            android.widget.Toast.makeText(context, "Not connected", android.widget.Toast.LENGTH_SHORT).show();
             return;
         }
         try {
-            android.util.Log.d("CompanionService", "Sending notify: " + text);
-            instance.sendNotify(text);
+            // Send in App Inventor format: "M:message\n"
+            String message = "M:" + text + "\n";
+            instance.sendPlainText(message);
             android.widget.Toast.makeText(context, "Message sent: " + text, android.widget.Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             android.util.Log.e("CompanionService", "Error sending notify: " + e.getMessage(), e);
@@ -382,6 +432,8 @@ public class CompanionForegroundService extends Service {
 
             updateNoti("Connected");
             sendStatusConnected();
+            // Restart periodic time sender when connected
+            startPeriodicTimeSender();
 
             byte[] buf = new byte[256];
             while (!Thread.currentThread().isInterrupted()) {
@@ -400,137 +452,18 @@ public class CompanionForegroundService extends Service {
             shutdownIo();
         }
     }
-    
-    private void runTcpIo(String host, int port) {
-        updateNoti("Connecting TCP...");
-        try {
-            tcpConnection = new TcpConnectionHelper(host, port);
-            if (!tcpConnection.connect()) {
-                updateNoti("TCP connection failed: " + host + ":" + port);
-                android.util.Log.e("CompanionService", "TCP connection failed to " + host + ":" + port);
-                return;
-            }
-
-            synchronized (this) {
-                in = tcpConnection.getInputStream();
-                out = tcpConnection.getOutputStream();
-                android.util.Log.d("CompanionService", "TCP streams set - out=" + (out != null) + ", in=" + (in != null));
-                
-                // Verify streams are not null
-                if (out == null) {
-                    android.util.Log.e("CompanionService", "ERROR: Output stream is null after connection!");
-                }
-                if (in == null) {
-                    android.util.Log.e("CompanionService", "ERROR: Input stream is null after connection!");
-                }
-            }
-
-            updateNoti("Connected (TCP)");
-            
-            // Wait a moment for streams to be fully ready
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            
-            sendStatusConnected();
-            
-            // Send a test message to verify connection
-            try {
-                Thread.sleep(200);
-                sendNotify("Connected to server");
-                android.util.Log.d("CompanionService", "Sent test message after connection");
-            } catch (Exception e) {
-                android.util.Log.e("CompanionService", "Error sending test message: " + e.getMessage());
-            }
-
-            byte[] buf = new byte[256];
-            while (!Thread.currentThread().isInterrupted() && tcpConnection.isConnected()) {
-                try {
-                    int n = in.read(buf);
-                    if (n > 0) {
-                        android.util.Log.d("CompanionService", "Received " + n + " bytes from server");
-                        decoder.feed(buf, n);
-                    } else if (n < 0) {
-                        // Connection closed
-                        android.util.Log.d("CompanionService", "Server closed connection (EOF)");
-                        break;
-                    } else if (n == 0) {
-                        // Shouldn't happen with blocking read, but handle it
-                        android.util.Log.w("CompanionService", "Read returned 0 bytes");
-                        Thread.sleep(100);
-                    }
-                } catch (java.net.SocketTimeoutException e) {
-                    // Timeout is normal - just continue reading
-                    // This prevents the thread from hanging
-                    android.util.Log.d("CompanionService", "Read timeout (normal) - continuing");
-                    // Check if we should still be connected
-                    if (!tcpConnection.isConnected()) {
-                        android.util.Log.d("CompanionService", "Connection lost during timeout");
-                        break;
-                    }
-                    continue;
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    android.util.Log.d("CompanionService", "Read thread interrupted");
-                    break;
-                } catch (IOException e) {
-                    android.util.Log.e("CompanionService", "Read error: " + e.getMessage(), e);
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            android.util.Log.e("CompanionService", "Unexpected error in runTcpIo: " + e.getMessage(), e);
-            updateNoti("Disconnected (Error)");
-        } finally {
-            try {
-                // Send a test message before disconnecting
-                synchronized (this) {
-                    if (out != null && tcpConnection != null && tcpConnection.isConnected()) {
-                        try {
-                            sendNotify("Disconnecting...");
-                            Thread.sleep(200); // Give it a moment to send
-                        } catch (Exception e) {
-                            android.util.Log.e("CompanionService", "Error sending disconnect message: " + e.getMessage());
-                        }
-                    }
-                }
-                sendStatusDisconnected();
-            } catch (Throwable ignored) {}
-            shutdownIo();
-        }
-    }
 
     private synchronized void sendFrame(byte type, byte flags, byte[] payload) {
-        // Always try to get fresh stream reference to avoid stale references
+        // Get output stream from Bluetooth socket
         OutputStream streamToUse = null;
         
-        // Priority 1: If TCP connection exists and is connected, ALWAYS get fresh stream
-        if (tcpConnection != null && tcpConnection.isConnected()) {
-            streamToUse = tcpConnection.getOutputStream();
-            if (streamToUse != null) {
-                synchronized (this) {
-                    out = streamToUse; // Update stored reference
-                }
-                android.util.Log.d("CompanionService", "Using fresh output stream from TCP connection");
-            } else {
-                android.util.Log.e("CompanionService", "ERROR: TCP connection exists and isConnected()=true but getOutputStream() returned null!");
-                // Connection might be in a bad state - clear it
-                synchronized (this) {
-                    out = null;
-                }
-                return;
-            }
-        }
-        
-        // Priority 2: Try stored reference if TCP didn't work (for Bluetooth)
-        if (streamToUse == null && out != null && socket != null) {
+        // Try stored reference first
+        if (out != null && socket != null) {
             streamToUse = out;
             android.util.Log.d("CompanionService", "Using stored output stream reference (Bluetooth)");
         }
         
-        // Priority 3: Try Bluetooth socket as fallback
+        // Try Bluetooth socket as fallback
         if (streamToUse == null && socket != null) {
             try {
                 streamToUse = socket.getOutputStream();
@@ -548,35 +481,8 @@ public class CompanionForegroundService extends Service {
         // Final check - if still null, we can't send
         if (streamToUse == null) {
             android.util.Log.e("CompanionService", "Cannot send frame - output stream is null (not connected)");
-            android.util.Log.e("CompanionService", "  socket=" + (socket != null) + ", tcpConnection=" + (tcpConnection != null));
-            if (tcpConnection != null) {
-                android.util.Log.e("CompanionService", "  tcpConnection.isConnected()=" + tcpConnection.isConnected());
-                if (tcpConnection.isConnected()) {
-                    OutputStream testStream = tcpConnection.getOutputStream();
-                    android.util.Log.e("CompanionService", "  tcpConnection.getOutputStream()=" + testStream);
-                }
-            }
+            android.util.Log.e("CompanionService", "  socket=" + (socket != null));
             return;
-        }
-        
-        // Verify connection is still active before sending (double-check for TCP)
-        if (tcpConnection != null) {
-            if (!tcpConnection.isConnected()) {
-                android.util.Log.w("CompanionService", "Cannot send frame - TCP connection is not connected");
-                synchronized (this) {
-                    out = null; // Clear stale reference
-                }
-                return;
-            }
-            // Verify stream is still valid
-            OutputStream verifyStream = tcpConnection.getOutputStream();
-            if (verifyStream != streamToUse) {
-                android.util.Log.w("CompanionService", "Stream reference changed - updating");
-                streamToUse = verifyStream;
-                synchronized (this) {
-                    out = streamToUse;
-                }
-            }
         }
         
         try {
@@ -626,10 +532,6 @@ public class CompanionForegroundService extends Service {
         synchronized (this) {
             try { if (socket != null) socket.close(); } catch (IOException ignored) {}
             socket = null;
-            if (tcpConnection != null) {
-                tcpConnection.disconnect();
-                tcpConnection = null;
-            }
             in = null;
             out = null;
         }

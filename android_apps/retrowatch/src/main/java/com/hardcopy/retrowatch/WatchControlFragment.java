@@ -52,8 +52,6 @@ public class WatchControlFragment extends Fragment {
 	private Spinner mSpinnerClockStyle = null;
 	private Spinner mSpinnerIndicator = null;
 	private CheckBox mCheckBackground;
-	private EditText mEditTcpHost = null;
-	private EditText mEditTcpPort = null;
 	private Button mBtnConnect = null;
 	private Button mBtnDisconnect = null;
 	private Button mBtnSendClock = null;
@@ -137,52 +135,6 @@ public class WatchControlFragment extends Fragment {
 				Settings.getInstance(mContext).setRunInBackground(isChecked);
 				mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_RUN_IN_BACKGROUND, 0, 0, null, null,null);
 			}
-		});
-		
-		// TCP Server settings
-		mEditTcpHost = (EditText) rootView.findViewById(R.id.edit_tcp_host);
-		mEditTcpPort = (EditText) rootView.findViewById(R.id.edit_tcp_port);
-		
-		// Load saved TCP settings
-		String savedHost = Settings.getInstance(mContext).getTcpHost();
-		int savedPort = Settings.getInstance(mContext).getTcpPort();
-		if (savedHost != null && !savedHost.isEmpty()) {
-			mEditTcpHost.setText(savedHost);
-		}
-		if (savedPort > 0) {
-			mEditTcpPort.setText(String.valueOf(savedPort));
-		}
-		
-		// Save TCP settings when changed
-		mEditTcpHost.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String host = s.toString().trim();
-				if (!host.isEmpty()) {
-					Settings.getInstance(mContext).setTcpHost(host);
-					mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_SET_TCP_HOST, 0, 0, host, null, null);
-				}
-			}
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			@Override public void afterTextChanged(Editable s) {}
-		});
-		
-		mEditTcpPort.addTextChangedListener(new TextWatcher() {
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				String portStr = s.toString().trim();
-				if (!portStr.isEmpty()) {
-					try {
-						int port = Integer.parseInt(portStr);
-						Settings.getInstance(mContext).setTcpPort(port);
-						mFragmentListener.OnFragmentCallback(IFragmentListener.CALLBACK_REQUEST_SET_TCP_PORT, port, 0, null, null, null);
-					} catch (NumberFormatException e) {
-						// Ignore invalid port
-					}
-				}
-			}
-			@Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			@Override public void afterTextChanged(Editable s) {}
 		});
 		
 		// Connect/Disconnect buttons

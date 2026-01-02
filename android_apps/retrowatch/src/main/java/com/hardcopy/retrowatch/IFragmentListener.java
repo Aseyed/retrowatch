@@ -32,8 +32,6 @@ public interface IFragmentListener {
 	public static final int CALLBACK_REQUEST_CLOCK_STYLE = 23;
 	public static final int CALLBACK_REQUEST_SHOW_INDICATOR = 24;
 	public static final int CALLBACK_REQUEST_RUN_IN_BACKGROUND = 25;
-	public static final int CALLBACK_REQUEST_SET_TCP_HOST = 26;
-	public static final int CALLBACK_REQUEST_SET_TCP_PORT = 27;
 	public static final int CALLBACK_REQUEST_CONNECT = 28;
 	public static final int CALLBACK_REQUEST_DISCONNECT = 29;
 	public static final int CALLBACK_REQUEST_SEND_CLOCK = 30;

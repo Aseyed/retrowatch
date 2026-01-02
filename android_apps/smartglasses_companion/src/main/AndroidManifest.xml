@@ -14,8 +14,6 @@
     <!-- Notifications -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
-    <!-- Internet for TCP connection (testing with simulator) -->
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- Boot for auto-start (optional, but typical for companion apps) -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
