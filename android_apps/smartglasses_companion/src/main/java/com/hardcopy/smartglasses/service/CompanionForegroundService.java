@@ -273,11 +273,13 @@ public class CompanionForegroundService extends Service {
         }
     }
     
-    // Get application name from package name (always returns readable name, never full package name)
+    // Get application name from package name (always returns readable name, limited to 5 characters)
     private String getApplicationName(String packageName) {
         if (packageName == null || packageName.isEmpty()) {
-            return "Unknown";
+            return "Unkno"; // 5 chars
         }
+        
+        String appName = null;
         
         try {
             android.content.pm.PackageManager pm = getPackageManager();
@@ -286,7 +288,7 @@ public class CompanionForegroundService extends Service {
                 if (appInfo != null) {
                     CharSequence appLabel = pm.getApplicationLabel(appInfo);
                     if (appLabel != null && !appLabel.toString().isEmpty()) {
-                        return appLabel.toString();
+                        appName = appLabel.toString();
                     }
                 }
             }
@@ -296,18 +298,28 @@ public class CompanionForegroundService extends Service {
             android.util.Log.e("CompanionService", "Error getting app name: " + e.getMessage(), e);
         }
         
-        // If we can't get the app name, extract a shorter identifier from package name
-        // e.g., "com.example.myapp" -> "myapp"
-        if (packageName != null && packageName.contains(".")) {
-            String[] parts = packageName.split("\\.");
-            if (parts.length > 0) {
-                String lastPart = parts[parts.length - 1];
-                // Capitalize first letter for better readability
-                if (lastPart.length() > 0) {
-                    return lastPart.substring(0, 1).toUpperCase() + 
-                           (lastPart.length() > 1 ? lastPart.substring(1) : "");
+        // If we couldn't get the app name, extract from package name
+        if (appName == null || appName.isEmpty()) {
+            if (packageName != null && packageName.contains(".")) {
+                String[] parts = packageName.split("\\.");
+                if (parts.length > 0) {
+                    appName = parts[parts.length - 1];
                 }
             }
+            if (appName == null || appName.isEmpty()) {
+                appName = packageName;
+            }
+        }
+        
+        // Limit to first 5 characters
+        if (appName != null && appName.length() > 5) {
+            appName = appName.substring(0, 5);
+        }
+        
+        // Capitalize first letter for better readability
+        if (appName != null && appName.length() > 0) {
+            return appName.substring(0, 1).toUpperCase() + 
+                   (appName.length() > 1 ? appName.substring(1) : "");
         }
         
         // Final fallback
@@ -692,5 +704,6 @@ public class CompanionForegroundService extends Service {
         nm.notify(NOTI_ID, buildNotification(text));
     }
 }
+
 
 
