@@ -58,6 +58,8 @@ public class CompanionForegroundService extends Service {
     private Thread ioThread;
     private Handler timerHandler;
     private Runnable timeSender;
+    private Handler notificationDelayHandler;
+    private Runnable pendingNotificationSender;
 
     private BluetoothSocket socket;
     private InputStream in;
@@ -113,6 +115,7 @@ public class CompanionForegroundService extends Service {
         runningHint = true;
         mainHandler = new Handler(Looper.getMainLooper());
         timerHandler = new Handler(Looper.getMainLooper());
+        notificationDelayHandler = new Handler(Looper.getMainLooper());
         ensureNotificationChannel();
         startPeriodicTimeSender();
     }
@@ -154,6 +157,11 @@ public class CompanionForegroundService extends Service {
         instance = null;
         runningHint = false;
         stopPeriodicTimeSender();
+        // Cancel pending notification
+        if (notificationDelayHandler != null && pendingNotificationSender != null) {
+            notificationDelayHandler.removeCallbacks(pendingNotificationSender);
+            pendingNotificationSender = null;
+        }
         shutdownIo();
         super.onDestroy();
     }
@@ -205,17 +213,44 @@ public class CompanionForegroundService extends Service {
     }
     
     // Forward notification (App Inventor format: "N:text:title\n")
+    // Delays sending by 5 seconds and resets clock timer
     public synchronized void forwardNotification(String packageName, String title, String text) {
         if (!isConnected()) {
             android.util.Log.d("CompanionService", "Cannot forward notification - not connected");
             return;
         }
-        try {
-            String message = "N:" + (text != null ? text : "") + ":" + (title != null ? title : "") + "\n";
-            sendPlainText(message);
-            android.util.Log.d("CompanionService", "Forwarded notification: " + message);
-        } catch (Exception e) {
-            android.util.Log.e("CompanionService", "Error forwarding notification: " + e.getMessage(), e);
+        
+        // Reset clock timer when notification arrives
+        android.util.Log.d("CompanionService", "Notification received - resetting clock timer");
+        startPeriodicTimeSender();
+        
+        // Cancel any pending notification send
+        if (notificationDelayHandler != null && pendingNotificationSender != null) {
+            notificationDelayHandler.removeCallbacks(pendingNotificationSender);
+            pendingNotificationSender = null;
+        }
+        
+        // Create delayed notification sender
+        final String message = "N:" + (text != null ? text : "") + ":" + (title != null ? title : "") + "\n";
+        pendingNotificationSender = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    if (isConnected()) {
+                        sendPlainText(message);
+                        android.util.Log.d("CompanionService", "Forwarded notification after 5s delay: " + message);
+                    }
+                } catch (Exception e) {
+                    android.util.Log.e("CompanionService", "Error forwarding notification: " + e.getMessage(), e);
+                }
+                pendingNotificationSender = null;
+            }
+        };
+        
+        // Schedule notification to be sent after 5 seconds
+        if (notificationDelayHandler != null) {
+            notificationDelayHandler.postDelayed(pendingNotificationSender, 5000);
+            android.util.Log.d("CompanionService", "Scheduled notification to be sent in 5 seconds");
         }
     }
     
