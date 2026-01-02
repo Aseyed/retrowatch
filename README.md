@@ -1,5 +1,7 @@
 # RetroWatch Project
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Open source smart watch project with Android apps, Arduino hardware, and desktop simulation tools.
 
 ## Project Structure
@@ -60,11 +62,18 @@ cd desktop_tools/arduino_simulator
 
 ## Documentation
 
-See `docs/` folder for:
-- Build guides
-- Setup instructions
-- Architecture documentation
-- TCP connection guides
+Comprehensive documentation is available in the `docs/` folder:
+
+- **[Documentation Index](docs/INDEX.md)** - Complete documentation index
+- **Build Guides** - See `docs/build/` for build instructions
+- **Testing** - See `docs/testing/` for testing guides
+- **Troubleshooting** - See `docs/troubleshooting/` for connection issues
+- **Android Apps** - See `docs/android_apps/` for app-specific documentation
+
+Quick links:
+- [Quick Reference](docs/QUICK_REFERENCE.md)
+- [Build APK Guide](docs/build/BUILD_APK_GUIDE.md)
+- [Testing Guide](docs/testing/TESTING_GUIDE.md)
 
 ## Building
 
@@ -84,5 +93,18 @@ cd desktop_tools/arduino_simulator
 
 ## License
 
-See LICENSE file.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Topics
+
+This project uses the following technologies:
+- Arduino
+- Android
+- Bluetooth
+- IoT
+- Wearable Technology
 

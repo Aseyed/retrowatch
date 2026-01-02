@@ -4,7 +4,7 @@
 
 1. ✅ **Desktop Server Built** - `bluetooth_test_device` is compiled and ready
 2. ✅ **IP Address Identified** - Your PC's Wi-Fi IP: `192.168.52.99`
-3. ✅ **Testing Guides Created** - See `docs/TESTING_GUIDE.md` and `QUICK_TEST_START.md`
+3. ✅ **Testing Guides Created** - See `docs/testing/TESTING_GUIDE.md` and `docs/testing/QUICK_TEST_START.md`
 
 ## 🎯 Next Steps - Start Testing
 
