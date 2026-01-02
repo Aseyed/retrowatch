@@ -57,8 +57,11 @@ public class NotificationBridgeService extends NotificationListenerService {
             android.util.Log.d("NotificationBridge", "Notification received - Package: " + packageName + ", Title: " + title + ", Text: " + text);
             
             // Forward to CompanionForegroundService in App Inventor format: "N:text:title\n"
-            if (CompanionForegroundService.getInstance() != null) {
-                CompanionForegroundService.getInstance().forwardNotification(packageName, title, text);
+            // Only send if we have both title and text, or at least one of them
+            if ((title != null && !title.isEmpty()) || (text != null && !text.isEmpty())) {
+                if (CompanionForegroundService.getInstance() != null) {
+                    CompanionForegroundService.getInstance().forwardNotification(packageName, title, text);
+                }
             }
             
             // Also handle phone calls separately

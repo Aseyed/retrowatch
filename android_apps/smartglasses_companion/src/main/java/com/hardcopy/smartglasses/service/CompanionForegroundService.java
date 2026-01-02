@@ -434,6 +434,8 @@ public class CompanionForegroundService extends Service {
             sendStatusConnected();
             // Restart periodic time sender when connected
             startPeriodicTimeSender();
+            // Notify UI about connection (will be handled by status update)
+            android.util.Log.d("CompanionService", "Connected successfully");
 
             byte[] buf = new byte[256];
             while (!Thread.currentThread().isInterrupted()) {

@@ -1,47 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
-    
-<LinearLayout
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/statusText"
+    <!-- Top row: Select Device button and status (like App Inventor) -->
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Status"
-        android:textSize="14sp"
-        android:paddingBottom="12dp" />
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+        
+        <Button
+            android:id="@+id/selectDeviceBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select Device"
+            android:layout_marginEnd="8dp" />
+        
+        <TextView
+            android:id="@+id/statusText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="disconnected"
+            android:textSize="14sp"
+            android:gravity="center" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/deviceText"
+    <!-- Message input and Send button row -->
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Device: (not selected)"
-        android:textSize="14sp"
-        android:paddingBottom="12dp" />
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+        
+        <EditText
+            android:id="@+id/messageInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter message"
+            android:inputType="text"
+            android:padding="8dp"
+            android:layout_marginEnd="8dp" />
+        
+        <Button
+            android:id="@+id/sendMessageBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Send" />
+    </LinearLayout>
 
-    <!-- Output area (like App Inventor) -->
+    <!-- Output area at bottom (like App Inventor) -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_marginBottom="12dp">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#F5F5F5">
         <TextView
             android:id="@+id/outputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="12sp"
-            android:background="#F5F5F5"
             android:padding="8dp"
             android:gravity="top|start"
             android:fontFamily="monospace" />
     </ScrollView>
+
+</LinearLayout>
 
     <Button
         android:id="@+id/startServiceBtn"

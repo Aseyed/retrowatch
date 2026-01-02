@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,13 +31,17 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQ_POST_NOTI = 12;
 
     private TextView statusText;
-    private TextView deviceText;
     private TextView outputText;
     private EditText messageInput;
+    private Button selectDeviceBtn;
+    private Button sendMessageBtn;
 
     private static final String PREFS = "smartglasses_prefs";
     private static final String KEY_MAC = "device_mac";
     private static final String KEY_NAME = "device_name";
+    
+    private Handler statusUpdateHandler;
+    private Runnable statusUpdateRunnable;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,43 +49,74 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         statusText = findViewById(R.id.statusText);
-        deviceText = findViewById(R.id.deviceText);
         outputText = findViewById(R.id.outputText);
-
-        Button startBtn = findViewById(R.id.startServiceBtn);
-        Button stopBtn = findViewById(R.id.stopServiceBtn);
-        Button notiAccessBtn = findViewById(R.id.openNotiAccessBtn);
-        Button pickBtn = findViewById(R.id.pickDeviceBtn);
-        Button connectBtn = findViewById(R.id.connectBtn);
-        Button disconnectBtn = findViewById(R.id.disconnectBtn);
         messageInput = findViewById(R.id.messageInput);
-        Button sendMessageBtn = findViewById(R.id.sendMessageBtn);
-        Button sendClockBtn = findViewById(R.id.sendClockBtn);
-        Button sendBatteryBtn = findViewById(R.id.sendBatteryBtn);
+        selectDeviceBtn = findViewById(R.id.selectDeviceBtn);
+        sendMessageBtn = findViewById(R.id.sendMessageBtn);
 
-        startBtn.setOnClickListener(v -> {
-            CompanionForegroundService.start(this);
-            appendOutput("Service started\n");
-        });
-        stopBtn.setOnClickListener(v -> {
-            CompanionForegroundService.stop(this);
-            appendOutput("Service stopped\n");
-        });
-        notiAccessBtn.setOnClickListener(v -> openNotificationAccessSettings());
-        pickBtn.setOnClickListener(v -> pickDevice());
-        connectBtn.setOnClickListener(v -> connect());
-        disconnectBtn.setOnClickListener(v -> {
-            CompanionForegroundService.disconnect(this);
-            appendOutput("Disconnected\n");
-            Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show();
-        });
+        // Initialize status
+        statusText.setText("disconnected");
+        
+        // Start service automatically
+        CompanionForegroundService.start(this);
+        
+        // Set up select device button (top left) - combines pick and connect
+        selectDeviceBtn.setOnClickListener(v -> selectAndConnectDevice());
+        
+        // Set up send button
         sendMessageBtn.setOnClickListener(v -> sendMessage());
-        sendClockBtn.setOnClickListener(v -> sendClockData());
-        sendBatteryBtn.setOnClickListener(v -> sendBatteryStatus());
-
-        // Check notification service on startup (like App Inventor Screen1.Initialize)
+        
+        // Request all necessary permissions on startup
+        requestAllPermissions();
+        
+        // Check notification service on startup
         checkNotificationService();
-        ensureRuntimePermissions();
+        
+        // Start periodic status updates
+        statusUpdateHandler = new Handler(Looper.getMainLooper());
+        startStatusUpdates();
+    }
+    
+    private void startStatusUpdates() {
+        statusUpdateRunnable = new Runnable() {
+            @Override
+            public void run() {
+                updateStatus();
+                statusUpdateHandler.postDelayed(this, 1000); // Update every second
+            }
+        };
+        statusUpdateHandler.post(statusUpdateRunnable);
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (statusUpdateHandler != null && statusUpdateRunnable != null) {
+            statusUpdateHandler.removeCallbacks(statusUpdateRunnable);
+        }
+    }
+    
+    private void selectAndConnectDevice() {
+        // Request permission first if needed
+        if (!ensureBtConnectPermission()) {
+            return;
+        }
+        
+        // Check if we already have a device selected
+        String mac = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_MAC, null);
+        if (mac != null && mac.length() > 0) {
+            // Already have device, just connect
+            connectToDevice(mac);
+        } else {
+            // No device selected, show picker
+            pickDevice();
+        }
+    }
+    
+    private void connectToDevice(String mac) {
+        String name = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_NAME, null);
+        CompanionForegroundService.connect(this, mac);
+        // Status will be updated by statusUpdateRunnable
     }
     
     private void checkNotificationService() {
@@ -87,6 +124,19 @@ public class MainActivity extends AppCompatActivity {
             appendOutput("notification started\n");
         } else {
             appendOutput("notification service not enabled\n");
+            // Request notification access
+            requestNotificationAccess();
+        }
+    }
+    
+    private void requestNotificationAccess() {
+        if (!isNotificationListenerEnabled(this)) {
+            android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+            builder.setTitle("دسترسی به نوتیفیکیشن")
+                    .setMessage("برای ارسال نوتیفیکیشن‌ها به بلوتوث، لطفاً دسترسی به نوتیفیکیشن را فعال کنید.")
+                    .setPositiveButton("تنظیمات", (dialog, which) -> openNotificationAccessSettings())
+                    .setNegativeButton("بعداً", null)
+                    .show();
         }
     }
     
@@ -109,96 +159,55 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateStatus();
-        deviceText.setText(getSavedDeviceLine());
         checkNotificationService();
     }
     
     private void updateStatus() {
-        String status = buildStatusText();
         // Update status text based on connection (like App Inventor)
         CompanionForegroundService service = CompanionForegroundService.getInstance();
-        if (service != null && service.isConnected()) {
+        boolean wasConnected = statusText.getText().toString().equals("connected");
+        boolean isConnected = (service != null && service.isConnected());
+        
+        if (isConnected && !wasConnected) {
+            // Just connected - show device name in output
+            String name = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_NAME, null);
+            String mac = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_MAC, null);
+            if (mac != null) {
+                String deviceInfo = (name != null ? name : mac);
+                appendOutput(deviceInfo + " connected\n");
+            }
             statusText.setText("connected");
-        } else if (status.contains("STOPPED")) {
+        } else if (!isConnected && wasConnected) {
+            // Just disconnected
             statusText.setText("disconnected");
+            appendOutput("disconnected\n");
+        } else if (isConnected) {
+            statusText.setText("connected");
         } else {
-            statusText.setText(status);
+            statusText.setText("disconnected");
         }
-    }
-
-    private String buildStatusText() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Service: ").append(CompanionForegroundService.isRunningHint()).append("\n");
-        sb.append("Notification access: ").append(isNotificationListenerEnabled(this) ? "ENABLED" : "DISABLED").append("\n");
-        sb.append("Android: ").append(Build.VERSION.SDK_INT);
-        return sb.toString();
-    }
-
-    private String getSavedDeviceLine() {
-        String name = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_NAME, null);
-        String mac = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_MAC, null);
-        if (mac == null) return "Device: (not selected)";
-        if (name == null) name = "(unknown)";
-        return "Device: " + name + " (" + mac + ")";
     }
 
     private void pickDevice() {
         if (!ensureBtConnectPermission()) return;
         startActivityForResult(new Intent(this, DevicePickerActivity.class), REQ_PICK_DEVICE);
     }
-
-    private void connect() {
-        if (!ensureBtConnectPermission()) return;
-        String mac = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_MAC, null);
-        if (mac == null || mac.length() == 0) {
-            pickDevice();
-            return;
-        }
-        String name = getSharedPreferences(PREFS, MODE_PRIVATE).getString(KEY_NAME, null);
-        appendOutput((name != null ? name : mac) + " connected\n");
-        statusText.setText("connected");
-        CompanionForegroundService.connect(this, mac);
-    }
     
     private void sendMessage() {
-        if (!CompanionForegroundService.isRunningHint().equals("RUNNING")) {
-            Toast.makeText(this, "Service not running. Please start the service first.", Toast.LENGTH_LONG).show();
+        CompanionForegroundService service = CompanionForegroundService.getInstance();
+        if (service == null || !service.isConnected()) {
+            Toast.makeText(this, "به بلوتوث وصل نیستید", Toast.LENGTH_SHORT).show();
             return;
         }
         
         String message = messageInput.getText().toString().trim();
         if (message.isEmpty()) {
-            Toast.makeText(this, "Please enter a message", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "لطفاً پیامی وارد کنید", Toast.LENGTH_SHORT).show();
             return;
         }
         
-        appendOutput(message + "\n");
         CompanionForegroundService.sendNotify(this, message);
         messageInput.setText(""); // Clear input
-    }
-    
-    private void sendClockData() {
-        if (!CompanionForegroundService.isRunningHint().equals("RUNNING")) {
-            Toast.makeText(this, "Service not running. Please start the service first.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        
-        java.util.Calendar cal = java.util.Calendar.getInstance();
-        int hour = cal.get(java.util.Calendar.HOUR_OF_DAY);
-        int minute = cal.get(java.util.Calendar.MINUTE);
-        int second = cal.get(java.util.Calendar.SECOND);
-        String timeStr = String.format("%02d:%02d:%02d", hour, minute, second);
-        appendOutput(timeStr + "\n");
-        CompanionForegroundService.sendTime(this);
-    }
-    
-    private void sendBatteryStatus() {
-        if (!CompanionForegroundService.isRunningHint().equals("RUNNING")) {
-            Toast.makeText(this, "Service not running. Please start the service first.", Toast.LENGTH_LONG).show();
-            return;
-        }
-        
-        CompanionForegroundService.sendBatteryStatus(this);
     }
 
     private void openNotificationAccessSettings() {
@@ -207,9 +216,29 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void ensureRuntimePermissions() {
-        ensureBtConnectPermission();
-        ensurePostNotificationsPermission();
+    private void requestAllPermissions() {
+        // Request Bluetooth permissions
+        if (Build.VERSION.SDK_INT >= 31) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, 
+                    new String[]{Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN}, 
+                    REQ_BT_CONNECT);
+            }
+        }
+        
+        // Request notification permission (Android 13+)
+        if (Build.VERSION.SDK_INT >= 33) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, 
+                    new String[]{Manifest.permission.POST_NOTIFICATIONS}, 
+                    REQ_POST_NOTI);
+            }
+        }
+        
+        // Request notification listener access
+        if (!isNotificationListenerEnabled(this)) {
+            requestNotificationAccess();
+        }
     }
 
     private boolean ensureBtConnectPermission() {
@@ -251,8 +280,11 @@ public class MainActivity extends AppCompatActivity {
                         .putString(KEY_NAME, name)
                         .putString(KEY_MAC, mac)
                         .apply();
-                deviceText.setText(getSavedDeviceLine());
-                appendOutput((name != null ? name : mac) + "\n");
+                // Show which device was selected in output box
+                String deviceInfo = (name != null ? name : mac);
+                appendOutput(deviceInfo + "\n");
+                // Automatically connect to selected device
+                connectToDevice(mac);
             }
         }
     }
